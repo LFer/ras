@@ -18,7 +18,6 @@ from . import fronteras
 from . import depositos
 from . import service_products_to_calendar
 from . import catalogo_bultos
-from . import report_mic_crt
 from . import codigo_contenedores
 from . import hr_employee
 from . import stock_picking
