@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+
+
+
+        <record id="marfrig_calendario" model="ir.ui.view">
+            <field name="name">marfrig.calendar.form.view</field>
+            <field name="model">servicio.calendario</field>
+            <field name="inherit_id" ref="servicio_base.folder_calendarrio_contenedor"/>
+            <field name="arch" type="xml">
+                <data>
+                    <field name="rt_service_id" position="after">
+                        <field name="marfrig_id" required="0" context = "{'default_partner_invoice_id': partner_id,
+                                                                             }" />
+                    </field>
+                </data>
+            </field>
+        </record>
+
+    </data>
+</odoo>

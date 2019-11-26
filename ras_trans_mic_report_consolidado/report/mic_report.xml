@@ -1,0 +1,67 @@
+<?xml version="1.0"?>
+<openerp>
+    <data>
+        <record id="paperformat_mic_report" model="report.paperformat">
+            <field name="name">A4 - MIC Report Consolidado</field>
+            <field name="default" eval="False" />
+            <field name="format">A4</field>
+            <field name="page_height">0</field>
+            <field name="page_width">0</field>
+            <field name="orientation">Portrait</field>
+            <field name="margin_top">10</field>
+            <field name="margin_bottom">10</field>
+            <field name="margin_left">7</field>
+            <field name="margin_right">7</field>
+            <field name="header_line" eval="False"/>
+            <field name="header_spacing">0</field>
+            <field name="dpi">90</field>
+        </record>
+
+        <record id="paperformat_mic_report_half" model="report.paperformat">
+            <field name="name">A4 - MIC Report Consolidado Half</field>
+            <field name="default" eval="False" />
+            <field name="format">A4</field>
+            <field name="page_height">0</field>
+            <field name="page_width">0</field>
+            <field name="orientation">Portrait</field>
+            <field name="margin_top">10</field>
+            <field name="margin_bottom">10</field>
+            <field name="margin_left">7</field>
+            <field name="margin_right">7</field>
+            <field name="header_line" eval="False"/>
+            <field name="header_spacing">0</field>
+            <field name="dpi">90</field>
+        </record>
+
+        <report
+            id="mic_report"
+            model="carpeta.camion"
+            string="MIC Report Consolidado"
+            report_type="qweb-pdf"
+            name="ras_trans_mic_report_consolidado.report_mic_report"
+            file="ras_trans_mic_report_consolidado.report_mic_report"
+            paperformat="ras_trans_mic_report_consolidado.paperformat_mic_report"
+        />
+
+        <report
+            id="mic_report_inicio"
+            model="carpeta.camion"
+            string="MIC Report Consolidado Inicio"
+            report_type="qweb-pdf"
+            name="ras_trans_mic_report_consolidado.report_mic_report_inicio"
+            file="ras_trans_mic_report_consolidado.report_mic_report_inicio"
+            paperformat="ras_trans_mic_report_consolidado.paperformat_mic_report_half"
+        />
+
+        <report
+            id="mic_report_final"
+            model="carpeta.camion"
+            string="MIC Report Consolidado Final"
+            report_type="qweb-pdf"
+            name="ras_trans_mic_report_consolidado.report_mic_report_final"
+            file="ras_trans_mic_report_consolidado.report_mic_report_final"
+            paperformat="ras_trans_mic_report_consolidado.paperformat_mic_report_half"
+        />
+
+    </data>
+</openerp>

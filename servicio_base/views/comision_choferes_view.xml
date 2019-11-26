@@ -1,0 +1,143 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+
+        <record id="comision_choferes_filter" model="ir.ui.view">
+            <field name="name">Comision Choferes</field>
+            <field name="model">rt.service.productos</field>
+            <field name="arch" type="xml">
+                <search string="Buscar Comisiones">
+                    <filter string="Pagas" name="paid" domain="[('comision_paga','=','pago')]"/>
+                    <filter string="No Pagas" name="unpaid" domain="[('comision_paga','=','no_pago')]"/>
+                    <field name="driver_id"/>
+                    <field name="product_id"/>
+                    <field name="vehicle_id"/>
+                    <group expand="1" string="Group By">
+                        <filter name="filter_driver" string="Chofer" icon="terp-gtk-jump-to-rtl" domain="[]" context="{'group_by':'driver_id'}"/>
+                        <filter name="filter_state" string="Estado" icon="terp-accessories-archiver" domain="[]" context="{'group_by':'comision_paga'}"/>
+                        <filter name="filter_month" string="Mes" icon="terp-accessories-archiver" domain="[]" context="{'group_by':'start' }"/>
+                        <filter name="filter_currency" string="Moneda" icon="terp-accessories-archiver" domain="[]" context="{'group_by':'currency_id_chofer' }"/>
+                    </group>
+                </search>
+            </field>
+        </record>
+
+        <record id="action_comisiones_choferes" model="ir.actions.act_window">
+            <field name="name">Reporte de Viajes</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">rt.service.productos</field>
+            <field name="view_mode">tree</field>
+            <field name="filter" eval="True"/>
+            <field name="domain">[('operation_type','=','national')]</field>
+            <field name="search_view_id" ref="comision_choferes_filter"/>
+            <field name="help" type="html">
+                <p class="o_view_nocontent_smiling_face">
+                    No se crearon Catálogo
+                </p>
+            </field>
+        </record>
+
+        <record id="action_comisiones_choferes_inter" model="ir.actions.act_window">
+            <field name="name">Reporte de Viajes</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">rt.service.productos</field>
+            <field name="view_mode">tree</field>
+            <field name="filter" eval="True"/>
+            <field name="domain">[('operation_type','=','international')]</field>
+            <field name="search_view_id" ref="comision_choferes_filter"/>
+            <field name="help" type="html">
+                <p class="o_view_nocontent_smiling_face">
+                    No se crearon Catálogo
+                </p>
+            </field>
+        </record>
+
+
+        <record id="view_comision_chofer_graph" model="ir.ui.view">
+            <field name="name">comision.chofer.graph</field>
+            <field name="model">rt.service.productos</field>
+            <field name="arch" type="xml">
+                <graph string="Sales Analysis" type="bar" stacked="True">
+                    <!--AGRUPADORES-->
+                    <field name="operation_type"/>
+                    <field name="comision_paga"/>
+                    <field name="driver_id"/>
+                    <!--CAMPO DE COLUMNA-->
+                    <field name="driver_commission" type="measure"/>
+                    </graph>
+            </field>
+        </record>
+
+        <record id="comision_chofer_view_pivot" model="ir.ui.view">
+            <field name="name">comision.chofer.pivot</field>
+            <field name="model">rt.service.productos</field>
+            <field name="arch" type="xml">
+                <pivot string="Sales Analysis" disable_linking="True">
+                    <field name="operation_type" type="row"/>
+                    <field name="comision_paga" type="row"/>
+                    <field name="driver_id" type="row"/>
+                    <field name="driver_commission" type="measure" widget="monetary" options="{'currency_field': 'currency_id_chofer'}"/>
+                    <field name="currency_id_chofer" type="col"/>
+                </pivot>
+            </field>
+        </record>
+
+        <record id="comision_choferes_report_view_dashboard" model="ir.ui.view">
+            <field name="name">comision.chofer.view.dashboard</field>
+            <field name="model">rt.service.productos</field>
+            <field name="mode">primary</field>
+            <field name="arch" type="xml">
+                <dashboard>
+                    <view type="graph" ref="servicio_base.view_comision_chofer_graph"/>
+                    <view type="pivot" ref="servicio_base.comision_chofer_view_pivot"/>
+                </dashboard>
+            </field>
+        </record>
+
+
+        <record id="filter_comisions_two" model="ir.filters">
+            <field name="name">Chofer->Mes-Estado</field>
+            <field name="model_id">rt.service.productos</field>
+            <field name="user_id" eval="False"/>
+            <field name="context">{'group_by': ['driver_id', 'comision_paga', 'start:month']}</field>
+            <field name="action_id" ref="action_comisiones_choferes"/>
+            <field name="is_default" eval="True"/>
+        </record>
+
+        <record id="filter_comisions_two_inter" model="ir.filters">
+            <field name="name">Chofer->Mes-Estado</field>
+            <field name="model_id">rt.service.productos</field>
+            <field name="user_id" eval="False"/>
+            <field name="context">{'group_by': ['driver_id', 'comision_paga', 'start:month']}</field>
+            <field name="action_id" ref="action_comisiones_choferes_inter"/>
+            <field name="is_default" eval="True"/>
+        </record>
+
+        <record id="comision_chofer_tree" model="ir.ui.view">
+            <field name="name">Comision Chofer-Tree</field>
+            <field name="model">rt.service.productos</field>
+            <field name="arch" type="xml">
+                <tree string="Comision de Chofer" edit="false" create="false" delete="false" decoration-success="comision_paga=='pago'" decoration-it="comision_paga=='pago'" decoration-danger="comision_paga=='no_pago'">
+                    <field name="comision_paga"/>
+                    <field name="name" string="Referencia"/>
+                    <field name="operation_type" string="Operativa"/>
+                    <field name="driver_id"/>
+                    <field name="start" string="Fecha Servicio"/>
+                    <field name="product_id"/>
+                    <field name="vehicle_id"/>
+                    <field name="origin_id"/>
+                    <field name="destiny_id"/>
+                    <field name="currency_id_chofer"/>
+                    <field name="driver_commission" widget="monetary" options="{'currency_field': 'currency_id_chofer'}" sum="Total"/>
+                </tree>
+            </field>
+        </record>
+
+
+
+
+
+
+
+    </data>
+</odoo>

@@ -1,0 +1,17 @@
+<?xml version="1.0" ?>
+<odoo>
+    <record id="module_deposito_security" model="ir.module.category">
+        <field name="name">Deposito</field>
+        <field name="sequence">20</field>
+    </record>
+    <record id="deposito_group_user" model="res.groups">
+        <field name="name">User</field>
+        <field name="category_id" ref="module_deposito_security"/>
+    </record>
+
+    <record id="deposito_group_manager" model="res.groups">
+        <field name="name">Manager</field>
+        <field name="implied_ids" eval="[(4, ref('deposito_group_user'))]"/>
+        <field name="category_id" ref="module_deposito_security"/>
+    </record>
+</odoo>

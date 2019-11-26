@@ -1,0 +1,49 @@
+<odoo>
+    <data>
+
+
+        <record id="action_product_pallet" model="ir.actions.act_window">
+            <field name="name">Pallets</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">product.template</field>
+            <field name="domain">[('is_pallet','=',True)]</field>
+             <field name="view_mode">kanban,tree,form</field>
+            <field name="view_type">form</field>
+            <field name="context">{'search_default_consumable':1, 'default_type':'product', 'default_is_pallet': 1, 'default_uom_id': 1}</field>
+            <field name="view_ids" eval="[(5, 0, 0),
+                (0, 0, {'view_mode': 'kanban', 'view_id': ref('product_hierarchy.pallet_kanban_view')}),
+                (0, 0, {'view_mode': 'form', 'view_id': ref('product_hierarchy.pallet_form_view')}),
+                (0, 0, {'view_mode': 'tree', 'view_id': ref('product.product_template_tree_view')}),
+                ]"/>
+            <field name="filter" eval="True"/>
+        </record>
+
+        <record id="action_product_box" model="ir.actions.act_window">
+            <field name="name">Cajas</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">product.template</field>
+            <field name="domain">[('is_box','=',True)]</field>
+            <field name="view_mode">tree,form</field>
+<!--            <field name="view_ids" eval="[(5, 0, 0),-->
+<!--                (0, 0, {'view_mode': 'tree', 'view_id': ref('servicio_base.product_comision_revision_tree_view')}),-->
+<!--                (0, 0, {'view_mode': 'form', 'view_id': ref('servicio_base.view_service_product_form_2')})]"/>-->
+            <field name="filter" eval="True"/>
+        </record>
+
+
+
+        <menuitem name="Pallets"
+                  id="product_hierarchy.menu_pallet"
+                  parent="stock.menu_stock_inventory_control"
+                  action="product_hierarchy.action_product_pallet"
+                  sequence="4"
+        />
+
+        <menuitem name="Cajas"
+                  id="product_hierarchy.menu_box"
+                  parent="stock.menu_stock_inventory_control"
+                  action="product_hierarchy.action_product_box"
+                  sequence="5"
+        />
+    </data>
+</odoo>

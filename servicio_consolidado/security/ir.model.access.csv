@@ -1,0 +1,7 @@
+name,perm_create,perm_write,perm_unlink,perm_read,group_id/id,model_id/id
+carpeta.camion,1,1,1,1,servicio_consolidado.consolidado_manager,servicio_consolidado.model_carpeta_camion
+carga.camion,1,1,1,1,servicio_consolidado.consolidado_manager,servicio_consolidado.model_carga_camion
+producto.servicio.camion,1,1,1,1,servicio_consolidado.consolidado_manager,servicio_consolidado.model_producto_servicio_camion
+consolidado.factura.carga,1,1,1,1,servicio_consolidado.consolidado_manager,servicio_consolidado.model_consolidado_factura_carga
+consolidado.packing.list.carga,1,1,1,1,servicio_consolidado.consolidado_manager,servicio_consolidado.model_consolidado_packing_list_carga
+consolidado.bill.of.landing.carga,1,1,1,1,servicio_consolidado.consolidado_manager,servicio_consolidado.model_consolidado_bill_of_landing_carga

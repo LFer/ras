@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+
+
+        <record id="seq_service_deposito" model="ir.sequence">
+            <field name="name">Depósitos - </field>
+            <field name="code">service.deposito</field>
+            <field name="prefix">Depo/%(range_year)s/</field>
+            <field name="padding">3</field>
+            <field name="company_id" eval="False"/>
+        </record>
+
+
+    </data>
+</odoo>

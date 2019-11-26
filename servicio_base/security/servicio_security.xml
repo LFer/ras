@@ -1,0 +1,46 @@
+<?xml version="1.0" ?>
+<odoo>
+    <record id="module_servicio_category" model="ir.module.category">
+        <field name="name">Servicio</field>
+        <field name="sequence">20</field>
+    </record>
+
+    <record id="servicio_group_user" model="res.groups">
+        <field name="name">User</field>
+        <field name="category_id" ref="module_servicio_category"/>
+    </record>
+
+    <record id="fleet_group_manager" model="res.groups">
+        <field name="name">Manager</field>
+        <field name="implied_ids" eval="[(4, ref('servicio_group_user'))]"/>
+        <field name="category_id" ref="module_servicio_category"/>
+    </record>
+
+
+    <record id="servicio_validar_cancelar_facturas" model="res.groups">
+        <field name="name">Puede Validar y Cancelar Facturas</field>
+   </record>
+
+    <record id="servicio_ver_numero_interno_factura" model="res.groups">
+        <field name="name">Ver número interno factura</field>
+   </record>
+
+    <record id="module_comision_category" model="ir.module.category">
+        <field name="name">Reporte de Viajes de Choferes</field>
+        <field name="sequence">20</field>
+    </record>
+
+
+
+    <record id="consulta_comisiones" model="res.groups">
+        <field name="name">Solo Consulta</field>
+            <field name="category_id" ref="module_comision_category"/>
+    </record>
+
+    <record id="encargado_comisiones" model="res.groups">
+        <field name="name">Encargado</field>
+        <field name="implied_ids" eval="[(4, ref('consulta_comisiones'))]"/>
+        <field name="category_id" ref="module_comision_category"/>
+    </record>
+
+</odoo>

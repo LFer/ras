@@ -1,0 +1,142 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+
+        <record id="product_comision_revision_form_view" model="ir.ui.view">
+            <field name="name">prodcuct.comision.form</field>
+            <field name="model">rt.service.productos</field>
+            <field name="arch" type="xml">
+                <form string="Reporte de Viajes">
+                    <header>
+                        <field name="estado_comision" widget="statusbar"/>
+                        <button class="oe_highlight"
+                                type="object"
+                                name="aprobar_correcion"
+                                string="Aprobar Correcion"
+                        />
+                    </header>
+                    <sheet>
+                        <div class="oe_button_box" name="button_box">
+                        </div>
+                        <group sring="Datos de La Matricula">
+                            <group>
+                                <field name="product_type"  invisible="1"/>
+                                <field name="solo_lectura"  readonly="0" groups="base.group_no_one" force_save="1"/>
+                                <field name="alquilado" invisible="1"/>
+                                <field name="flujo" invisible="1"/>
+                                <field name="name"/>
+                                <field name="rt_service_id" options="{'no_create': True}"/>
+                                <field name="motivo_solicitud" string="Motivo"/>
+                                <field name="attach_motivo_correcion_comision"
+                                />
+                                <field name="comision_excepcion" attrs="{'readonly': [('solo_lectura','=', True)], 'invisible': [('flujo','=', True)]}"/>
+                                <field name="vehicle_id" options="{'no_create': True, 'no_open': True}" attrs="{'invisible': [('product_type','!=', 'propio'),('alquilado','=', False)],'readonly': [('solo_lectura','=', True)]}"/>
+                                <field name="matricula_dos_id" options='{"no_open": True, "no_create": True}' attrs="{'invisible': [('product_type','!=', 'propio'),('alquilado','=', False)],'readonly': [('solo_lectura','=', True)]}"/>
+                                <field name="driver_id" options="{'no_create': True, 'no_open': True}" attrs="{'invisible': [('product_type','!=', 'propio'),('alquilado','=', False)], 'required': [('vehicle_id','!=', False)],'readonly': [('solo_lectura','=', True)]}"/>
+                                <field name="chofer" attrs="{'invisible': ['|',('product_type','=', 'propio'),('alquilado','=', True)],'readonly': [('solo_lectura','=', True)]}"/>
+                                <field name="currency_id_chofer" options="{'no_open': True,'no_create': True}" attrs="{'readonly': [('solo_lectura','=', True)], 'invisible': [('flujo','=', True)]}"/>
+                                <field name="driver_commission" widget="monetary" options="{'currency_field': 'currency_id_chofer'}" attrs="{'readonly': [('solo_lectura','=', True)], 'invisible': [('flujo','=', True)]}"/>
+                                <field name="attach_motivo_correcion_comision" widget="many2many_binary" invisible="1"/>
+                            </group>
+                        </group>
+                    </sheet>
+                    <div class="oe_chatter">
+                        <field name="message_follower_ids" widget="mail_followers" groups="base.group_user"/>
+                        <field name="message_ids" widget="mail_thread"/>
+                    </div>
+                </form>
+            </field>
+        </record>
+
+        <record id="product_comision_revision_aprobada_form_view" model="ir.ui.view">
+            <field name="name">prodcuct.comision.form</field>
+            <field name="model">rt.service.productos</field>
+            <field name="arch" type="xml">
+                <form string="Reporte de Viajes" edit="false" create="false" delete="false">
+                    <header>
+                        <field name="estado_comision" widget="statusbar"/>
+                    </header>
+                    <sheet>
+                        <div class="oe_button_box" name="button_box">
+                        </div>
+                        <group sring="Datos de La Matricula">
+                            <group>
+                                <field name="product_type"  invisible="1"/>
+                                <field name="solo_lectura"  readonly="0" groups="base.group_no_one" force_save="1"/>
+                                <field name="alquilado" invisible="1"/>
+                                <field name="flujo" invisible="1"/>
+                                <field name="name"/>
+                                <field name="rt_service_id" options="{'no_create': True}"/>
+                                <field name="motivo_solicitud" string="Motivo"/>
+                                <field name="attach_motivo_correcion_comision"
+                                       widget="many2many_binary"
+                                       attrs="{'required': [('estado_comision','=', 'correcion_solicitada')]}"
+                                       string="Adjunto"
+                                       nolabel="1"
+                                />
+                                <field name="comision_excepcion" attrs="{'readonly': [('solo_lectura','=', True)], 'invisible': [('flujo','=', True)]}"/>
+                                <field name="vehicle_id" options="{'no_create': True, 'no_open': True}" attrs="{'invisible': [('product_type','!=', 'propio'),('alquilado','=', False)],'readonly': [('solo_lectura','=', True)]}"/>
+                                <field name="matricula_dos_id" options='{"no_open": True, "no_create": True}' attrs="{'invisible': [('product_type','!=', 'propio'),('alquilado','=', False)],'readonly': [('solo_lectura','=', True)]}"/>
+                                <field name="driver_id" options="{'no_create': True, 'no_open': True}" attrs="{'invisible': [('product_type','!=', 'propio'),('alquilado','=', False)], 'required': [('vehicle_id','!=', False)],'readonly': [('solo_lectura','=', True)]}"/>
+                                <field name="chofer" attrs="{'invisible': ['|',('product_type','=', 'propio'),('alquilado','=', True)],'readonly': [('solo_lectura','=', True)]}"/>
+                                <field name="currency_id_chofer" options="{'no_open': True,'no_create': True}" attrs="{'readonly': [('solo_lectura','=', True)], 'invisible': [('flujo','=', True)]}"/>
+                                <field name="driver_commission" widget="monetary" options="{'currency_field': 'currency_id_chofer'}" attrs="{'readonly': [('solo_lectura','=', True)], 'invisible': [('flujo','=', True)]}"/>
+
+                            </group>
+                        </group>
+                    </sheet>
+                    <div class="oe_chatter">
+                        <field name="message_follower_ids" widget="mail_followers" groups="base.group_user"/>
+                        <field name="message_ids" widget="mail_thread"/>
+                    </div>
+                </form>
+            </field>
+        </record>
+
+        <record id="product_comision_revision_tree_view" model="ir.ui.view">
+            <field name="name">Reporte de Viajes-Tree</field>
+            <field name="model">rt.service.productos</field>
+            <field name="arch" type="xml">
+                <tree string="Comisiones" create="false" delete="false">
+                    <field name="estado_comision"/>
+                    <field name="name"/>
+                    <field name="rt_service_id"/>
+                    <field name="motivo_solicitud" string="Motivo"/>
+                    <field name="comision_excepcion"/>
+                    <field name="vehicle_id"/>
+                    <field name="matricula_dos_id" />
+                    <field name="driver_id" />
+                    <field name="chofer" />
+                    <field name="currency_id_chofer" />
+                    <field name="driver_commission" widget="monetary" options="{'currency_field': 'currency_id_chofer'}" />
+                </tree>
+            </field>
+        </record>
+
+        <record id="product_comision_revision_aprobada_tree_view" model="ir.ui.view">
+            <field name="name">Reporte de Viajes-Tree</field>
+            <field name="model">rt.service.productos</field>
+            <field name="arch" type="xml">
+                <tree string="Comisiones" edit="false" create="false" delete="false">
+                    <field name="estado_comision"/>
+                    <field name="name"/>
+                    <field name="rt_service_id"/>
+                    <field name="motivo_solicitud" string="Motivo"/>
+                    <field name="comision_excepcion"/>
+                    <field name="vehicle_id"/>
+                    <field name="matricula_dos_id" />
+                    <field name="driver_id" />
+                    <field name="chofer" />
+                    <field name="currency_id_chofer" />
+                    <field name="driver_commission" widget="monetary" options="{'currency_field': 'currency_id_chofer'}" />
+                </tree>
+            </field>
+        </record>
+
+
+
+
+
+
+    </data>
+</odoo>

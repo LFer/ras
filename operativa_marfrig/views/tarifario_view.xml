@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+
+        <record id="view_marfig_tarifario_tree" model="ir.ui.view">
+        <field name="name">Marfrig-Tarifario-Tree</field>
+        <field name="model">product.pricelist</field>
+        <field name="arch" type="xml">
+            <tree string="pricelist">
+                <field name="name"/>
+                <field name="partner_id"/>
+                <field name="es_marfrig" invisible="1"/>
+            </tree>
+        </field>
+    </record>
+
+    <record id="view_marfig_tarifario_form" model="ir.ui.view">
+        <field name="name">marfrig.tarifario.form</field>
+        <field name="model">product.pricelist.item</field>
+        <field name="domain">[('partner_id','=',True)]</field>
+        <field name="inherit_id" ref="servicio_base.rt_product_pricelist_form_view"/>
+        <field name="arch" type="xml">
+            <field name="partner_id"  position="after">
+                <field name="planta_id" style="width:40%"/>
+            </field>
+        </field>
+    </record>
+
+    </data>
+</odoo>

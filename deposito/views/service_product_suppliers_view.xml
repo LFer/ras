@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <record id="deposito_supplier_tree_view" model="ir.ui.view">
+            <field name="name">Deposito-Proveedores-Tree</field>
+            <field name="model">rt.service.product.supplier</field>
+			<field name="inherit_id" ref="servicio_base.supplier_tree_view"/>
+            <field name="arch" type="xml">
+                <data>
+                    <field name="rt_service_id" position="after">
+                        <field name="deposito_id" string="Carpeta Deposito" groups="base.group_no_one"/>
+                    </field>
+                    <field name="rt_service_product_id" position="after">
+                        <field name="rt_deposito_product_id" string="Servicio Deposito" groups="base.group_no_one"/>
+                    </field>
+                </data>
+            </field>
+        </record>
+
+    </data>
+</odoo>

@@ -1,0 +1,5 @@
+name,group_id/id,model_id/id,perm_create,perm_write,perm_unlink,perm_read
+marfrig.template.service.products,operativa_marfrig.fleet_group_manager,operativa_marfrig.model_marfrig_template_service_products,True,True,True,True
+marfrig.template,operativa_marfrig.fleet_group_manager,operativa_marfrig.model_marfrig_template,True,True,True,True
+marfrig.service.products,operativa_marfrig.fleet_group_manager,operativa_marfrig.model_marfrig_service_products,True,True,True,True
+marfrig.service.base,operativa_marfrig.fleet_group_manager,operativa_marfrig.model_marfrig_service_base,True,True,True,True

@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+    <data noupdate="1">
+        <record forcecreate="0" id="f21_deposito_ras" model="f21.deposito">
+            <field name="name">Grupo RAS</field>
+            <field name="codigo">4</field>
+            <field name="tipo">origen</field>
+        </record>
+        <record forcecreate="0" id="f21_deposito_mshop" model="f21.deposito">
+            <field name="name">Montevideo Shopping</field>
+            <field name="codigo">1</field>
+            <field name="tipo">destino</field>
+        </record>
+        <record id="dtm_fe_sale_produccion_firmar" model="ir.config_parameter">
+                <field name="key">url_ws_f21</field>
+                <field name="value">http://srv01.real2b.com:20501/IPointWSTest.asmx?WSDL</field>
+        </record>
+    </data>
+</openerp>

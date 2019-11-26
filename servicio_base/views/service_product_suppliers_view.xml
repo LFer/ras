@@ -1,0 +1,178 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <record id="export_document" model="ir.ui.view">
+        <field name="name">Descargar Archivo</field>
+        <field name="model">descargar.hojas</field>
+        <field name="type">form</field>
+        <field name="arch" type="xml">
+            <form string="Hoja de Precios">
+                <group>
+                    <field name="archivo_nombre" readonly="1"/>
+                    <field name="archivo_contenido" filename="archivo_nombre" readonly="1"/>
+                </group>
+                <footer>
+                    <button string="Cerrar Ventana" class="oe_highlight" special="cancel"/>
+                </footer>
+            </form>
+        </field>
+    </record>
+
+    <data>
+        <record id="supplier_tree_view" model="ir.ui.view">
+            <field name="name">Proveedores-Tree</field>
+            <field name="model">rt.service.product.supplier</field>
+            <field name="arch" type="xml">
+                <tree string="Proveedores" edit="false" create="false" delete="false">
+                    <field name="state" groups="base.group_no_one"/>
+                    <field name="name"/>
+                    <field name="ref"/>
+                    <field name="output_reference"/>
+                    <field name="invoice_id"/>
+                    <field name="partner_invoice_id"/>
+                    <field name="supplier_id"/>
+                    <field name="product_id"/>
+                    <field name="origin_id" options="{'no_create': True, 'no_open': True}"/>
+                    <field name="destiny_id" options="{'no_create': True, 'no_open': True}"/>
+                    <field name="tack_id"/>
+                    <field name="dua"/>
+                    <field name="mic"/>
+                    <field name="crt"/>
+                    <field name="service_date"/>
+                    <field name="currency_id"/>
+                    <field name="amount"/>
+                    <field name="tax_ids" widget="many2many_tags"/>
+                    <field name="price_subtotal"/>
+                    <field name="service_state" groups="base.group_no_one"/>
+                    <field name="rt_service_id" groups="base.group_no_one"/>
+                    <field name="rt_service_product_id" string="Servicio" groups="base.group_no_one"/>
+                </tree>
+            </field>
+        </record>
+
+        <record id="supplier_filter" model="ir.ui.view">
+            <field name="name">Proveedores</field>
+            <field name="model">rt.service.product.supplier</field>
+            <field name="arch" type="xml">
+                <search string="Buscar Comisiones">
+                    <filter string="Servicios" name="servicio" domain="[('rt_service_product_id','!=',False)]"/>
+                    <filter string="Sin Facturas" name="sin_facturas" domain="[('invoice_id','=',False)]"/>
+                    <filter string="Con Facturas" name="con_facturas" domain="[('invoice_id','!=',False)]"/>
+                    <field name="name" string="Orden de Pago"/>
+                    <field name="ref"/>
+                    <field name="tack_id"/>
+                    <field name="output_reference"/>
+                    <field name="partner_invoice_id"/>
+                    <field name="dua"/>
+                    <field name="mic"/>
+                    <field name="crt"/>
+                    <field name="supplier_id"/>
+                    <field name="rt_service_product_id"/>
+                    <field name="origin_id"/>
+                    <field name="destiny_id"/>
+                    <field name="product_id"/>
+                    <group expand="1" string="Group By">
+                        <filter name="filter_tack_id" string="Contenedores" icon="terp-accessories-archiver" domain="[]" context="{'group_by':'tack_id'}"/>
+                        <filter name="filter_folder" string="Carpeta Relacionada" icon="terp-accessories-archiver" domain="[]" context="{'group_by':'ref'}"/>
+                        <filter name="filter_partner_invoice_id" string="Cliente a Facturar" icon="terp-accessories-archiver" domain="[]" context="{'group_by':'partner_invoice_id'}"/>
+                        <filter name="filter_dua" string="DUA" icon="terp-accessories-archiver" domain="[]" context="{'group_by':'dua'}"/>
+                        <filter name="filter_product_id" string="Producto" icon="terp-accessories-archiver" domain="[]" context="{'group_by':'product_id'}"/>
+                        <filter name="filter_mic" string="MIC" icon="terp-accessories-archiver" domain="[]" context="{'group_by':'mic'}"/>
+                        <filter name="filter_crt" string="CRT" icon="terp-accessories-archiver" domain="[]" context="{'group_by':'crt'}"/>
+                        <filter name="filter_supplier_id" string="Proveedor" icon="terp-accessories-archiver" domain="[]" context="{'group_by':'supplier_id'}"/>
+                        <filter name="filter_service_date" string="Fecha" icon="terp-accessories-archiver" domain="[]" context="{'group_by':'service_date'}"/>
+                        <filter name="filter_service" string="Servicios" icon="terp-accessories-archiver" domain="[]" context="{'group_by':'rt_service_product_id'}"/>
+                        <filter name="filter_currency" string="Moneda" icon="terp-accessories-archiver" domain="[]" context="{'group_by':'currency_id'}"/>
+                        <filter name="filter_origin_id" string="Origen" icon="terp-accessories-archiver" domain="[]" context="{'group_by':'origin_id'}"/>
+                        <filter name="filter_destiny_id" string="Destino" icon="terp-accessories-archiver" domain="[]" context="{'group_by':'destiny_id'}"/>
+                        <filter name="filter_output_reference" string="Referencia de Salida" icon="terp-accessories-archiver" domain="[]" context="{'group_by':'output_reference'}"/>
+                        <filter name="filter_oc" string="Orden de Pago" icon="terp-accessories-archiver" domain="[]" context="{'group_by':'name'}"/>
+                    </group>
+                </search>
+            </field>
+        </record>
+
+        <record model="ir.actions.act_window" id="product_supplier_action">
+            <field name="name">Proveedores</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">rt.service.product.supplier</field>
+            <field name="domain">[('invoice_id','=',False)]</field>
+            <field name="view_mode">tree</field>
+            <field name="view_id" ref="supplier_tree_view"/>
+            <field name="filter" eval="True"/>
+            <field name="search_view_id" ref="supplier_filter"/>
+        </record>
+
+        <record model="ir.actions.act_window" id="action_liquidacion_proveedores">
+            <field name="name">Liquidación de Proveedores</field>
+            <field name="res_model">liquidacion.proveedores</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">form</field>
+            <field name="target">new</field>
+        </record>
+
+
+        <record model="ir.ui.view" id="view_ras_trans_liquidacion_poveedores_form">
+            <field name="name">liquidacion.proveedores.form</field>
+            <field name="model">liquidacion.proveedores</field>
+            <field name="type">form</field>
+            <field name="arch" type="xml">
+                <form>
+                    <sheet>
+                        <group string="Liquidación de Proveedores" colspan="4">
+                            <field name="inicio" style="width: 30%"/>
+                            <field name="fin" style="width: 30%"/>
+                            <field name="partner_id" options="{'no_open': True, 'no_create_edit': True}" style="width: 30%"/>
+                            <field name="sin_factura"/>
+                        </group>
+                        <footer>
+                            <button class="oe_highlight"
+                                    type="object"
+                                    name="gen_report_xls_ventas_fleteros"
+                                    string="Excel">
+                            </button>
+                            or
+                            <button string="Cancel" class="oe_link" special="cancel"/>
+                        </footer>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+
+
+        <menuitem
+                id="menu_supplier_root"
+                name="Proveedores"
+                web_icon="fleet,static/description/icon.png"
+                groups="base.group_user"
+                sequence="150"
+        />
+
+        <menuitem
+                id="menu_supplier_main"
+                parent="menu_supplier_root"
+                name="Proveedores"
+                groups="base.group_user"
+                sequence="150"
+                action="product_supplier_action"
+        />
+
+        <menuitem
+                id="menu_supplier_report"
+                parent="menu_supplier_root"
+                name="Informes"
+                groups="base.group_user"
+                sequence="107"
+        />
+
+        <menuitem
+                id="menu_supplier_report_xls"
+                parent="menu_supplier_root"
+                name="Exportar a Excel"
+                groups="base.group_user"
+                sequence="150"
+                action="action_liquidacion_proveedores"
+        />
+
+    </data>
+</odoo>

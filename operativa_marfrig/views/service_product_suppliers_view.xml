@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <record id="marfrig_supplier_tree_view" model="ir.ui.view">
+            <field name="name">Marfrig-Proveedores-Tree</field>
+            <field name="model">rt.service.product.supplier</field>
+            <field name="inherit_id" ref="servicio_base.supplier_tree_view"/>
+            <field name="arch" type="xml">
+                <data>
+                    <field name="rt_service_id" position="after">
+                        <field name="margrig_id" string="Carpeta Marfrig" groups="base.group_no_one"/>
+                    </field>
+                    <field name="rt_service_product_id" position="after">
+                        <field name="rt_marfrig_product_id" string="Servicio Marfrig" groups="base.group_no_one"/>
+                    </field>
+                </data>
+            </field>
+        </record>
+
+        <record id="marfig_supplier_filter" model="ir.ui.view">
+            <field name="name">Marfrig-Proveedores</field>
+            <field name="model">rt.service.product.supplier</field>
+            <field name="inherit_id" ref="servicio_base.supplier_filter"/>
+            <field name="arch" type="xml">
+                <data>
+                    <xpath expr="//filter[@name='filter_currency']" position="after">
+                        <filter name="groupby_mafrig" string="Servicio Marfrig" icon="terp-accessories-archiver" domain="[]" context="{'group_by':'rt_marfrig_product_id'}"/>
+                    </xpath>
+                </data>
+            </field>
+        </record>
+    </data>
+</odoo>

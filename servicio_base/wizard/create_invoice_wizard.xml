@@ -1,0 +1,111 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+
+
+        <record id="view_rt_service_advance_payment_inv" model="ir.ui.view">
+            <field name="name">rt.service.advance.payment.inv.form</field>
+            <field name="model">rt.service.advance.payment.inv</field>
+            <field name="arch" type="xml">
+                <form string="Invoice">
+                    <p>
+                        <span style="font-size: 16px;">
+                            Seleccione cómo quiere facturar este servicio. <br/>
+                            Esto creará una factura borrador que puede ser modificada antes de la validación
+                        </span>
+                    </p>
+                    <group>
+                        <field name="rt_service_id" invisible="1"/>
+                        <field name="group_by_product"/>
+                        <field name="operation_type" invisible="1"/>
+                        <field name="advance_payment_method" readonly="0" style="width:50%%"/>
+                        <field name="tramo_a_facturar" readonly="0" style="width:50%%" attrs="{'invisible': ['|',('advance_payment_method', '!=', 'percentage'),('operation_type', '!=', 'international')]}"/>
+                        <field name="amount"  style="width:50%%" attrs="{'invisible': ['|',('advance_payment_method', '!=', 'percentage'),('operation_type', '!=', 'international')], 'required': [('advance_payment_method', '=', 'percentage'),('operation_type', '!=', 'international')]}"/>
+                        <field name="amount_nat"  style="width:50%%" attrs="{'invisible': ['|',('advance_payment_method', '!=', 'all'),('operation_type', '!=', 'international')], 'required': [('advance_payment_method', '=', 'all'),('operation_type', '!=', 'international')]}"/>
+                        <field name="amount_inter"  style="width:50%%" attrs="{'invisible': ['|',('advance_payment_method', '!=', 'all'),('operation_type', '!=', 'international')], 'required': [('advance_payment_method', '=', 'all'),('operation_type', '!=', 'international')]}"/>
+                        <field name="qtty" invisible="1"  readonly="0"/>
+                        <field name="product_id"  readonly="0" invisible="1"/>
+                    </group>
+                    <div attrs="{'invisible': [('advance_payment_method', '!=', 'lines')]}">
+                        <p>
+                            Después de hacer clic en 'Mostrar líneas a facturar',
+                            seleccione los servicios a facturar y cree la factura desde
+                            el menú desplegable 'Más'.
+                        </p>
+                    </div>
+                    <footer>
+                        <button name="create_invoices" string="Crear y Ver Factura" type="object" context="{'open_invoices': True}" class="oe_highlight"  attrs="{'invisible': [('advance_payment_method', '=', 'lines')]}"/>
+                        <button name="create_invoices" string="Crear Factura" type="object" class="oe_highlight" attrs="{'invisible': [('advance_payment_method', '=', 'lines')]}"/>
+                        <button name="create_invoices" string="Mostrar servicios a facturar" type="object" class="oe_highlight" attrs="{'invisible': [('advance_payment_method', '!=', 'lines')]}"/>
+                        or
+                        <button string="Cancel" class="oe_link" special="cancel"/>
+                    </footer>
+                </form>
+            </field>
+        </record>
+
+
+        <record id="action_view_rt_service_advance_payment_inv" model="ir.actions.act_window">
+            <field name="name">Orden de facturación</field>
+            <field name="res_model">rt.service.advance.payment.inv</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">form</field>
+            <field name="view_id" ref="view_rt_service_advance_payment_inv"/>
+            <field name="target">new</field>
+        </record>
+
+
+
+        <record id="view_rt_service_product_make_invoice" model="ir.ui.view">
+            <field name="name">Service Product Make Invoice</field>
+            <field name="model">rt.service.product.make.invoice</field>
+            <field name="arch" type="xml">
+                <form string="Create invoices">
+                    <p>
+                        <span class="fa fa-info-circle" style="font-size: 24px; margin-right: 10px; color: #DC5F59; float: left;"/>
+                        <span style="font-size: 16px;">Todos los servicios selecionados seran facturados</span>
+                    </p>
+                    <group>
+                        <field name="group_by_product"/>
+                        <field name="regimen" readonly="1" style="width:50%%"/>
+                        <field name="operation_type" invisible="0"/>
+                        <field name="advance_payment_method" readonly="0" style="width:50%%"/>
+                        <field name="tramo_a_facturar" readonly="0" style="width:50%%" attrs="{'invisible': ['|',('advance_payment_method', '!=', 'percentage'),('operation_type', '!=', 'international')]}"/>
+                        <field name="amount"  style="width:50%%" attrs="{'invisible': ['|',('advance_payment_method', '!=', 'percentage'),('operation_type', '!=', 'international')], 'required': [('advance_payment_method', '=', 'percentage'),('operation_type', '!=', 'international')]}"/>
+                        <field name="amount_nat"  style="width:50%%" attrs="{'invisible': ['|',('advance_payment_method', '!=', 'all'),('operation_type', '!=', 'international')], 'required': [('advance_payment_method', '=', 'all'),('operation_type', '!=', 'international')]}"/>
+                        <field name="amount_inter"  style="width:50%%" attrs="{'invisible': ['|',('advance_payment_method', '!=', 'all'),('operation_type', '!=', 'international')], 'required': [('advance_payment_method', '=', 'all'),('operation_type', '!=', 'international')]}"/>
+                    </group>
+                    <footer>
+                        <button name="make_invoices" string="Crear &amp; Ver Factura" type="object"
+                                context="{'open_invoices': True}" class="oe_highlight"/>
+                        <button name="make_invoices" string="Crear Facturas" type="object" class="oe_highlight"/>
+                        or
+                        <button string="Cancelar" class="oe_link" special="cancel" />
+                    </footer>
+                </form>
+            </field>
+        </record>
+
+
+
+        <act_window
+                id="action_view_rt_service_product_make_invoice"
+                multi="True"
+                key2="client_action_multi"
+                name="Crear Factura"
+                res_model="rt.service.product.make.invoice"
+                src_model="rt.service.productos"
+                view_mode="form"
+                target="new"
+                view_type="form"
+                view_id="view_rt_service_product_make_invoice"
+        />
+
+
+
+    </data>
+</odoo>
+
+
+
+

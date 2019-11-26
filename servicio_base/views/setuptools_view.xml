@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <record model="ir.ui.view" id="setup_tools_view_form">
+            <field name="name">setup.tools.form</field>
+            <field name="model">setup.tools</field>
+            <field name="type">form</field>
+            <field name="arch" type="xml">
+                <form>
+                    <header>
+                        <button string="Confirmar" type="object" name="button_draft_done" class="oe_highlight oe_read_only"/>
+                        <field name="state" widget="statusbar"/>
+                    </header>
+                    <sheet>
+                        <group string="SetupTools">
+                            <button string="excel" type="object" name="arma_excel" class="oe_highlight oe_read_only"/>
+
+                            <field name="name" style="width: 30%"/>
+                            <field name="fecha" style="width: 30%"/>
+                        </group>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+
+        <record id="setuptools_action" model="ir.actions.act_window">
+            <field name="name">SetupTools</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">setup.tools</field>
+            <field name="view_mode">form</field>
+            <field name="help" type="html">
+                <p>
+                </p>
+            </field>
+        </record>
+
+        <menuitem
+                id="menu_setuptools_root"
+                name="Setup"
+                groups="base.group_no_one"
+                sequence="150"
+        />
+
+        <menuitem
+                id="meenu_setuptools_main"
+                parent="menu_setuptools_root"
+                name="SetupTools"
+                groups="base.group_no_one"
+                sequence="150"
+                action="setuptools_action"
+        />
+
+
+
+    </data>
+</odoo>

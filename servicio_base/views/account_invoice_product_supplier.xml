@@ -1,0 +1,165 @@
+<?xml version="1.0"?>
+<openerp>
+    <data>
+
+
+
+        <record id="rt_service_product_supplier_search" model="ir.ui.view">
+            <field name="name">rt.service.product.supplier.search</field>
+            <field name="model">rt.service.product.supplier</field>
+            <field name="arch" type="xml">
+                <search string="Suppliers">
+                    <field name="rt_service_product_id"/>
+                    <field name="supplier_id"/>
+                    <field name="invoice_id"/>
+                    <field name="currency_id"/>
+                    <field name="amount"/>
+                    <separator/>
+                    <filter string="Without Invoice" name="filter_without_invoice" icon="terp-personal" domain="[('invoice_id','=',False)]"/>
+                    <separator/>
+                    <group expand="1" string="Group By">
+                        <filter name="filter_rt_service_id" string="Service" domain="[]" context="{'group_by':'rt_service_id'}"/>
+                        <filter name="filter_group_rt_service_product_id" string="Product" domain="[]" context="{'group_by':'rt_service_product_id'}"/>
+                        <filter name="filter_group_supplier_id" string="Supplier" domain="[]" context="{'group_by':'supplier_id'}"/>
+                        <filter name="filter_group_invoice_id" string="Invoice" domain="[]" context="{'group_by':'invoice_id'}"/>
+                        <filter name="filter_group_currency_id" string="Currency" domain="[]" context="{'group_by':'currency_id'}"/>
+                    </group>
+                </search>
+            </field>
+        </record>
+
+        <record id="rt_service_product_supplier_action" model="ir.actions.act_window">
+            <field name="name">Freighters Liquidation</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">rt.service.product.supplier</field>
+            <field name="view_mode">tree,form</field>
+            <field name="view_type">form</field>
+            <field name="search_view_id" ref="servicio_base.rt_service_product_supplier_search"/>
+            <field name="domain">[('rt_service_product_id','!=',False),('rt_service_id','!=',False),('amount','>',0)]</field>
+            <field name="context">{'search_default_filter_without_invoice': True, 'tree_view_ref':'ras_trans_supplier_invoice.rt_service_product_supplier_tree2', 'form_view_ref':'ras_trans_supplier_invoice.rt_service_product_supplier_form2'}</field>
+        </record>
+
+        <record id="rt_service_product_supplier_tree2" model="ir.ui.view">
+            <field name="name">rt.service.product.supplier.tree</field>
+            <field name="model">rt.service.product.supplier</field>
+            <field name="priority">2</field>
+            <field name="arch" type="xml">
+                <tree string="Suppliers" create="false" edit="true" delete="false" editable="bottom">
+                    <field name="state"/>
+                    <field name="invoice_id"/>
+                    <field name="partner_invoice_id"/>
+                    <field name="supplier_id"/>
+                    <field name="product_id"/>
+                    <field name="output_reference"/>
+                    <field name="origin_id" options="{'no_create': True, 'no_open': True}"/>
+                    <field name="destiny_id" options="{'no_create': True, 'no_open': True}"/>
+                    <field name="tack_id"/>
+                    <field name="dua"/>
+                    <field name="mic"/>
+                    <field name="crt"/>
+                    <field name="service_date"/>
+                    <field name="currency_id"/>
+                    <field name="amount"/>
+                    <field name="tax_ids" widget="many2many_tags"/>
+                    <field name="price_subtotal"/>
+                    <field name="service_state"/>
+                    <field name="rt_service_product_id" string="Servicio"/>
+                </tree>
+            </field>
+        </record>
+
+        <record id="rt_service_product_supplier_form2" model="ir.ui.view">
+            <field name="name">rt.service.product.supplier.form</field>
+            <field name="model">rt.service.product.supplier</field>
+            <field name="priority">2</field>
+            <field name="arch" type="xml">
+                <form string="Suppliers" create="false" edit="true" delete="false">
+                    <group col="2">
+                        <group>
+                            <field name="rt_service_id" readonly="1" attrs="{'invisible': [('rt_service_id','=',False)]}" options='{"no_create": True}'/>
+                            <field name="rt_service_product_id" readonly="1" options='{"no_create": True}'/>
+                            <field name="supplier_id" options='{"no_create": True}' context='{"default_supplier": True, "search_default_supplier": True}'/>
+                            <field name="invoice_id" options='{"no_create": True}'/>
+                            <field name="supplier_invoice_number"/>
+                        </group>
+                        <group>
+                            <field name="currency_id" options='{"no_create": True}'/>
+                            <field name="sender"/>
+                            <field name="amount"/>
+                            <field name="price_subtotal"/>
+                            <button class="oe_stat_button"
+                                    string="Actualizar Importe"
+                                    name="update_amount"
+                                    type="object"
+                                    icon="fa-users"
+                                    style="border: 1px solid #7C7BAD; border-radius: 3px; white-space: normal;"
+                            />
+                        </group>
+                        <group colspan="2" col="1">
+                            <separator string="Taxes"/>
+                            <field name="tax_ids" nolabel="1" options='{"no_create": True}'/>
+                        </group>
+                    </group>
+                </form>
+            </field>
+        </record>
+
+
+
+
+
+
+
+        <record id="invoice_supplier_form" model="ir.ui.view">
+            <field name="name">account.invoice.supplier.form</field>
+            <field name="model">account.invoice</field>
+            <field name="inherit_id" ref="account.invoice_supplier_form"/>
+            <field name="arch" type="xml">
+                <data>
+                    <notebook position="inside">
+                        <page string="Services Information">
+                            <group>
+                                <div class="oe_right oe_button_box" style="width: 300px; height: 40px; margin-bottom: -30px;" name="buttons">
+                                    <button class="oe_stat_button" string="Add Suppliers" name="bind_service_product_supplier" type="object" icon="fa-users" style="border: 1px solid #7C7BAD; border-radius: 3px; white-space: normal;"
+                                            attrs="{'invisible':[('state','not in',['open','paid','draft'])]}"/>
+                                </div>
+                            </group>
+                            <group col="2">
+                                <group>
+                                    <field name="freighter_id" domain="[('supplier','=',True)]"/>
+                                </group>
+                                <group/>
+                            </group>
+                            <notebook>
+                                <page string="Product Suppliers">
+                                    <field name="product_supplier_ids" nolabel="1" widget="one2many_list">
+                                        <!--                                        <tree string="Suppliers" create="false" edit="false" delete="false">-->
+                                        <tree string="Suppliers">
+                                            <field name="rt_service_id" attrs="{'invisible': [('rt_service_id','=',False)]}" options='{"no_create": True}'/>
+                                            <field name="rt_service_product_id" options='{"no_create": True}'/>
+                                            <field name="currency_id" options='{"no_create": True}'/>
+                                            <field name="tax_ids" widget="many2many_tags" options='{"no_create": True}'/>
+                                            <field name="amount"/>
+                                        </tree>
+                                    </field>
+                                </page>
+                                <page string="Services">
+                                    <field name="service_ids" nolabel="1" widget="one2many_list">
+                                        <tree string="Services" create="false" edit="false" delete="false">
+                                            <field name="name" string="Service Number"/>
+                                            <!--<field name="product_id"/>-->
+                                            <!--<field name="date_start"/>-->
+                                            <field name="partner_id"/>
+                                            <field name="state"/>
+                                        </tree>
+                                    </field>
+                                </page>
+                            </notebook>
+                        </page>
+                    </notebook>
+                </data>
+            </field>
+        </record>
+
+    </data>
+</openerp>

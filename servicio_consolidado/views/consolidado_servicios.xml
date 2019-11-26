@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+
+        <record id="consolidados_servcios_search" model="ir.ui.view">
+            <field name="name">Filtro Servicio Consolidado</field>
+            <field name="model">producto.servicio.camion</field>
+            <field name="arch" type="xml">
+                <search string="Search Uninvoiced Service Product">
+                    <filter string="No Facturado" name="uninvoiced" domain="[('invoiced','=',False)]"/>
+                    <filter string="Factura Rechazada" name="invoiced_rejected" domain="[('invoiced_rejected','=',True)]"/>
+                    <filter string="Facturado" name="invoiced" domain="[('invoiced','=',True)]"/>
+                    <filter string="Facturable" name="invoiceable" domain="[('is_invoiced','=',True)]"/>
+                    <field name="product_id"/>
+                    <field name="currency_id"/>
+                    <group expand="1" string="Group By">
+                        <filter name="filter_service_carpeta" string="Carpeta" icon="terp-gtk-jump-to-rtl" domain="[]" context="{'group_by':'camion_id'}"/>
+                        <filter name="filter_service_carga" string="Carga" icon="terp-gtk-jump-to-rtl" domain="[]" context="{'group_by':'rt_carga_id'}"/>
+                        <filter name="filter_product" string="Product" icon="terp-accessories-archiver" domain="[]" context="{'group_by':'product_id'}"/>
+                        <filter name="filter_regimen" string="Regimen" icon="terp-accessories-archiver" domain="[]" context="{'group_by':'regimen'}"/>
+                        <filter name="filter_product" string="Cliente a Facturar" icon="terp-accessories-archiver" domain="[]" context="{'group_by':'partner_invoice_id'}"/>
+                        <filter name="filter_currency" string="Currency" icon="terp-dolar_ok!" domain="[]" context="{'group_by':'currency_id'}"/>
+                        <filter name="filter_crt_number" string="CRT" icon="terp-gtk-jump-to-rtl" domain="[]" context="{'group_by':'crt_number'}"/>
+                        <filter name="filter_planta" string="Planta Destino"  domain="[]" context="{'group_by':'partner_invoice_id'}"/>
+                    </group>
+                </search>
+            </field>
+        </record>
+
+        <record id="consolidado_servicios_tree_view" model="ir.ui.view">
+            <field name="name">Servicios Consolidados</field>
+            <field name="model">producto.servicio.camion</field>
+            <field name="arch" type="xml">
+                <tree string="Servicios" create="false" decoration-danger="invoiced_rejected == True" decoration-it="invoiced_rejected == True">
+                    <field name="invoiced_rejected" invisible="1"/>
+                    <field name="product_id"/>
+                    <field name="partner_invoice_id"/>
+                    <field name="name"/>
+                    <field name="regimen"/>
+                    <field name="tramo_inter" invisible="0"/>
+                    <field name="tramo_nat" invisible="0"/>
+                    <field name="is_invoiced" invisible="1"/>
+                    <field name="supplier_id"/>
+                    <field name="state"/>
+                    <field name="camion_id"/>
+                    <field name="rt_carga_id"/>
+                </tree>
+            </field>
+        </record>
+
+
+        <record id="action_consolidado_servicio_tree" model="ir.actions.act_window">
+            <field name="name">Servicios Consolidado</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">producto.servicio.camion</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">tree</field>
+            <field name="search_view_id" ref="consolidados_servcios_search"/>
+            <field name="view_id" ref="consolidado_servicios_tree_view"/>
+            <field name="context">{"search_default_uninvoiced":1}</field>
+            <field name="filter" eval="True"/>
+            <field name="help" type="html">
+              <p>
+                Here is a list of each service product to be invoiced. You can
+                invoice service product partially, by lines of service.
+              </p>
+            </field>
+        </record>
+
+        <record id="action_consolidado_servicio_rechazado" model="ir.actions.act_window">
+            <field name="name">Servicios Consolidado</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">producto.servicio.camion</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">tree</field>
+            <field name="search_view_id" ref="consolidados_servcios_search"/>
+            <field name="view_id" ref="consolidado_servicios_tree_view"/>
+            <field name="context">{"search_default_invoiced_rejected":1}</field>
+            <field name="filter" eval="True"/>
+            <field name="help" type="html">
+              <p>
+                Here is a list of each service product to be invoiced. You can
+                invoice service product partially, by lines of service.
+              </p>
+            </field>
+        </record>
+
+    </data>
+</odoo>

@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+
+        <!-- ACCIONES-->
+
+        <record id="action_rt_service_product_invoiced_tree" model="ir.actions.act_window">
+            <field name="name">Servicio Facturados</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">rt.service.productos</field>
+            <field name="domain">[('invoiced','=',True)]</field>
+            <field name="view_id" ref="servicio_base.view_productos_nacional_tree"/>
+            <field name="search_view_id" ref="view_rt_service_product_search_view"/>
+            <field name="view_mode">tree</field>
+            <field name="help" type="html">
+                <p>
+                    Here is a list of each service product to be invoiced. You can
+                    invoice service product partially, by lines of service.
+                </p>
+            </field>
+        </record>
+
+        <record id="action_rt_service_product_is_invoiced_tree" model="ir.actions.act_window">
+            <field name="name">Servicio Facturables</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">rt.service.productos</field>
+            <field name="domain">[('is_invoiced','=',True)]</field>
+            <field name="view_id" ref="servicio_base.view_productos_nacional_tree"/>
+            <field name="search_view_id" ref="view_rt_service_product_search_view"/>
+            <field name="view_mode">tree</field>
+            <field name="help" type="html">
+                <p>
+                    Here is a list of each service product to be invoiced. You can
+                    invoice service product partially, by lines of service.
+                </p>
+            </field>
+        </record>
+
+        <record id="action_rt_service_product_uninvoiced_tree" model="ir.actions.act_window">
+            <field name="name">Servicio No Facturados</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">rt.service.productos</field>
+            <field name="domain">[('invoiced','=',False)]</field>
+            <field name="view_id" ref="servicio_base.view_productos_nacional_tree"/>
+            <field name="search_view_id" ref="view_rt_service_product_search_view"/>
+            <field name="view_mode">tree</field>
+            <field name="help" type="html">
+                <p>
+                    Here is a list of each service product to be invoiced. You can
+                    invoice service product partially, by lines of service.
+                </p>
+            </field>
+        </record>
+
+        <!--MENU DE FILTROS-->
+
+
+
+
+    </data>
+</odoo>

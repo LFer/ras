@@ -1,0 +1,709 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+
+        <template id="assets_backend" inherit_id="web.assets_backend">
+            <xpath expr="." position="inside">
+                <link rel="stylesheet" href="/servicio_base/static/src/css/carga_container.css"/>
+            </xpath>
+        </template>
+
+        <!--Vista lista de la carpeta-->
+        <record id="rt_service_base_tree_view" model="ir.ui.view">
+            <field name="name">rt.service.base.tree.view</field>
+            <field name="model">rt.service</field>
+            <field name="arch" type="xml">
+                <tree string="Carpeta"
+                      decoration-primary="state=='draft'"
+                      decoration-bf="state=='confirm'"
+                      decoration-success="state=='done'"
+                      decoration-muted="state=='cancel'"
+                      decoration-info="state=='inprocess'"
+                      decoration-danger="state=='invoice_rejected'"
+                      decoration-it="state=='invoice_rejected'"
+                >
+                    <field name="name"/>
+                    <field name="reference"/>
+                    <field name="partner_invoice_id" options="{'no_open': True,'no_create': True}"/>
+                    <field name="partner_id" options="{'no_open': True,'no_create': True}"/>
+                    <field name="regimen"/>
+                    <field name="start_datetime"/>
+                    <field name="state"/>
+                    <field name="currency_id" invisible="0"/>
+                </tree>
+            </field>
+        </record>
+
+        <!--Vista lista de productos-->
+        <record id="view_rt_productos_tree" model="ir.ui.view">
+            <field name="name">rt.productos.list.list</field>
+            <field name="model">rt.service.productos</field>
+            <field name="arch" type="xml">
+                <tree string="Productos" create="true"
+                      decoration-danger="invoiced_rejected == True"
+                      decoration-it="invoiced_rejected == True"
+                      decoration-success="invoiced == True"
+                >
+                    <field name="rt_carga_id" invisible="1"/>
+                    <field name="invoiced_rejected" invisible="1"/>
+                    <field name="invoiced" invisible="1"/>
+                    <field name="id" widget="handle"/>
+                    <field name="regimen"/>
+                    <field name="regimen_excepcion"/>
+                    <field name="tramo_inter"/>
+                    <field name="tramo_nat"/>
+                    <field name="product_id"/>
+                    <field name="action_type_id"/>
+                    <field name="product_type"/>
+                    <field name="driver_id" options="{'no_open': True,'no_create': True}"/>
+                    <field name="currency_id_chofer" invisible="1"/>
+                    <field name="driver_commission" widget="monetary" options="{'currency_field': 'currency_id_chofer'}"/>
+                    <field name="supplier_id" options="{'no_open': True,'no_create': True}"/>
+                    <field name="currency_id" invisible="1"/>
+                    <field name="importe" widget="monetary" options="{'currency_field': 'currency_id'}"/>
+                    <field name="is_outgoing" invisible="1"/>
+                </tree>
+            </field>
+        </record>
+
+        <!--Vista Formulario de la Carga-->
+        <record id="view_service_carga_form" model="ir.ui.view">
+            <field name="name">rt.service.carga.form</field>
+            <field name="model">rt.service.carga</field>
+            <field name="arch" type="xml">
+                <form string="Cargas" create="false">
+                    <header>
+                        <field name="state" widget="statusbar"/>
+                        <button class="oe_highlight"
+                                type="object"
+                                name="carga_realizada"
+                                string="Carga Realizada"
+                                states="ingress"
+                        />
+                        <button class="oe_highlight"
+                                type="object"
+                                name="ingresar_carga"
+                                string="Ingresar Carga"
+                                states="draft"
+                        />
+                    </header>
+                    <sheet>
+                        <!--Campos para visibilidad-->
+                        <field name="make_page_invisible" groups="base.group_no_one"/>
+                        <field name="regimen" invisible="1"/>
+                        <field name="operation_type" invisible="1"/>
+                        <field name="es_plantilla" groups="base.group_no_one"/>
+                        <field name="partner_invoice_id" invisible="1"/>
+                        <field name="make_dua_invisible_or_required" invisible="1"/>
+                        <field name="make_gex_invisible_or_required" invisible="1"/>
+                        <field name="dua_not_gex" invisible="1"/>
+                        <field name="gex_not_dua" invisible="1"/>
+                        <field name="invisible_in_transit" invisible="1"/>
+                        <field name="invisible_in_transit_out" invisible="1"/>
+                        <field name="make_presentacion_invisible" invisible="1"/>
+                        <field name="make_terminal_devolucion_invisible" invisible="1"/>
+                        <field name="make_container_number_invisible" invisible="1"/>
+                        <field name="rt_service_id" force_save="1" groups="base.group_no_one"/>
+                        <field name="carga_qty" invisible="1"/>
+                        <field name="carga_m3" invisible="1"/>
+                        <field name="valid_cointaner_number_text" invisible="1"/>
+                        <field name="invalid_cointaner_number_text" invisible="1"/>
+                        <field name="company_id" invisible="1"/>
+                        <notebook>
+                            <page string="Alerta" name="page_to_show_invisible" attrs="{'invisible': ['|',('es_plantilla', '=', True),('make_page_invisible','=',False)]}">
+                                <p>
+                                    <h2>Si esta viendo esta ventana significa que:</h2>
+                                    <separator></separator>
+                                    - No ha selecionado un Régimen
+                                    <br/>
+                                    - No ha selecionado un Cliente a Facturar
+                                    <br/>
+                                    - No ha elegido la Mododalidad del DUA (Cabeal o Línea)
+                                    <br/>
+                                    - No ha selecionado un Servicio Asociado
+                                    <br/><br/>
+                                    <h4>Cierre esta ventana y configure los campos</h4>
+                                </p>
+                            </page>
+                            <page string="Principal de la Carga" name="page_principal_carga" attrs="{'invisible': [('make_page_invisible','=',True),('es_plantilla', '=', False)]}">
+                                <div name="buttons" attrs="{'invisible': ['|',('regimen','not in',('expo_inter','transit_inter_in','transit_inter_out')),('operation_type','=','national')]}">
+                                    <button class="oe_stat_button" string="Recibir Mercaderia" name="abrir_contenedor" type="object" icon="fa-truck" style="border: 1px solid #7C7BAD; border-radius: 3px; white-space: normal"/>
+                                </div>
+                                <group>
+                                    <field name="seq" invisible="1"/>
+                                    <field name="estado_correccion"/>
+                                    <field name="user_correction_id"  groups="base.group_no_one" force_save="1"/>
+                                </group>
+                                <group>
+                                    <field name="motivo_solicitud" string="Motivo"
+                                           attrs="{'required': [('estado_correccion','=', 'correcion_solicitada')]}"
+                                    />
+                                    <field name="attach_motivo_correccion"
+                                           widget="many2many_binary"
+                                           attrs="{'required': [('estado_correccion','=', 'correcion_solicitada')]}"
+                                           string="Adjunto"
+                                           nolabel="1"
+                                    />
+                                    <button class="oe_stat_button"
+                                            string="Solicitar Correción"
+                                            name="solicitar_correccion"
+                                            type="object"
+                                            icon="fa-check-double"
+                                            style="white-space: normal;border: 1px solid #7C7BAD;"
+
+                                    />
+                                    <span attrs="{'invisible':[('estado_correccion','!=', 'correcion_solicitada')]}" class="fa fa-paper-plane" style="position: absolute;font-size: 14px; color: #02e02f;"> Corrección Solicitada</span>
+
+
+                                    <field name="solo_lectura" readonly="0" groups="base.group_no_one" force_save="1"/>
+                                    <field name="partner_id" options="{'no_open': True,'no_create': True}" attrs="{'readonly': [('solo_lectura','=', True)]}"/>
+                                </group>
+                                <group name="grupo_0">
+                                    <h1>
+                                        <field name="name" placeholder="Referencia Carga" attrs="{'readonly': [('solo_lectura','=', True)]}"/>
+                                    </h1>
+                                    <field name="dangers_loads" attrs="{'readonly': [('solo_lectura','=', True)]}"/>
+                                    <field name="pricelist_id" options="{'no_open': True,'no_create': True}" attrs="{'readonly': [('solo_lectura','=', True)]}"/>
+                                </group>
+                                <group>
+                                    <group>
+                                        <field name="start_datetime" attrs="{'readonly': [('solo_lectura','=', True)], 'required': [('es_plantilla', '=', False)], 'invisible': [('es_plantilla', '=', True)]}"/>
+                                        <field name="comentarios" invisible="1"/>
+                                        <field name="delivery_order" attrs="{'invisible': [('es_plantilla', '=', True)], 'readonly': [('solo_lectura','=', True)]}"/>
+                                        <field name="purchase_order" attrs="{'invisible': [('es_plantilla', '=', True)], 'readonly': [('solo_lectura','=', True)]}"/>
+                                        <field name="load_type" attrs="{'readonly': [('solo_lectura','=', True)]}"/>
+                                        <field name="load_presentation" options="{'no_create': True, 'no_open': True}" attrs="{'invisible': [('es_plantilla', '=', True)], 'readonly': [('solo_lectura','=', True)]}"/>
+                                        <field name="has_dua_cabezal" invisible="1"/>
+                                        <label for="dua_muestra" attrs="{'invisible': ['|','|','|',('es_plantilla', '=', True),('dua_not_gex', '=', False),('has_dua_cabezal', '=', True),('regimen','in',('interno_plaza_nat','interno_fiscal_nat'))]}"/>
+                                        <div class="address_format" attrs="{'invisible': ['|','|','|',('es_plantilla', '=', True),('dua_not_gex', '=', False),('has_dua_cabezal', '=', True),('regimen','in',('interno_plaza_nat','interno_fiscal_nat'))]}" >
+                                            <field name="dua_muestra" style="width: 25%"/>
+                                            <label for="multiple_dua" style="font-weight:bold;width: 25%" attrs="{'invisible': [('load_type','=', 'bulk')]}"/>
+                                            <field name="multiple_dua" style="width: 25%" attrs="{'invisible': [('load_type','=', 'bulk')]}"/>
+                                        </div>
+                                        <field name="duas_ids"  mode="tree" context="{'default_rt_carga_id' : id,}" attrs="{'invisible': ['|',('es_plantilla', '=', True),('multiple_dua','=', False)], 'required': [('es_plantilla', '=', False),('has_dua_cabezal','=', False),('dua_not_gex', '=', True),('multiple_dua', '=', True)]}">
+                                            <tree string="Packing List" editable="bottom">
+                                                <field name="rt_carga_id" invisible="1"/>
+                                                <field name="regimen" invisible="1"/>
+                                                <field name="dua_aduana"/>
+                                                <field name="dua_anio"/>
+                                                <field name="dua_numero"/>
+                                            </tree>
+                                        </field>
+                                        <!--<field name="aduana_origen_id"  options="{'no_open': True,'no_create': True, 'always_reload': True}"/>-->
+                                        <label for="dua_aduana" string="DUA" attrs="{'invisible': ['|','|','|','|',('es_plantilla', '=', True),('multiple_dua', '=',True),('dua_not_gex', '=', False),('has_dua_cabezal', '=', True),('regimen','in',('interno_plaza_nat','interno_fiscal_nat'))]}"/>
+                                        <div class="address_format" attrs="{'invisible': ['|','|','|','|',('es_plantilla', '=', True),('dua_not_gex', '=', False),('has_dua_cabezal', '=', True),('regimen','in',('interno_plaza_nat','interno_fiscal_nat')), ('multiple_dua', '=',True)], 'required': [('es_plantilla', '=', False),('has_dua_cabezal','=', False),('dua_not_gex', '=', True),('multiple_dua', '=', False)]}" >
+                                            <field name="dua_aduana" style="width: 20%" placeholder="Nº Aduana" />
+                                            <span> - </span>
+                                            <field name="dua_anio" style="width: 15%" placeholder="Año" />
+                                            <span> - </span>
+                                            <field name="dua_numero" style="width: 30%" placeholder="Número DUA" />
+                                        </div>
+                                        <field name="gex_number" attrs="{'invisible': ['|','|','|','|',('es_plantilla', '=', True),('multiple_dua', '=',True),('gex_not_dua', '=', False),('has_dua_cabezal', '=', True),('regimen','in',('interno_plaza_nat','interno_fiscal_nat'))], 'required': [('es_plantilla', '=', False),('has_dua_cabezal','=', False),('gex_not_dua', '=', True),('multiple_dua', '=', False),('regimen','not in',('interno_plaza_nat','interno_fiscal_nat'))]}"/>
+                                        <field name="dua_anionumero" invisible="1"/>
+                                        <label for="container_type" attrs="{'invisible': [( 'load_type','!=', 'contenedor')],'readonly': [('solo_lectura','=', True)]}"/>
+                                        <div>
+                                            <field name="container_type" options="{'no_create': True, 'no_open': False}" style="width: 50%" attrs="{'invisible': [( 'load_type','!=', 'contenedor')], 'required': [('load_type','=','contenedor')],'readonly': [('solo_lectura','=', True)]}"/>
+                                            <field name="attach_tipo_contenedor" widget="many2many_binary" nolabel="1" style="width: 50%" attrs="{'invisible': [( 'load_type','!=', 'contenedor')]}"/>
+                                        </div>
+                                        <field name="container_kg" invisible="1"/>
+                                    </group>
+                                    <group>
+                                        <field name="pallet_type" attrs="{'invisible': ['|','|',( 'load_presentation','=','otros'), ('load_presentation','=','paquete'), ('load_presentation','=', False)], 'required': [('load_presentation','=','pallet ')]}"/>
+                                        <field name="received_by" attrs="{'invisible': ['|',('es_plantilla', '=', True),('operation_type','=','international')]}"/>
+                                        <field name="mic_aduana" attrs="{'invisible': ['|',('es_plantilla', '=', True),('operation_type','=','national')]}"/>
+                                        <separator string="CRT" attrs="{'invisible': ['|',('es_plantilla', '=', True),('operation_type','=','national')]}"/>
+                                        <button class="oe_highlight" type="object" name="get_crt_number" string="Generar Nº CRT" confirm="¿Esta seguro?" attrs="{'invisible': ['|','|',('es_plantilla', '=', True),('regimen','not in',('expo_inter','transit_inter_in','transit_inter_out')),('operation_type','=','national')]}"/>
+                                        <span></span>
+                                        <span></span>
+                                        <span></span>
+                                        <span></span>
+                                        <span></span>
+                                        <span></span>
+                                        <label for="crt_number" style="align:left" attrs="{'invisible': ['|',('es_plantilla', '=', True),('operation_type','=','national')]}"/>
+                                        <div attrs="{'invisible': ['|',('es_plantilla', '=', True),('operation_type','=','national')]}">
+                                            <field name="crt_number" style="font-weight:bold;width: 50%" attrs="{'invisible': ['|',('es_plantilla', '=', True),('operation_type','=','national')]}"/>
+                                        </div>
+                                        <separator string="MIC" attrs="{'invisible': ['|',('es_plantilla', '=', True),('operation_type','=','national')]}"/>
+                                        <button class="oe_highlight" type="object" name="get_mic_number" string="Generar Nº MIC" confirm="¿Esta seguro?" attrs="{'invisible': ['|','|',('es_plantilla', '=', True),('regimen','not in',('expo_inter','transit_inter_in','transit_inter_out')),('operation_type','=','national')]}"/>
+                                        <label for="mic_number" style="align:left" attrs="{'invisible': ['|',('es_plantilla', '=', True),('operation_type','=','national')]}"/>
+                                        <div attrs="{'invisible': ['|',('es_plantilla', '=', True),('operation_type','=','national')]}">
+                                            <field name="mic_number" style="font-weight:bold;width: 50%" attrs="{'invisible': ['|',('es_plantilla', '=', True),('operation_type','=','national')]}"/>
+                                        </div>
+                                    </group>
+                                </group>
+                                <group>
+                                    <!--TIPO DE CONTENEDOR = BULK-->
+                                    <group>
+                                        <!--Carga Bulk-->
+                                        <field name="volume" attrs="{'readonly': [('solo_lectura','=', True)], 'invisible': [('es_plantilla', '=', True)]}"/>
+                                        <field name="raw_kg" attrs="{'readonly': [('solo_lectura','=', True)], 'invisible': [('es_plantilla', '=', True)]}"/>
+                                        <field name="package" attrs="{'readonly': [('solo_lectura','=', True)], 'invisible': [('es_plantilla', '=', True)]}"/>
+                                        <field name="km_recorridos" attrs="{'invisible': ['|',('es_plantilla', '=', True),( 'load_type','!=', 'bulk')],'readonly': [('solo_lectura','=', True)]}" />
+                                        <field name="search_conditions" invisible="1"/>
+                                        <field name="booking"
+                                               string="Booking/Virada"
+                                               attrs="{'invisible': ['|','|','|',('es_plantilla', '=', True),('regimen', 'in', ('impo_nat', 'impo_inter')),( 'invisible_in_transit','=', True), ( 'load_type','!=', 'contenedor')],'readonly': [('solo_lectura','=', True)]}"/>
+                                        <field name="preasignado" attrs="{'invisible': ['|','|', ('regimen','=','impo_nat'), ( 'load_type','!=', 'contenedor'),( 'invisible_in_transit','=', True)],'readonly': [('solo_lectura','=', True)]}"/>
+                                        <field name="cut_off_documentario"
+                                               attrs="{'invisible': ['|','|','|','|','|',('es_plantilla', '=', True),('preasignado','=',True),('regimen','=','impo_nat'), ( 'load_type','!=', 'contenedor'),( 'invisible_in_transit','=', True)],'readonly': [('solo_lectura','=', True)]}"/>
+                                        <field name="cut_off_operative" attrs="{'invisible': ['|','|','|','|','|',('es_plantilla', '=', True),('preasignado','=',True),('regimen','=','impo_nat'), ( 'load_type','!=', 'contenedor'),( 'invisible_in_transit','=', True)],'readonly': [('solo_lectura','=', True)]}"/>
+                                        <field name="terminal_retreat" options="{'no_create': True, 'no_open': True}" attrs="{'invisible': ['|','|',('regimen', 'in', ('impo_nat', 'impo_inter')),( 'invisible_in_transit','=', True), ( 'load_type','!=', 'contenedor')],'readonly': [('solo_lectura','=', True)]}"/>
+                                        <field name="aduana_origen_id" options="{'no_create': True, 'no_open': True}" attrs="{'invisible': [('regimen','not in',('impo_nat','transit_nat',))],'readonly': [('solo_lectura','=', True)]}"/>
+                                        <field name="origin_id" options="{'no_create': True, 'no_open': True}" attrs="{'readonly': [('solo_lectura','=', True)]}"/>
+                                        <field name="destiny_id" options="{'no_create': True, 'no_open': True}" attrs="{'readonly': [('solo_lectura','=', True)]}"/>
+                                        <field name="aduana_destino_id" options="{'no_create': True, 'no_open': True}" attrs="{'invisible': [('regimen','not in',('expo_nat','transit_nat'))],'readonly': [('solo_lectura','=', True)],'readonly': [('solo_lectura','=', True)]}"/>
+                                    </group>
+                                    <group>
+                                        <field name="importe_currency_id" readonly="0" invisible="0" options="{'no_create': True, 'no_open': True}" attrs="{'invisible': [('es_plantilla', '=', True)], 'readonly': [('solo_lectura','=', True)]}"/>
+                                        <field name="importe" widget="monetary" options="{'currency_field': 'importe_currency_id'}"  attrs="{'invisible': [('es_plantilla', '=', True)], 'readonly': [('solo_lectura','=', True)]}"/>
+                                        <field name="precio_flete" attrs="{'invisible': ['|',('es_plantilla', '=', True),('operation_type','=','national')],'readonly': [('solo_lectura','=', True)]}"/>
+                                        <field name="precio_seguro" attrs="{'invisible': ['|',('es_plantilla', '=', True),('operation_type','=','national')],'readonly': [('solo_lectura','=', True)]}"/>
+                                        <field name="container_number" placeholder="ej: HOYU-751013-6" attrs="{'invisible': ['|','|',('es_plantilla', '=', True),('load_type','!=', 'contenedor'), ('make_container_number_invisible', '=', True)], 'required': [('load_type','=','contenedor ')],'readonly': [('solo_lectura','=', True)]}"/>
+                                        <field name="container_number_exception" style="color:Green" attrs="{'invisible': ['|','|',('es_plantilla', '=', True),('load_type','!=', 'contenedor'),('make_container_number_invisible', '=', False)],'readonly': [('solo_lectura','=', True)]}"/>
+                                        <button class="oe_highlight" type="object" name="get_container_number" string="Generar Excepcion" confirm="¿Estas seguro?" attrs="{'invisible': ['|','|',('es_plantilla', '=', True),('load_type','!=', 'contenedor'),('make_container_number_invisible', '=', True)],'readonly': [('solo_lectura','=', True)]}"/>
+                                        <button class="oe_highlight" type="object" name="cancel_get_container_number" string="Cancelar" attrs="{'invisible': ['|','|',('es_plantilla', '=', True),('load_type','!=', 'contenedor'),('make_container_number_invisible', '=', False)],'readonly': [('solo_lectura','=', True)]}"/>
+                                        <span/>
+                                        <!--<div id="hideMe">-->
+                                        <span attrs="{'invisible': [('valid_cointaner_number_text','=',False)]}" style="color:Green;align:right">
+                                            <p>¡Número de contenedor válido!</p>
+                                        </span>
+                                        <span/>
+                                        <span  attrs="{'invisible': [('invalid_cointaner_number_text','!=',True)]}" style="color:Red;align:right">
+                                            <p>¡Número de contenedor inválido!</p>
+                                        </span>
+                                        <!--</div>-->
+                                        <label for="seal_number" string="Precinto" attrs="{'invisible': ['|',('es_plantilla', '=', True),( 'load_type','!=', 'contenedor')],'readonly': [('solo_lectura','=', True)]}"/>
+                                        <div>
+                                            <field name="seal_number" style="width: 50%" attrs="{'invisible': ['|',('es_plantilla', '=', True),( 'load_type','!=', 'contenedor')],'readonly': [('solo_lectura','=', True)]}"/>
+                                            <field name="attach_precinto" widget="many2many_binary" nolabel="1" style="width: 50%" attrs="{'invisible': ['|',('es_plantilla', '=', True),( 'load_type','!=', 'contenedor')],'readonly': [('solo_lectura','=', True)]}"/>
+                                        </div>
+                                        <label for="remito" string="Remito" invisible="1"/>
+                                        <div>
+                                            <field name="remito" style="width: 50%" invisible="1" attrs="{'readonly': [('solo_lectura','=', True)]}"/>
+                                            <field name="attach_remito" widget="many2many_binary" nolabel="1" style="width: 50%" invisible="1"/>
+                                        </div>
+                                        <field name="search_conditions_html" widget="html" readonly="1" groups="base.group_no_one"/>
+                                        <field name="payload"  attrs="{'invisible': ['|',('regimen', 'in', ('impo_nat', 'impo_inter')),( 'load_type','!=', 'contenedor')],'readonly': [('solo_lectura','=', True)]}"/>
+                                        <field name="tare"  attrs="{'invisible': ['|','|','|',('es_plantilla', '=', True),('regimen', 'in', ('impo_nat', 'impo_inter')),( 'load_type','!=', 'contenedor'),( 'invisible_in_transit','=', True)],'readonly': [('solo_lectura','=', True)]}"/>
+                                        <field name="terminal_return" options="{'no_create': True, 'no_open': True}" attrs="{'invisible': ['|','|','|',( 'load_type','!=', 'contenedor'),( 'invisible_in_transit_out','=', True),( 'load_type','!=', 'contenedor'),('regimen', '=', 'expo_nat')],'readonly': [('solo_lectura','=', True)]}"/>
+                                        <field name="libre_devolucion" attrs="{'invisible': ['|','|',( 'invisible_in_transit_out','=', True), ( 'load_type','!=', 'contenedor'),('regimen', 'in', ('expo_nat', 'expo_inter'))],'readonly': [('solo_lectura','=', True)]}"/>
+                                        <field name="terminal_ingreso_cargado" options="{'no_create': True, 'no_open': True}" attrs="{'invisible': ['|',( 'load_type','!=', 'contenedor'), ('regimen', 'not in', ('expo_nat', 'expo_inter','transit_nat', 'transit_inter'))],'readonly': [('solo_lectura','=', True)],'readonly': [('solo_lectura','=', True)]}"/>
+                                        <field name="importe_total_carga" attrs="{'invisible': [('es_plantilla', '=', True)], 'readonly': [('solo_lectura','=', True)]}"/>
+                                        <separator string="Ingreso / Egreso Carga" attrs="{'invisible': [('es_plantilla', '=', True)]}"/>
+                                        <button class="oe_stat_button"
+                                                string="Calcular"
+                                                name="recurring_service"
+                                                type="object"
+                                                icon="fa-file-excel-o"
+                                                style="border: 1px solid #7C7BAD; border-radius: 3px; white-space: normal"
+                                                attrs="{'invisible': [('es_plantilla', '=', True)]}"
+                                        />
+                                        <field name="stock_in_id" options="{'no_create': True, 'no_open': True}" attrs="{'invisible': [('es_plantilla', '=', True)], 'readonly': [('solo_lectura','=', True)]}"/>
+                                        <field name="fecha_ingreso" readonly="1" force_save="1" attrs="{'invisible': [('es_plantilla', '=', True)], 'readonly': [('solo_lectura','=', True)]}"/>
+                                        <field name="recurring_next_date" readonly="1" force_save="1" attrs="{'invisible': [('es_plantilla', '=', True)], 'readonly': [('solo_lectura','=', True)]}"/>
+                                        <field name="stock_out_id" options="{'no_create': True, 'no_open': True}" attrs="{'invisible': [('es_plantilla', '=', True)], 'readonly': [('solo_lectura','=', True)]}"/>
+                                        <field name="to_renew" attrs="{'invisible': [('es_plantilla', '=', True)]}"/>
+
+                                    </group>
+                                </group>
+                                <notebook>
+                                    <page string="Productos">
+                                        <field name="producto_servicio_ids" context="{'form_view_ref':'servicio_base.view_service_product_form',
+                                                                                      'tree_view_ref':'servicio_base.view_rt_productos_tree',
+                                                                                      'default_rt_carga_id' : active_id,
+                                                                                      'default_pricelist_id': pricelist_id,
+                                                                                      'default_invisible_in_transit': invisible_in_transit,
+                                                                                      'default_es_plantilla': es_plantilla,
+                                                                                      'regimen':regimen,
+                                                                                      'default_partner_id': partner_id,
+                                                                                      'default_origin_id': origin_id,
+                                                                                      'default_destiny_id': destiny_id,
+                                                                                      }">
+                                        </field>
+
+                                    </page>
+                                    <page string="Profit de Carga">
+                                        <button class="oe_stat_button" string="Calcular" name="compute_load_profit" type="object" icon="fa-file-excel-o" style="border: 1px solid #7C7BAD; border-radius: 3px; white-space: normal"/>
+                                        <field name="profit_carga_ids" mode="tree" readonly="1">
+                                            <tree string="profit" editable="0">
+                                                <field name="rt_carga_id" invisible="1"/>
+                                                <field name="usd_currency_id" invisible="1"/>
+                                                <field name="uyu_currency_id" invisible="1"/>
+                                                <field name="currency_operation" invisible="1" string="Moneda Operativa"/>
+                                                <field name="name"/>
+                                                <field name="venta_usd" options="{'currency_field': 'usd_currency_id'}" string="Venta USD" sum="Total usd"/>
+                                                <field name="costo_usd" options="{'currency_field': 'usd_currency_id'}" string="Costo USD" sum="Total usd"/>
+                                                <field name="venta_uyu" sum="Total uyu"/>
+                                                <field name="costo_uyu" sum="Total uyu"/>
+                                            </tree>
+                                        </field>
+                                        <group>
+                                            <field name="profit_carga_uyu" readonly="1"/>
+                                            <field name="profit_carga_usd" readonly="1"/>
+                                        </group>
+                                    </page>
+                                    <page string="Documentos de la Carga">
+                                        <separator string="Factura"/>
+                                        <field name="make_factura_invisible"/>
+                                        <field name="factura_carga_ids" context="{'default_rt_carga_id' : active_id}" mode="tree" attrs="{'invisible': [('make_factura_invisible','=', False)]}">
+                                            <tree string="Factura" editable="bottom">
+                                                <field name="rt_carga_id" invisible="1"/>
+                                                <field name="remitente_id"/>
+                                                <field name="partner_remitente_id"/>
+                                                <field name="destinatario_id"/>
+                                                <field name="partner_destinatario_id"/>
+                                                <field name="consigantario_id"/>
+                                                <field name="partner_consigantario_id"/>
+                                                <field name="notificar_id"/>
+                                                <field name="partner_notificar_id"/>
+                                                <field name="invoice_description"/>
+                                                <field name="invoice_list"/>
+                                                <field name="market_value"/>
+                                                <field name="market_value_desc" invisible="1"/>
+                                                <field name="market_value_currency_id" options="{'no_open': True,'no_create': True}"/>
+                                                <field name="ncm"/>
+                                                <field name="market_origin"/>
+                                                <field name="attachment" widget="many2many_binary"/>
+                                            </tree>
+                                        </field>
+                                        <separator string="Packing List"/>
+                                        <field name="make_packing_list_invisible"/>
+                                        <field name="packing_list_carga_ids" context="{'default_rt_carga_id' : active_id}" mode="tree" attrs="{'invisible': [('make_packing_list_invisible','=', False)]}">
+                                            <tree string="Packing List" editable="bottom">
+                                                <field name="rt_carga_id" invisible="1"/>
+                                                <field name="package"/>
+                                                <field name="load_presentation" options="{'no_create': True, 'no_open': True}"/>
+                                                <field name="net_kg"/>
+                                                <field name="raw_kg"/>
+                                                <field name="volume"/>
+                                                <field name="attachment" widget="many2many_binary"/>
+                                            </tree>
+                                        </field>
+                                        <separator string="Bill Of Lading"/>
+                                        <field name="make_bill_of_landing_invisible"/>
+                                        <field name="bill_of_landing_ids" context="{'default_rt_carga_id' : active_id}" mode="tree" attrs="{'invisible': [('make_bill_of_landing_invisible','=', False)]}">
+                                            <tree string="Bill of Lading" editable="bottom">
+                                                <field name="rt_carga_id" invisible="1"/>
+                                                <field name ="bl_number"/>
+                                                <field name="remitente_id"/>
+                                                <field name="partner_remitente_id"/>
+                                                <field name="consigantario_id"/>
+                                                <field name="partner_consigantario_id"/>
+                                                <field name="notificar_id"/>
+                                                <field name="partner_notificar_id"/>
+                                                <field name="package"/>
+                                                <field name="load_presentation" options="{'no_open': True,'no_create': True}"/>
+                                                <field name="ncm"/>
+                                                <field name="raw_kg"/>
+                                                <field name="container_number"/>
+                                                <field name="seal_number"/>
+                                                <field name="container_type" options="{'no_open': True,'no_create': True}"/>
+                                                <field name="attachment" widget="many2many_binary"/>
+                                            </tree>
+                                        </field>
+                                    </page>
+                                </notebook>
+                            </page>
+                        </notebook>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+
+        <!--Accion de la Carga-->
+        <record id="action_service_carga" model="ir.actions.act_window">
+            <field name="name">Cargas</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">rt.service.carga</field>
+            <field name="view_mode">form</field>
+            <field name="view_id" ref="servicio_base.view_service_carga_form"/>
+            <field name="target">fullscreen</field>
+            <field name="help" type="html">
+                <p>
+                    Here is a list of each service product to be invoiced. You can
+                    invoice service product partially, by lines of service.
+                </p>
+            </field>
+        </record>
+
+
+
+        <!--Vista lista de las cargas-->
+        <record id="view_rt_cargas" model="ir.ui.view">
+            <field name="name">rt.cargas.list.list</field>
+            <field name="model">rt.service.carga</field>
+            <field name="arch" type="xml">
+                <tree string="Cargas"
+                      create="false"
+                      decoration-success="state=='ready'">
+                    <field name="id" widget="handle"/>
+                    <field name="seq"/>
+                    <field name="name"/>
+                    <field name="load_type"/>
+                    <!--<field name="dua_linea"/>-->
+                    <field name="container_number"/>
+                    <field name="importe_total_carga"/>
+                    <field name="xls_name" invisible="1"/>
+                    <field name="state"/>
+                    <!--<field name="xls_file" nolabel="1" readonly="1" filename="xls_name" attrs="{'invisible':[('xls_name','=', False)]}" style="font-size: 14px;" string="CRT"/>-->
+                    <!--<field name="xls_file" nolabel="1" readonly="1" filename="xls_name" string="CRT"/>-->
+                </tree>
+            </field>
+        </record>
+
+        <!--Vista Formulario de la Carpeta-->
+        <record id='view_rt_service_form' model='ir.ui.view'>
+            <field name="name">rt.service.form</field>
+            <field name="model">rt.service</field>
+            <field name="arch" type="xml">
+                <form string="Carpeta">
+                    <header>
+                        <button class="oe_highlight"
+                                type="object"
+                                name="borrador_confirmado"
+                                string="Confirmar"
+                                states="draft"
+                        />
+                        <button class="oe_highlight"
+                                type="object"
+                                name="a_cancelado"
+                                string="Cancelar"
+                                states="draft"
+                                confirm="¿Esta seguro?"
+                        />
+                        <button class="oe_highlight"
+                                type="object"
+                                name="a_borrador"
+                                string="Pasar a Borrador"
+                                states="cancel"
+                        />
+                        <button class="oe_highlight"
+                                type="object"
+                                name="a_cancelado"
+                                string="Cancelar"
+                                states="confirm"
+                        />
+                        <button class="oe_highlight"
+                                type="object"
+                                name="confirmado_en_procesos"
+                                string="En Proceso"
+                                states="confirm"
+                        />
+                        <button class="oe_highlight"
+                                type="action"
+                                name="%(action_view_rt_service_advance_payment_inv)d"
+                                string="Crear Factura"
+                                context="{'default_rt_service_id': id}"
+                                attrs="{'invisible':['|', ('state', 'not in', ('confirm','inprocess', 'progress', 'invoice_rejected', 'invoiced')), ('totally_invoiced_computed', '=', True)]}"
+                        >
+                        </button>
+                        <button
+                                name="show_rejected_service_lines"
+                                string="Ver Servicios Rechazados"
+                                type="object"
+                                states="invoice_rejected"
+                                class="oe_highlight"
+                        >
+                        </button>
+                        <button type="object"
+                                states="progress,done"
+                                name="action_view_invoice"
+                                class="oe_highlight"
+                                attrs="{'invisible':[('state', 'not in', ('progress','invoice_rejected', 'cancel'))]}"
+                                string="Ver Factura">
+                        </button>
+                        <button
+                                name="facturado_a_realiado"
+                                string="Realizado"
+                                type="object"
+                                states="progress"
+                                class="oe_highlight"
+                        >
+                        </button>
+                        <field name="state" widget="statusbar"/>
+                        <field name="invoice_count" invisible="1"/>
+                    </header>
+                    <sheet>
+                        <div class="oe_button_box" name="button_box">
+                            <button class="oe_stat_button"
+                                    name="copy"
+                                    type="object"
+                                    icon="fa-files-o"
+                                    attrs="{'invisible':[('es_plantilla', '=', False)]}"
+                                    string="Usar como plantilla"
+                            />
+                            <button class="oe_stat_button"
+                                    type="object"
+                                    icon="fa-truck"
+                                    name="generar_cargas"
+                                    string="Generar Cargas"
+                            >
+                            </button>
+                            <button class="oe_stat_button" name="attachment_tree_view" type="object" icon="fa-files-o">
+                                <field string="Documents" name="doc_count" widget="statinfo"/>
+                            </button>
+                            <button name="toggle_active" type="object"
+                                    class="oe_stat_button" icon="fa-archive">
+                                <field name="active" widget="boolean_button"
+                                       options='{"terminology": "archive"}'/>
+                            </button>
+                        </div>
+                        <h1>
+                            <field name="name" class="oe_inline" readonly="1"/>
+                        </h1>
+                        <group string="Referencia Carpeta">
+                            <field name="load_type" groups="base.group_no_one"/>
+                            <field name="operation_type" groups="base.group_no_one"/>
+                            <field name="totally_invoiced_computed" groups="base.group_no_one"/>
+                            <field name="es_plantilla" groups="base.group_no_one"/>
+                            <field name="totally_invoiced" groups="base.group_no_one"/>
+                            <field name="reference"/>
+                            <field name="plantilla_id" attrs="{'invisible': [('es_plantilla','=',False)], 'readonly': ['|',('es_plantilla','=', False),('es_plantilla','=',True)]}"/>
+                            <field name="calendario_id" domain="[('rt_service_id','=',False), ('marfrig_id','=',False)]" attrs="{'invisible': [('es_plantilla','=',False)]}"/>
+
+                        </group>
+                        <group>
+                            <group>
+                                <field name="make_page_invisible" groups="base.group_no_one"/>
+                                <field name="make_presentacion_invisible" invisible="1"/>
+                                <field name="make_terminal_devolucion_invisible" invisible="1"/>
+                                <field name="make_dua_invisible_or_required" invisible="1"/>
+                                <field name="make_gex_invisible_or_required" invisible="1"/>
+                                <field name="load_type" invisible="1"/>
+                                <field name="company_id" invisible="1"/>
+                                <field name="user_id" invisible="1"/>
+                                <field name="regimen" required="1"/>
+                                <field name="partner_invoice_id" widget="res_partner_many2one" domain="[('customer','=',True)]" context="{'search_default_customer':1, 'show_address': 1, 'show_vat': True}" options="{'no_open': True,'no_create': True}"/>
+                                <field name="partner_id" context="{'search_default_customer': 1, 'show_address': 1}"  attrs="{'required': [('state','!=','draft')]}" options="{'no_open': True,'no_create': True}"/>
+                                <field name="dua_type" attrs="{'invisible': [('regimen','in',('interno_plaza_nat','interno_fiscal_nat'))], 'required': [('regimen','not in',('interno_plaza_nat','interno_fiscal_nat'))]}"/>
+                                <field name="dua_muestra" attrs="{'invisible': ['|','|','|',('es_plantilla', '=', True),('dua_type','=','linea'),('regimen','in',('interno_plaza_nat','interno_fiscal_nat')),('make_dua_invisible_or_required', '=', False)]}"/>
+                                <label for="dua_aduana" string="DUA" attrs="{'invisible': ['|','|','|',('es_plantilla', '=', True),('dua_type','=','linea'),('regimen','in',('interno_plaza_nat','interno_fiscal_nat')),('make_dua_invisible_or_required', '=', False)], 'required': ['|',('dua_type','=','cabezal'),('state','!=','draft')]}"/>
+                                <div class="address_format" attrs="{'invisible': ['|','|','|',('es_plantilla', '=', True),('dua_type','=','linea'),('regimen','in',('interno_plaza_nat','interno_fiscal_nat')),('make_dua_invisible_or_required', '=', False)], 'required': [('es_plantilla', '=', False),('dua_type','=','cabezal'),('make_dua_invisible_or_required', '=', True),'|',('state','!=','draft')]}">
+                                    <field name="dua_aduana" style="width: 20%" placeholder="Nº Aduana" />
+                                    <span> - </span>
+                                    <field name="dua_anio" style="width: 15%" placeholder="Año" />
+                                    <span> - </span>
+                                    <field name="dua_numero" style="width: 30%" placeholder="Número DUA" />
+                                </div>
+                                <field name="gex_number" attrs="{'invisible': ['|','|','|',('es_plantilla', '=', True),('dua_type','=','linea'),('regimen','in',('interno_plaza_nat','interno_fiscal_nat')),('make_gex_invisible_or_required', '=', False)], 'required': [('es_plantilla', '=', False),('dua_type','=','cabezal'),('make_gex_invisible_or_required', '=', True),'|',('state','!=','draft')]}"/>
+                                <field name="mensaje_simplificado" attrs="{'invisible': [('regimen','!=','interno_fiscal_nat')]}"/>
+                                <field name="dua_anionumero" invisible="1"/>
+                                <field name="partner_dispatcher_id"  context="{'default_dispatcher': True, 'search_default_dispatcher': True}" attrs="{'required': [('state','!=','draft'),('regimen','not in',('interno_plaza_nat','interno_fiscal_nat'))], 'invisible': ['|',('es_plantilla', '=', True),('regimen','in',('interno_plaza_nat','interno_fiscal_nat'))]}"  options="{'no_open': True,'no_create': True}"/>
+                                <field name="aduana_origen_id" options="{'no_create': True, 'no_open': True}" attrs="{'invisible': [('regimen','not in',('impo_nat','transit_nat',))]}"/>
+                                <field name="origin_id" options="{'no_create': True, 'no_open': True}" attrs="{'invisible': [('regimen','in',('impo_nat','transit_nat',))]}"/>
+                                <field name="destiny_id" options="{'no_create': True, 'no_open': True}" attrs="{'invisible': [('regimen','in',('expo_nat','transit_nat'))]}"/>
+                                <field name="aduana_destino_id" options="{'no_create': True, 'no_open': True}" attrs="{'invisible': [('regimen','not in',('expo_nat','transit_nat'))]}"/>
+                            </group>
+                            <group>
+                                <field name="pricelist_id" options="{'no_open': True,'no_create': True}"/>
+                                <field name="currency_id" invisible="0"/>
+                                <field name="start_datetime" attrs="{'required': [('es_plantilla', '=', False)], 'invisible': [('es_plantilla', '=', True)]}"/>
+                                <field name="stop_datetime" attrs="{'invisible': [('es_plantilla', '=', True)]}"/>
+                                <field name="has_dua_cabezal" groups="base.group_no_one"/>
+                                <field name="rt_servicios_ids" mode="tree" context="{'default_rt_service_id' : id}">
+                                    <tree string="Servicios Brindados" editable="bottom" decoration-info="True">
+                                        <field name="id" widget="handle"/>
+                                        <field name="load_type"/>
+                                        <field name="vehicle_id" options="{'no_create': True}" string="Modelo"/>
+                                        <field name="qty"/>
+                                    </tree>
+                                </field>
+                                <field name="carpeta_currecy_id" invisible="1"/>
+                                <field name="importe_total_carpeta" options="{'currency_field': 'carpeta_currecy_id'}" attrs="{'invisible': [('es_plantilla', '=', True)]}"/>
+                            </group>
+                        </group>
+                        <notebook>
+                            <page string="Cargas">
+                                <button class="oe_stat_button"
+                                        style="border: 1px solid #7C7BAD; border-radius: 3px; white-space: normal"
+                                        type="action"
+                                        name="%(action_service_carga)d"
+                                        string="Añadir Carga"
+                                        icon="fa-truck"
+                                        context="{'default_rt_service_id' : active_id,
+                                                  'default_operation_type': operation_type,
+                                                  'default_make_dua_invisible_or_required': make_dua_invisible_or_required,
+                                                  'default_make_gex_invisible_or_required': make_gex_invisible_or_required,
+                                                  'default_make_page_invisible': make_page_invisible,
+                                                  'default_dua_aduana' : dua_aduana,
+                                                  'default_make_terminal_devolucion_invisible': make_terminal_devolucion_invisible,
+                                                  'default_partner_invoice_id': partner_invoice_id,
+                                                  'default_partner_id': partner_id,
+                                                  'default_aduana_origen_id': aduana_origen_id,
+                                                  'default_origin_id': origin_id,
+                                                  'default_destiny_id': destiny_id,
+                                                  'default_aduana_destino_id': aduana_destino_id,
+                                                  'default_has_dua_cabezal': has_dua_cabezal,
+                                                  'default_es_plantilla': es_plantilla,
+                                                  'default_load_type': load_type,
+                                                  }"/>
+                                <field name="carga_ids" context="{'default_rt_service_id' : active_id,
+                                                                  'default_operation_type': operation_type,
+                                                                  'default_make_dua_invisible_or_required':make_dua_invisible_or_required,
+                                                                  'default_make_gex_invisible_or_required':make_gex_invisible_or_required,
+                                                                  'default_make_page_invisible': make_page_invisible,
+                                                                  'default_dua_aduana' : dua_aduana,
+                                                                  'default_make_terminal_devolucion_invisible': make_terminal_devolucion_invisible,
+                                                                  'default_partner_invoice_id': partner_invoice_id,
+                                                                  'default_partner_id': partner_id,
+                                                                  'default_es_plantilla': es_plantilla,
+                                                                  'default_aduana_origen_id': aduana_origen_id,
+                                                                  'default_origin_id': origin_id,
+                                                                  'default_destiny_id': destiny_id,
+                                                                  'default_aduana_destino_id': aduana_destino_id,
+                                                                  'form_view_ref':'servicio_base.view_service_carga_form',
+                                                                  'tree_view_ref':'servicio_base.view_rt_cargas',
+                                                                  }">
+
+                                </field>
+                            </page>
+                            <page string="Profit Carpeta" name="page_service_profit" groups="base.group_no_one">
+                                <button class="oe_stat_button" string="Calcular" name="compute_profit" type="object" icon="fa-file-excel-o" style="border: 1px solid #7C7BAD; border-radius: 3px; white-space: normal"/>
+                                <field name="profit_carpeta_ids" mode="tree" readonly="1">
+                                    <tree string="profit" editable="0">
+                                        <field name="name"/>
+                                        <field name="rt_service_id" invisible="1"/>
+                                        <field name="usd_currency_id" invisible="1"/>
+                                        <field name="uyu_currency_id" invisible="1"/>
+                                        <field name="currency_operation" invisible="0" string="Moneda Operativa"/>
+                                        <field name="venta_usd" options="{'currency_field': 'usd_currency_id'}" string="Venta USD" sum="Total usd"/>
+                                        <field name="venta_uyu" sum="Total uyu"/>
+                                        <field name="costo_usd" options="{'currency_field': 'usd_currency_id'}" string="Costo USD" sum="Total usd"/>
+                                        <field name="costo_uyu" sum="Total uyu"/>
+                                    </tree>
+                                </field>
+                                <group>
+                                    <field name="profit_carpeta_uyu" readonly="1"/>
+                                    <field name="profit_carpeta_usd" readonly="1"/>
+                                </group>
+                            </page>
+                            <page string="Vehículos de la Carpeta">
+                                <field name="vehicles_ids"  readonly="1" context="{'form_view_ref':'fleet.fleet_vehicle_view_form',
+                                                                     'tree_view_ref':'servicio_base.fleet_vehicle_base_view_tree',}"/>
+                            </page>
+                            <page string="Archivos Adjuntos">
+                                <field name="attachment" nolabel="1" colspan="2" widget="many2many_binary"/>
+                            </page>
+                            <page string="Facturas de Cliente">
+                                <field name="invoices_ids"  readonly="1" context="{'form_view_ref':'account.invoice_form',
+                                                                     'tree_view_ref':'account.invoice_tree',}"/>
+                            </page>
+                            <page string="Facturas de Proveedor">
+                                <field name="supplier_invoices_ids" readonly="1" context="{'form_view_ref':'account.invoice_supplier_form',
+                                                                               'tree_view_ref':'account.invoice_supplier_tree',}"/>
+                            </page>
+                        </notebook>
+                    </sheet>
+                    <div class="oe_chatter">
+                        <field name="message_follower_ids" widget="mail_followers"/>
+                        <field name="message_ids" widget="mail_thread" options='{"thread_level": 1}'/>
+                        <field name="message_follower_ids" widget="mail_followers" groups="base.group_user"/>
+                        <field name="activity_ids" widget="mail_activity"/>
+                        <field name="message_ids" widget="mail_thread"/>
+                    </div>
+                </form>
+            </field>
+        </record>
+
+    </data>
+</odoo>

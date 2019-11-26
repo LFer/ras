@@ -1,0 +1,627 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <template id="report_mic_report_final">
+        <t t-call="web.html_container">
+            <!--<t t-debug="ipdb"/>-->
+            <div class="page">
+                <div style="width: 100%; height: 55%" name="borde_externo">
+                    <table>
+                        <tbody>
+                            <t t-if="vacio">
+                                <tr>
+                                    <td style="width: 20%" class="celda_contenido">
+                                        <span class="texto_titulito">23  Nº carta de porte / Nº do conhecimiento</span>
+                                        <br></br>
+                                    </td>
+                                    <td colspan="2" class="celda_contenido">
+                                        <span class="texto_titulito">24  Aduana de destino / Alfadega de destino</span>
+                                        <br></br>
+                                        <table style="vertical-align: bottom; float: right; width: 0px; height: 20px">
+                                            <tbody>
+                                                <tr>
+                                                    <td class="celda_contenido">&#160;&#160;&#160;&#160;</td>
+                                                    <td class="celda_contenido">&#160;&#160;&#160;&#160;</td>
+                                                    <td class="celda_contenido">&#160;&#160;&#160;&#160;</td>
+                                                    <td class="celda_contenido">&#160;&#160;&#160;&#160;</td>
+                                                    <td class="celda_contenido">&#160;&#160;&#160;&#160;</td>
+                                                    <td class="celda_contenido">&#160;&#160;&#160;&#160;</td>
+                                                    <td class="celda_contenido">&#160;&#160;&#160;&#160;</td>
+                                                </tr>
+                                            </tbody>
+                                        </table>
+                                    </td>
+
+                                    <td colspan="3" class="celda_contenido">
+                                        <span class="texto_titulito">33  Remitente / Remetente</span>
+                                        <br></br>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td class="celda_contenido">
+                                        <span class="texto_titulito">25  Moneda / Moeda</span>
+                                        <br></br>
+                                    </td>
+                                    <td colspan="2" class="celda_contenido">
+                                        <span class="texto_titulito">26  Origen de las mercaderias / Origen das mercadorias</span>
+                                        <br></br>
+                                    </td>
+                                    <td colspan="3" class="celda_contenido">
+                                        <span class="texto_titulito">34  Destinatario / Destinatario</span>
+                                        <br></br>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td class="celda_contenido">
+                                        <span class="texto_titulito">27  Valor FOT / Valor FOT</span>
+                                        <br></br>
+                                    </td>
+                                    <td class="celda_contenido">
+                                        <span class="texto_titulito">28  Flete en U$S / Frete em U$S</span>
+                                        <br></br>
+                                    </td>
+                                    <td class="celda_contenido">
+                                        <span class="texto_titulito">29  Seguro en U$S / Seguro em U$S</span>
+                                        <br></br>
+                                    </td>
+                                    <td colspan="3" class="celda_contenido">
+                                        <span class="texto_titulito">35  Consignatario / consignatario</span>
+                                        <br></br>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td class="celda_contenido">
+                                        <span class="texto_titulito">30  Tipos de bultos / Tipo de volumenes</span>
+                                        <br></br>
+                                    </td>
+                                    <td class="celda_contenido">
+                                        <span class="texto_titulito">31  Cantidad de bultos / Quantidade de volumenes</span>
+                                        <br></br>
+                                    </td>
+                                    <td class="celda_contenido">
+                                        <span class="texto_titulito">32  Peso BRUTO en kg.</span>
+                                        <br></br>
+                                    </td>
+                                    <td colspan="3" rowspan="2" class="celda_contenido">
+                                        <span class="texto_titulito">36  Documentos anexos / Documentos anexos</span>
+                                        <br></br>
+                                        <span class="texto_titulito">Según Facturas:</span>
+                                        <br></br>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td class="celda_contenido" colspan="3">
+                                        <span class="texto_titulito">37  Número de precintos / número dos lacres</span>
+                                        <br></br>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td class="celda_contenido" colspan="6">
+                                        <span class="texto_titulito">38  Marcas y números de bultos, descripción de las mercancias / Marcas e números dos volumenes, descricao das mercadorias</span>
+                                        <br></br>
+                                        <span style="font-size: x-small">PALLETS QUE DICE CONTENER:</span>
+                                        <br></br>
+                                        <span style="font-size: x-small">Segun facturas:</span>
+                                        <br></br>
+                                        <span class="texto_prueba">Origen:</span>
+                                        <br></br>
+                                        <span class="texto_prueba">MERCADERIA EN TRANSTIO ADUANERO</span>
+                                    </td>
+                                </tr>
+                            </t>
+                            <t t-if="not vacio">
+                                <tr>
+                                    <td style="width: 20%; height: 20px" class="celda_contenido">
+                                        <span class="texto_titulito">23  Nº carta de porte / Nº do conhecimiento</span>
+                                        <br></br>
+                                        <span class="texto_prueba" t-esc="l.crt_number"/>
+                                        <br></br>
+                                    </td>
+                                    <t t-if="recorre_tipo_de_accion_arribo_a_fiscal(l.producto_servicio_carga_ids)">
+                                        <td style="width: 30%" colspan="2" class="celda_contenido">
+                                            <span class="texto_titulito">24  Aduana de destino / Alfadega de destino</span>
+                                            <br></br>
+                                            <t t-if="recorre_tipo_de_accion_arribo_a_fiscal(l.producto_servicio_carga_ids).destiny_id and recorre_tipo_de_accion_arribo_a_fiscal(l.producto_servicio_carga_ids).destiny_id.aduana_id ">
+                                                <span class="texto_prueba" t-esc="recorre_tipo_de_accion_arribo_a_fiscal(l.producto_servicio_carga_ids).destiny_id.aduana_id.name" style="text-transform:uppercase"/>
+                                                <br></br>
+                                                <span class="texto_prueba" t-esc="recorre_tipo_de_accion_arribo_a_fiscal(l.producto_servicio_carga_ids).destiny_id.aduana_id.country_id.name" style="text-transform:uppercase"/>
+                                            </t>
+                                            <t t-if="not (recorre_tipo_de_accion_arribo_a_fiscal(l.producto_servicio_carga_ids).destiny_id and recorre_tipo_de_accion_arribo_a_fiscal(l.producto_servicio_carga_ids).destiny_id.aduana_id)">
+                                                <br></br>
+                                            </t>
+                                            <table style="vertical-align: bottom; float: right; width: 0px; height: 20px">
+                                                    <tbody>
+                                                        <tr>
+                                                            <td class="celda_contenido">&#160;&#160;&#160;&#160;</td>
+                                                            <td class="celda_contenido">&#160;&#160;&#160;&#160;</td>
+                                                            <td class="celda_contenido">&#160;&#160;&#160;&#160;</td>
+                                                            <td class="celda_contenido">&#160;&#160;&#160;&#160;</td>
+                                                            <td class="celda_contenido">&#160;&#160;&#160;&#160;
+                                                                <t t-if="recorre_tipo_de_accion_arribo_a_fiscal(l.producto_servicio_carga_ids).destiny_id and recorre_tipo_de_accion_arribo_a_fiscal(l.producto_servicio_carga_ids).destiny_id.aduana_id ">
+                                                                    <span class="texto_celda" t-esc="recorre_tipo_de_accion_arribo_a_fiscal(l.producto_servicio_carga_ids).destiny_id.aduana_id.codigo_dna[0:1]"/>
+                                                                </t>
+                                                            </td>
+                                                            <td class="celda_contenido">&#160;&#160;&#160;&#160;
+                                                                <t t-if="recorre_tipo_de_accion_arribo_a_fiscal(l.producto_servicio_carga_ids).destiny_id and recorre_tipo_de_accion_arribo_a_fiscal(l.producto_servicio_carga_ids).destiny_id.aduana_id ">
+                                                                    <span class="texto_celda" t-esc="recorre_tipo_de_accion_arribo_a_fiscal(l.producto_servicio_carga_ids).destiny_id.aduana_id.codigo_dna[1:2]"/>
+                                                                </t>
+                                                            </td>
+                                                            <td class="celda_contenido">&#160;&#160;&#160;&#160;
+                                                                <t t-if="recorre_tipo_de_accion_arribo_a_fiscal(l.producto_servicio_carga_ids).destiny_id and recorre_tipo_de_accion_arribo_a_fiscal(l.producto_servicio_carga_ids).destiny_id.aduana_id ">
+                                                                    <span class="texto_celda" t-esc="recorre_tipo_de_accion_arribo_a_fiscal(l.producto_servicio_carga_ids).destiny_id.aduana_id.codigo_dna[2:3]"/>
+                                                                </t>
+                                                            </td>
+                                                        </tr>
+                                                    </tbody>
+                                                </table>
+                                        </td>
+                                    </t>
+                                    <t t-if="not recorre_tipo_de_accion_arribo_a_fiscal(l.producto_servicio_carga_ids)">
+                                        <td colspan="2" class="celda_contenido">
+                                            <span class="texto_titulito">24  Aduana de destino / Alfadega de destino</span>
+                                            <br></br>
+                                            <table style="vertical-align: bottom; float: right; width: 0px; height: 20px">
+                                                <tbody>
+                                                    <tr>
+                                                        <td class="celda_contenido">&#160;&#160;&#160;&#160;</td>
+                                                        <td class="celda_contenido">&#160;&#160;&#160;&#160;</td>
+                                                        <td class="celda_contenido">&#160;&#160;&#160;&#160;</td>
+                                                        <td class="celda_contenido">&#160;&#160;&#160;&#160;</td>
+                                                        <td class="celda_contenido">&#160;&#160;&#160;&#160;</td>
+                                                        <td class="celda_contenido">&#160;&#160;&#160;&#160;</td>
+                                                        <td class="celda_contenido">&#160;&#160;&#160;&#160;</td>
+                                                    </tr>
+                                                </tbody>
+                                            </table>
+                                        </td>
+                                    </t>
+                                    <t t-if="l.factura_carga_ids">
+                                        <t t-set ="factura_carga" t-value="recorre_tipo_de_lineas(l.factura_carga_ids)"/>
+                                        <t t-if="factura_carga.remitente_id">
+                                            <td colspan="3" class="celda_contenido">
+                                                <span class="texto_titulito">33  Remitente / Remetente</span>
+                                                <br></br>
+                                                <span t-esc="factura_carga.remitente_id.social_reason" class="texto_largo" style="text-transform:uppercase"/>
+                                                <span class="texto_largo"> - </span>
+                                                <span t-esc="factura_carga.remitente_id.street" class="texto_largo" style="text-transform:uppercase"/>
+                                                <br></br>
+                                                <span t-esc="factura_carga.remitente_id.city" class="texto_largo" style="text-transform:uppercase"/>
+                                                <span class="texto_largo"> , </span>
+                                                <span t-esc="factura_carga.remitente_id.country_id.name" class="texto_largo" style="text-transform:uppercase"/>
+                                                <span class="texto_largo">CUIT:<t t-esc="factura_carga.remitente_id.vat"/></span>
+                                            </td>
+                                        </t>
+                                        <t t-if="not factura_carga.remitente_id">
+                                            <td colspan="3" class="celda_contenido">
+                                                <span class="texto_titulito">33  Remitente / Remetente</span>
+                                                <br></br>
+                                                <span t-esc="factura_carga.partner_remitente_id.social_reason" class="texto_largo" style="text-transform:uppercase"/>
+                                                <span class="texto_largo"> - </span>
+                                                <span t-esc="factura_carga.partner_remitente_id.street" class="texto_largo" style="text-transform:uppercase"/>
+                                                <br></br>
+                                                <span t-esc="factura_carga.partner_remitente_id.city" class="texto_largo" style="text-transform:uppercase"/>
+                                                <span class="texto_largo"> , </span>
+                                                <span t-esc="factura_carga.partner_remitente_id.country_id.name" class="texto_largo" style="text-transform:uppercase"/>
+                                                <span class="texto_largo" style="text-transform:uppercase">CUIT:<t t-esc="factura_carga.partner_remitente_id.vat"/></span>
+                                            </td>
+                                        </t>
+                                    </t>
+                                    <t t-if="not l.factura_carga_ids">
+                                        <td colspan="3" class="celda_contenido">
+                                            <span class="texto_titulito">33  Remitente / Remetente</span>
+                                            <br></br>
+                                        </td>
+                                    </t>
+                                </tr>
+                                <tr>
+                                    <t t-if="l.factura_carga_ids">
+                                        <t t-set ="factura_carga" t-value="recorre_tipo_de_lineas(l.factura_carga_ids)"/>
+                                        <t t-if="factura_carga.market_value_currency_id">
+                                            <td class="celda_contenido">
+                                                <span class="texto_titulito">25  Moneda / Moeda</span>
+                                                <br></br>
+                                                <span class="texto_prueba" t-esc="factura_carga.market_value_currency_id.name"/>
+                                            </td>
+                                        </t>
+                                        <t t-if="not factura_carga.market_value_currency_id">
+                                            <td class="celda_contenido">
+                                                <span class="texto_titulito">25  Moneda / Moeda</span>
+                                                <br></br>
+                                            </td>
+                                        </t>
+                                    </t>
+                                    <t t-if="not l.factura_carga_ids">
+                                        <td class="celda_contenido">
+                                            <span class="texto_titulito">25  Moneda / Moeda</span>
+                                            <br></br>
+                                        </td>
+                                    </t>
+                                    <t t-if="l.factura_carga_ids">
+                                        <td colspan="2" class="celda_contenido">
+                                            <span class="texto_titulito">26  Origen de las mercaderias / Origen das mercadorias</span>
+                                            <br></br>
+                                            <span class="texto_prueba" t-esc="recorre_lineas_factura_market_origin(ls)" style="text-transform:uppercase"/>
+                                            <table style="vertical-align: bottom; float: right; width: 0px; height: 20px">
+                                                <tbody>
+                                                    <tr>
+                                                        <td class="celda_contenido">&#160;&#160;&#160;&#160;
+                                                            <!--<t t-if="l.dua_aduana">-->
+                                                                <!--<span class="texto_celda" t-esc="l.dua_aduana[0:1]"/>-->
+                                                            <!--</t>-->
+                                                        </td>
+                                                        <td class="celda_contenido">&#160;&#160;&#160;&#160;
+                                                            <!--<t t-if="l.dua_aduana">-->
+                                                                <!--<span class="texto_celda" t-esc="l.dua_aduana[1:2]"/>-->
+                                                            <!--</t>-->
+                                                        </td>
+                                                        <td class="celda_contenido">&#160;&#160;&#160;&#160;
+                                                            <!--<t t-if="l.dua_aduana">-->
+                                                                <!--<span class="texto_celda" t-esc="l.dua_aduana[2:3]"/>-->
+                                                            <!--</t>-->
+                                                        </td>
+                                                    </tr>
+                                                </tbody>
+                                            </table>
+                                        </td>
+                                    </t>
+                                    <t t-if="not l.factura_carga_ids">
+                                        <td colspan="2" class="celda_contenido">
+                                            <span class="texto_titulito">26  Origen de las mercaderias / Origen das mercadorias</span>
+                                            <br></br>
+                                        </td>
+                                    </t>
+                                    <t t-if="l.factura_carga_ids">
+                                        <t t-set ="factura_carga" t-value="recorre_tipo_de_lineas(l.factura_carga_ids)"/>
+                                        <t t-if="factura_carga.destinatario_id">
+                                            <td colspan="3" class="celda_contenido">
+                                                <span class="texto_titulito">34  Destinatario / Destinatario</span>
+                                                <br></br>
+                                                <span t-esc="factura_carga.destinatario_id.social_reason" class="texto_largo" style="text-transform:uppercase"/>
+                                                <span class="texto_largo" style="text-transform:uppercase"> - </span>
+                                                <span t-esc="factura_carga.destinatario_id.street" class="texto_largo" style="text-transform:uppercase"/>
+                                                <br></br>
+                                                <span t-esc="factura_carga.destinatario_id.city" class="texto_largo" style="text-transform:uppercase"/>
+                                                <span class="texto_largo" style="text-transform:uppercase"> , </span>
+                                                <span t-esc="factura_carga.destinatario_id.country_id.name" class="texto_largo" style="text-transform:uppercase"/>
+                                                <span class="texto_largo" style="text-transform:uppercase">CUIT:<t t-esc="factura_carga.destinatario_id.vat"/></span>
+                                            </td>
+                                        </t>
+                                        <t t-if="not factura_carga.destinatario_id">
+                                            <td colspan="3" class="celda_contenido">
+                                                <span class="texto_titulito">34  Destinatario / Destinatario</span>
+                                                <br></br>
+                                                <span t-esc="factura_carga.partner_destinatario_id.social_reason" class="texto_largo" style="text-transform:uppercase"/>
+                                                <span class="texto_largo" style="text-transform:uppercase"> - </span>
+                                                <span t-esc="factura_carga.partner_destinatario_id.street" class="texto_largo" style="text-transform:uppercase"/>
+                                                <br></br>
+                                                <span t-esc="factura_carga.partner_destinatario_id.city" class="texto_largo" style="text-transform:uppercase"/>
+                                                <span class="texto_largo" style="text-transform:uppercase"> , </span>
+                                                <span t-esc="factura_carga.partner_destinatario_id.country_id.name" class="texto_largo" style="text-transform:uppercase"/>
+                                                <span class="texto_largo" style="text-transform:uppercase">CUIT:<t t-esc="factura_carga.partner_destinatario_id.vat"/></span>
+                                            </td>
+                                        </t>
+                                    </t>
+                                    <t t-if="not l.factura_carga_ids">
+                                        <td colspan="3" class="celda_contenido">
+                                            <span class="texto_titulito">34  Destinatario / Destinatario</span>
+                                            <br></br>
+                                        </td>
+                                    </t>
+                                </tr>
+                                <tr>
+                                    <t t-if="l.factura_carga_ids">
+                                        <td style="width: 20%" class="celda_contenido">
+                                            <span class="texto_titulito">27  Valor FOT / Valor FOT</span>
+                                            <br></br>
+                                            <span class="texto_prueba" t-esc="recorre_lineas_factura_market_value(ls)"/>
+                                        </td>
+                                    </t>
+                                    <t t-if="not l.factura_carga_ids">
+                                        <td style="width: 20%" class="celda_contenido">
+                                            <span class="texto_titulito">27  Valor FOT / Valor FOT</span>
+                                            <br></br>
+                                        </td>
+                                    </t>
+                                    <td style="width: 15%" class="celda_contenido">
+                                        <span class="texto_titulito">28  Flete en U$S / Frete em U$S</span>
+                                        <br></br>
+                                        <t t-if="suma_precio_flete(ls) != 0">
+                                            <span t-esc="suma_precio_flete(ls)" class="texto_prueba"/>
+                                        </t>
+                                        <t t-if="suma_precio_flete(ls) == 0">
+                                            <br></br>
+                                        </t>
+                                    </td>
+                                    <td style="width: 15%" class="celda_contenido">
+                                        <span class="texto_titulito">29  Seguro en U$S / Seguro em U$S</span>
+                                        <br></br>
+                                        <t t-if="suma_precio_seguro(ls) != 0">
+                                            <span t-esc="suma_precio_seguro(ls)" class="texto_prueba"/>
+                                        </t>
+                                        <t t-if="suma_precio_seguro(ls) == 0">
+                                            <br></br>
+                                        </t>
+                                    </td>
+                                    <t t-if="carga.factura_carga_ids">
+                                        <t t-set ="factura_carga" t-value="recorre_tipo_de_lineas(carga.factura_carga_ids)"/>
+                                        <t t-if="factura_carga.consigantario_id">
+                                            <td colspan="3" class="celda_contenido">
+                                                <span class="texto_titulito">35  Consignatario / consignatario</span>
+                                                <br></br>
+                                                <span t-esc="factura_carga.consigantario_id.social_reason" class="texto_largo" style="text-transform:uppercase"/>
+                                                <span class="texto_largo" style="text-transform:uppercase"> - </span>
+                                                <span t-esc="factura_carga.consigantario_id.street" class="texto_largo" style="text-transform:uppercase"/>
+                                                <br></br>
+                                                <span t-esc="factura_carga.consigantario_id.city" class="texto_largo" style="text-transform:uppercase"/>
+                                                <span class="texto_largo" style="text-transform:uppercase"> , </span>
+                                                <span t-esc="factura_carga.consigantario_id.country_id.name" class="texto_largo" style="text-transform:uppercase"/>
+                                                <span class="texto_largo" style="text-transform:uppercase">CUIT:<t t-esc="factura_carga.consigantario_id.vat"/></span>
+                                            </td>
+                                        </t>
+                                        <t t-if="not factura_carga.consigantario_id">
+                                            <td colspan="3" class="celda_contenido">
+                                                <span class="texto_titulito">35  Consignatario / consignatario</span>
+                                                <br></br>
+                                                <span t-esc="factura_carga.partner_consigantario_id.social_reason" class="texto_largo" style="text-transform:uppercase"/>
+                                                <span style="font-size:12px"> - </span>
+                                                <span t-esc="factura_carga.partner_consigantario_id.street" class="texto_largo" style="text-transform:uppercase"/>
+                                                <br></br>
+                                                <span t-esc="factura_carga.partner_consigantario_id.city" class="texto_largo" style="text-transform:uppercase"/>
+                                                <span style="font-size:12px"> , </span>
+                                                <span t-esc="factura_carga.partner_consigantario_id.country_id.name" class="texto_largo" style="text-transform:uppercase"/>
+                                                <span class="texto_largo" style="text-transform:uppercase">CUIT:<t t-esc="factura_carga.partner_consigantario_id.vat"/></span>
+                                            </td>
+                                        </t>
+                                    </t>
+                                    <t t-if="not carga.factura_carga_ids">
+                                        <td colspan="3" class="celda_contenido">
+                                            <span class="texto_titulito">35  Consignatario / consignatario</span>
+                                            <br></br>
+                                        </td>
+                                    </t>
+                                </tr>
+                                <tr>
+                                    <t t-if="carga.packing_list_carga_ids">
+                                        <t t-set ="packing_list_carga" t-value="recorre_tipo_de_lineas(carga.packing_list_carga_ids)"/>
+                                        <t t-if="packing_list_carga.load_presentation">
+                                            <td class="celda_contenido">
+                                                <span class="texto_titulito">30  Tipos de bultos / Tipo de volumenes</span>
+                                                <br></br>
+                                                <span class="texto_contenido" t-esc="packing_list_carga.load_presentation.tipo_bulto"/>
+                                            </td>
+                                        </t>
+                                        <t t-if="not packing_list_carga.load_presentation">
+                                            <td class="celda_contenido">
+                                                <span class="texto_titulito">30  Tipos de bultos / Tipo de volumenes</span>
+                                                <br></br>
+                                            </td>
+                                        </t>
+                                    </t>
+                                    <t t-if="not carga.packing_list_carga_ids">
+                                        <td class="celda_contenido">
+                                            <span class="texto_titulito">30  Tipos de bultos / Tipo de volumenes</span>
+                                            <br></br>
+                                        </td>
+                                    </t>
+                                    <t t-if="carga.packing_list_carga_ids">
+                                        <td class="celda_contenido">
+                                            <span class="texto_titulito">31  Cantidad de bultos / Quantidade de volumenes</span>
+                                            <br></br>
+                                            <span class="texto_prueba" t-esc="carga_total_bultos(ls)"/>
+                                        </td>
+                                    </t>
+                                    <t t-if="not carga.packing_list_carga_ids">
+                                        <td class="celda_contenido">
+                                            <span class="texto_titulito">31  Cantidad de bultos / Quantidade de volumenes</span>
+                                            <br></br>
+                                        </td>
+                                    </t>
+                                    <t t-if="carga.packing_list_carga_ids">
+                                        <td class="celda_contenido">
+                                            <span class="texto_titulito">32  Peso BRUTO en kg.</span>
+                                            <br></br>
+                                            <span class="texto_prueba" t-esc="recorre_lineas_factura_raw_kg(ls)"/>
+                                        </td>
+                                    </t>
+                                    <t t-if="not carga.packing_list_carga_ids">
+                                        <td class="celda_contenido">
+                                            <span class="texto_titulito">32  Peso BRUTO en kg.</span>
+                                            <br></br>
+                                        </td>
+                                    </t>
+                                    <t t-if="carga.producto_servicio_carga_ids">
+                                        <t t-if="docs.product_type == 'propio'">
+                                            <td colspan="3" rowspan="2" class="celda_contenido">
+                                                <span class="texto_titulito">36  Documentos anexos / Documentos anexos</span>
+                                                <br></br>
+                                                <span class="texto_titulito">Según Facturas:</span>
+                                                <br></br>
+                                                <span class="texto_contenido" t-esc="recorre_lineas_factura_invoice_list(ls)"/>
+                                                <br></br>
+                                                <span class="texto_prueba">Chofer:</span>
+                                                <span class="texto_prueba" t-esc="docs.driver_id.name"/>
+                                                <span class="texto_prueba">Doc: </span>
+                                                <span class="texto_prueba" t-esc="docs.driver_id.identification_id"/>
+                                            </td>
+                                        </t>
+                                        <t t-if="not docs.product_type == 'propio'">
+                                            <td colspan="3" rowspan="2" class="celda_contenido">
+                                                <span class="texto_titulito">36  Documentos anexos / Documentos anexos</span>
+                                                <br></br>
+                                                <span class="texto_titulito">Según Facturas:</span>
+                                                <br></br>
+                                                <span class="texto_contenido" t-esc="recorre_lineas_factura_invoice_list(ls)"/>
+                                                <br></br>
+                                                <span class="texto_prueba">Chofer:</span>
+                                                <span class="texto_prueba" t-esc="docs.matricula_fletero.chofer"/>
+                                                <span class="texto_prueba">Doc: </span>
+                                                <span class="texto_prueba" t-esc="docs.matricula_fletero.documento_chofer"/>
+                                            </td>
+                                        </t>
+                                    </t>
+                                    <t t-if="not carga.producto_servicio_carga_ids">
+                                        <td colspan="3" rowspan="2" class="celda_contenido">
+                                            <span class="texto_titulito">36  Documentos anexos / Documentos anexos</span>
+                                            <br></br>
+                                            <span class="texto_titulito">Según Facturas:</span>
+                                            <br></br>
+                                        </td>
+                                    </t>
+                                </tr>
+                                <tr>
+                                    <td class="celda_contenido" colspan="3">
+                                        <span class="texto_titulito">37  Número de precintos / número dos lacres</span>
+                                        <br></br>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td class="celda_contenido" colspan="6">
+                                        <span class="texto_titulito">38  Marcas y números de bultos, descripción de las mercancias / Marcas e números dos volumenes, descricao das mercadorias</span>                                        <br></br>
+                                        <span style="font-size: x-small" t-esc="carga_total_bultos(ls)"/>
+                                        <span style="font-size: x-small">BULTOS</span>
+                                        <span style="font-size: x-small" t-esc="bultos_totales(ls)"/>
+                                        <span style="font-size: x-small">QUE DICE CONTENER:</span>
+                                        <br></br>
+                                        <span style="font-size: x-small" t-esc="bultos_lineas(ls)"/>
+                                        <br></br>
+                                        <span style="font-size: x-small">Segun facturas:</span>
+                                        <span style="font-size: x-small" t-esc="recorre_lineas_factura_invoice_list(ls)"/>
+                                        <br></br>
+                                        <span class="texto_prueba">Origen:</span>
+                                        <span class="texto_prueba" t-esc="recorre_lineas_factura_market_origin(ls)" style="text-transform:uppercase"/>
+                                        <br></br>
+                                        <span class="texto_prueba">MERCADERIA EN TRANSTIO ADUANERO</span>
+                                    </td>
+                                </tr>
+                            </t>
+                            <tr>
+                                <td class="celda_contenido">
+                                    <span class="texto_titulito"> SUBTOTALES</span>
+                                    <br></br>
+                                    <span class="texto_titulito"> SUBTOTAIS</span>
+                                </td>
+                                <t t-if="l.packing_list_carga_ids">
+                                    <td class="celda_contenido">
+                                        <span class="texto_titulito">42  Cantidad de bultos / Quantidade de volumenes</span>
+                                        <br></br>
+                                        <span class="texto_prueba" t-esc="bultos_actual"/>
+                                    </td>
+                                </t>
+                                <t t-if="not l.packing_list_carga_ids">
+                                    <td class="celda_contenido">
+                                        <span class="texto_titulito">42  Cantidad de bultos / Quantidade de volumenes</span>
+                                        <br></br>
+                                    </td>
+                                </t>
+                                <t t-if="l.packing_list_carga_ids">
+                                    <td class="celda_contenido">
+                                        <span class="texto_titulito">43  Peso BRUTO en kg.</span>
+                                        <br></br>
+                                        <span class="texto_prueba" t-esc="round(peso_actual, 2)"/>
+                                    </td>
+                                </t>
+                                <t t-if="not l.packing_list_carga_ids">
+                                    <td class="celda_contenido">
+                                        <span class="texto_titulito">43  Peso BRUTO en kg.</span>
+                                        <br></br>
+                                    </td>
+                                </t>
+                                <td class="celda_contenido" colspan="3" rowspan="3">
+                                    <span class="texto_titulito">40  Nº DTA, ruta y plazo de transporte / Nº DTA, rota y prazo de transporte</span>
+                                    <br></br>
+                                    <span class="texto_titulito_soft" t-esc="docs.route"/>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="celda_contenido">
+                                    <span class="texto_titulito"> Total de Hoja Anterior</span>
+                                    <br></br>
+                                    <span class="texto_titulito"> Total folha anterior</span>
+                                </td>
+                                <t t-if="l.packing_list_carga_ids">
+                                    <td class="celda_contenido">
+                                        <span class="texto_titulito">42  Cantidad de bultos / Quantidade de volumenes</span>
+                                        <br></br>
+                                        <span class="texto_prueba" t-esc="bultos_anterior"/>
+                                    </td>
+                                </t>
+                                <t t-if="not l.packing_list_carga_ids">
+                                    <td class="celda_contenido">
+                                        <span class="texto_titulito">42  Cantidad de bultos / Quantidade de volumenes</span>
+                                        <br></br>
+                                    </td>
+                                </t>
+                                <t t-if="l.packing_list_carga_ids">
+                                    <td class="celda_contenido">
+                                        <span class="texto_titulito">43  Peso BRUTO en kg.</span>
+                                        <br></br>
+                                        <span class="texto_prueba" t-esc="peso_anterior"/>
+                                    </td>
+                                </t>
+                                <t t-if="not l.packing_list_carga_ids">
+                                    <td class="celda_contenido">
+                                        <span class="texto_titulito">43  Peso BRUTO en kg.</span>
+                                        <br></br>
+                                    </td>
+                                </t>
+                            </tr>
+                            <tr>
+                                <td class="celda_contenido">
+                                    <span class="texto_titulito"> TOTALES ACUMULADOS</span>
+                                    <br></br>
+                                    <span class="texto_titulito"> TOTAIS ACUMULADOS</span>
+                                </td>
+                                <t t-if="l.packing_list_carga_ids">
+                                    <td class="celda_contenido">
+                                        <span class="texto_titulito">42  Cantidad de bultos / Quantidade de volumenes</span>
+                                        <br></br>
+                                        <span class="texto_prueba" t-esc="bultos_total"/>
+                                    </td>
+                                </t>
+                                <t t-if="not l.packing_list_carga_ids">
+                                    <td class="celda_contenido">
+                                        <span class="texto_titulito">42  Cantidad de bultos / Quantidade de volumenes</span>
+                                        <br></br>
+                                    </td>
+                                </t>
+                                <t t-if="l.packing_list_carga_ids">
+                                    <td class="celda_contenido">
+                                        <span class="texto_titulito">43  Peso BRUTO en kg.</span>
+                                        <br></br>
+                                        <span class="texto_prueba" t-esc="round(peso_total, 2)"/>
+                                    </td>
+                                </t>
+                                <t t-if="not l.packing_list_carga_ids">
+                                    <td class="celda_contenido">
+                                        <span class="texto_titulito">43  Peso BRUTO en kg.</span>
+                                        <br></br>
+                                    </td>
+                                </t>
+                            </tr>
+                            <tr>
+                                <td class="celda_contenido" colspan="3">
+                                    <span class="texto_titulito">39  Firma y sello del porteador / Assinatura e carimbo do transportador:</span>
+                                    <br></br>
+                                    <!--img t-if="res_company.sello_empresa"
+                                         t-att-src="image_data_uri(res_company.sello_empresa)"
+                                         alt="Logo"
+                                         style="height: 25mm; margin-left:100px"/-->
+                                    <br></br>
+                                    <span class="texto_titulito">Fecha / Data:</span>
+                                    <span class="texto_prueba" t-esc="date()"/>
+                                </td>
+                                <td class="celda_contenido" colspan="3">
+                                    <span class="texto_titulito">41  Firma y sello de la Aduana de Partida /  Assinatura e carimbo da Alfandega de Partida</span>
+                                    <br></br>
+                                    <br></br>
+                                    <br></br>
+                                    <span class="texto_titulito">Fecha / Data:</span>
+                                    <span class="texto_prueba" t-esc="date()"/>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </t>
+    </template>
+</odoo>

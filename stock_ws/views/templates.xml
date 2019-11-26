@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+<template id="CrearRemito">
+&lt;?xml version='1.0' encoding='utf-8'?&gt;
+<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:tem="http://tempuri.org/">
+   <soapenv:Header/>
+   <soapenv:Body>
+      <tem:CrearRemito>
+         <!--Optional:-->
+
+         <!--Optional:-->
+
+         <!--Optional:-->
+         <tem:remito>
+            <!--Optional:-->
+
+            <tem:Numero>10</tem:Numero>
+            <tem:Fecha>2019-08-15T00:00:00.000-03:00</tem:Fecha>
+            <tem:DepoOrigenID>10</tem:DepoOrigenID>
+            <tem:DepoDestinoID>10</tem:DepoDestinoID>
+            <!--Optional:-->
+
+            <!--Optional:-->
+            <tem:LineasRemito><tem:LineaRemito><tem:Cantidad>1</tem:Cantidad></tem:LineaRemito></tem:LineasRemito>
+         </tem:remito>
+         <tem:idTipoDocumento>10</tem:idTipoDocumento>
+      </tem:CrearRemito>
+   </soapenv:Body>
+</soapenv:Envelope>
+</template>
+</odoo>

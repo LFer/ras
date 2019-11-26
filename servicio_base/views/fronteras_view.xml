@@ -1,0 +1,285 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+
+
+        <record id="view_res_country_form" model="ir.ui.view">
+            <field name="name">res.country.service.inherit.search</field>
+            <field name="model">res.country</field>
+            <field name="inherit_id" ref="base.view_country_form"/>
+            <field name="arch" type="xml">
+                <field name="code" position="after">
+                    <field name="codigo_pais"/>
+                </field>
+            </field>
+        </record>
+
+
+
+
+        <record id="view_res_country_tree" model="ir.ui.view">
+            <field name="name">res.country.tree.inherit.search</field>
+            <field name="model">res.country</field>
+            <field name="inherit_id" ref="base.view_country_tree"/>
+            <field name="arch" type="xml">
+                <field name="code" position="after">
+                    <field name="codigo_pais"/>
+                </field>
+            </field>
+        </record>
+
+        <record id="pais_kanban_view" model="ir.ui.view">
+            <field name="name">Paises</field>
+            <field name="model">res.country</field>
+            <field name="arch" type="xml">
+                <kanban class="o_res_partner_kanban">
+                    <field name="id"/>
+                    <field name="name"/>
+                    <field name="image"/>
+                    <field name="code"/>
+                    <templates>
+                        <t t-name="kanban-box">
+                            <div class="oe_kanban_global_click o_kanban_record_has_image_fill o_res_partner_kanban">
+                                <div class="oe_kanban_details">
+                                    <div>
+                                        <img class="o_kanban_image" t-att-src="kanban_image('res.country', 'image', record.id.raw_value)" t-att-alt="record.name"/>
+                                    </div>
+                                    <h4><a type="open">
+                                        <field name="name"/>
+                                    </a></h4>
+                                    <ul>
+                                        <li>
+                                            <field name="code" />
+                                        </li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </t>
+                    </templates>
+                </kanban>
+            </field>
+        </record>
+
+
+        <!--Localidades-->
+        <record id="view_res_country_city_tree" model="ir.ui.view">
+            <field name="name">Localidades</field>
+            <field name="model">res.country.city</field>
+            <field name="arch" type="xml">
+                <tree string="Localidades">
+                    <field name="name"/>
+                    <field name="state_id"/>
+                    <field name="codigo_local"/>
+                    <field name="country_id"/>
+                </tree>
+            </field>
+        </record>
+
+        <record id="action_localidades" model="ir.actions.act_window">
+            <field name="name">Localidades</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">res.country.city</field>
+            <field name="view_mode">kanban,tree,form</field>
+            <field name="filter" eval="True"/>
+            <field name="help" type="html">
+                <p class="o_view_nocontent_smiling_face">
+                    No se crearon localidades
+
+                </p>
+            </field>
+        </record>
+
+
+                <!--Departamentos-->
+        <record id="view_res_country_city_tree" model="ir.ui.view">
+            <field name="name">Departamentos</field>
+            <field name="model">res.country.state</field>
+            <field name="arch" type="xml">
+                <tree string="Departamentos">
+                    <field name="name"/>
+                    <field name="country_id"/>
+                </tree>
+            </field>
+        </record>
+
+        <record id="action_departamentos" model="ir.actions.act_window">
+            <field name="name">Departamentos</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">res.country.state</field>
+            <field name="view_mode">kanban,tree,form</field>
+            <field name="filter" eval="True"/>
+            <field name="help" type="html">
+                <p class="o_view_nocontent_smiling_face">
+                    No se crearon localidades
+
+                </p>
+            </field>
+        </record>
+
+        <record id="frontera_kanban_view" model="ir.ui.view">
+            <field name="name">Fronteras</field>
+            <field name="model">fronteras</field>
+            <field name="arch" type="xml">
+                <kanban default_group_by="country_id" class="o_res_partner_kanban">
+                    <field name="id"/>
+                    <field name="country_id"/>
+                    <field name="image"/>
+                    <templates>
+                        <t t-name="kanban-box">
+                            <div class="oe_kanban_global_click o_kanban_record_has_image_fill o_res_partner_kanban">
+                                <div class="oe_kanban_details">
+                                    <div>
+                                        <img class="o_kanban_image" t-att-src="kanban_image('fronteras', 'image', record.id.raw_value)" t-att-alt="record.name"/>
+                                    </div>
+                                    <h4><a type="open">
+                                        <field name="name"/>
+                                    </a></h4>
+                                    <ul>
+                                        <li>
+                                            <field name="country_id" />
+                                        </li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </t>
+                    </templates>
+                </kanban>
+            </field>
+        </record>
+
+        <record id="frontera_tree_view" model="ir.ui.view">
+            <field name="name">Fronteras-Tree</field>
+            <field name="model">fronteras</field>
+            <field name="arch" type="xml">
+                <tree string="Fronteras">
+                    <field name="name"/>
+                    <field name="codigo"/>
+                    <field name="codigo_pais"/>
+                    <field name="codigo_dna"/>
+                    <field name="country_id"/>
+                </tree>
+            </field>
+        </record>
+
+        <record id="fronteras_form_view" model="ir.ui.view">
+            <field name="name">Fronteras - Form</field>
+            <field name="model">fronteras</field>
+            <field name="arch" type="xml">
+                <form string="Fronteras">
+                    <sheet>
+                        <field name="image" widget="image" class="oe_avatar"/>
+                        <group>
+                            <field name="name"/>
+                            <field name="codigo"/>
+                            <field name="codigo_pais"/>
+                            <field name="codigo_dna"/>
+                            <field name="country_id"/>
+                        </group>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+
+        <record id="action_fronteras" model="ir.actions.act_window">
+            <field name="name">Claves Aduaneras</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">fronteras</field>
+            <field name="view_mode">kanban,tree,form</field>
+            <field name="filter" eval="True"/>
+            <field name="help" type="html">
+                <p class="o_view_nocontent_smiling_face">
+                    No se crearon fronteras
+
+                </p>
+            </field>
+        </record>
+
+        <record id="action_paises" model="ir.actions.act_window">
+            <field name="name">Paises</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">res.country</field>
+            <field name="view_mode">kanban,tree,form</field>
+            <field name="filter" eval="True"/>
+            <field name="help" type="html">
+                <p class="o_view_nocontent_smiling_face">
+                    No se crearon Paises
+                </p>
+            </field>
+        </record>
+
+        <record id="action_paises_inter" model="ir.actions.act_window">
+            <field name="name">Paises</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">res.country</field>
+            <field name="view_mode">kanban,tree,form</field>
+            <field name="filter" eval="True"/>
+            <field name="help" type="html">
+                <p class="o_view_nocontent_smiling_face">
+                    No se crearon Paises
+                </p>
+            </field>
+        </record>
+
+        <menuitem action="action_fronteras"
+                  parent="menu_asociados_a_carpeta"
+                  id="menu_frontera"
+                  groups="base.group_user"
+                  sequence="25"
+        />
+
+        <menuitem action="action_fronteras"
+                  parent="menu_asociados_a_carpeta_inter"
+                  id="menu_frontera_inter"
+                  groups="base.group_user"
+                  sequence="25"
+        />
+
+        <menuitem action="action_paises"
+                  parent="menu_asociados_a_carpeta"
+                  id="menu_paises"
+                  groups="base.group_user"
+                  sequence="27"
+        />
+
+        <menuitem action="action_paises_inter"
+                  parent="menu_asociados_a_carpeta_inter"
+                  id="menu_paises_inter"
+                  groups="base.group_user"
+                  sequence="27"
+        />
+
+        <menuitem action="action_departamentos"
+                  parent="menu_asociados_a_carpeta"
+                  id="menu_frontera_departamento"
+                  groups="base.group_user"
+                  sequence="30"
+        />
+
+        <menuitem action="action_departamentos"
+                  parent="menu_asociados_a_carpeta_inter"
+                  id="menu_departamentos_inter"
+                  groups="base.group_user"
+                  sequence="30"
+        />
+
+        <menuitem action="action_localidades"
+                  parent="menu_asociados_a_carpeta_inter"
+                  id="menu_paises_inter"
+                  groups="base.group_user"
+                  sequence="31"
+        />
+
+        <menuitem action="action_localidades"
+                  parent="menu_asociados_a_carpeta"
+                  id="menu_localidades"
+                  groups="base.group_user"
+                  sequence="31"
+        />
+
+
+
+
+
+
+    </data>
+</odoo>

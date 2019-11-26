@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+    <data>
+
+        <record id="rt_supplier_invoice_wzd_form" model="ir.ui.view">
+            <field name="name">rt.supplier.invoice.wzd.form</field>
+            <field name="model">rt.supplier.invoice.wzd</field>
+            <field name="arch" type="xml">
+                <form string="Add Supplier Invoice">
+                    <group colspan="2">
+                        <group>
+                            <field name="partner_id" string="Proveedor" options="{'no_create': True}"/>
+                        </group>
+                        <group>
+                            <field name="invoice_id" string="Factura" attrs="{'readonly':[('partner_id','=',False)]}" options="{'no_create': False}" context="{'change_supplier_invoice_number':True}"/>
+                            <field name="number" string="Número de Factura"/>
+                            <field name="amount_untaxed" string="Subtotal"/>
+                            <field name="amount_available" string="Subtotal Disponible"/>
+                        </group>
+                    </group>
+                    <group colspan="2">
+                        <separator string="Proveedor de Producto de Servicio seleccionado" colspan="2"/>
+                        <field name="product_supplier_ids" nolabel="1" widget="one2many_list" attrs="{'readonly':[('partner_id','=',False)]}">
+                            <tree string="Proveedores" create="false" edit="false" delete="false" colors="red:invoice_id != False">
+                                <field name="rt_service_product_id" string="Producto del Servicio" options='{"no_create": True}'/>
+                                <field name="supplier_id" string="Proveedor" options='{"no_create": True}'/>
+                                <field name="invoice_id" string="Factura" options='{"no_create": True}'/>
+                                <field name="supplier_invoice_number" string="Número Factura Proveedor"/>
+                                <field name="tax_ids" string="Impuestos" widget="many2many_tags" options='{"no_create": True}'/>
+                                <field name="amount" string="Subtotal"/>
+                                <field name="price_subtotal" string="Total"/>
+                                <field name="currency_id" string="Moneda" options='{"no_create": True}'/>
+                            </tree>
+                        </field>
+                    </group>
+                    <footer>
+                        <div attrs="{'invisible':['|',('partner_id','=',False),('invoice_id','=',False)]}">
+                            <button name="add_invoices" string="Adicionar Factura" type="object" class="oe_highlight"/>
+                            o
+                            <button string="Cancelar" class="oe_link" special="cancel"/>
+                        </div>
+                        <div attrs="{'invisible':[('partner_id','!=',False),('invoice_id','!=',False)]}">
+                            <button string="Cancelar" class="oe_highlight" special="cancel"/>
+                        </div>
+                    </footer>
+                </form>
+            </field>
+        </record>
+
+        <record id="action_rt_supplier_invoice_wzd" model="ir.actions.act_window">
+            <field name="name">Add Supplier Invoice</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">rt.supplier.invoice.wzd</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">form</field>
+            <field name="view_id" ref="rt_supplier_invoice_wzd_form"/>
+            <field name="target">new</field>
+            <field name="multi">True</field>
+        </record>
+
+        <act_window
+            id="rt_supplier_invoice_wzd"
+            multi="True"
+            key2="client_action_multi"
+            name="Addicionar"
+            res_model="rt.supplier.invoice.wzd"
+            src_model="rt.service.product.supplier"
+            view_mode="form"
+            target="new"
+            view_type="form"
+            view_id="rt_supplier_invoice_wzd_form"
+        />
+
+    </data>
+</openerp>

@@ -1,0 +1,666 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+
+        <record id="view_rechazar_comision_pop_up" model="ir.ui.view">
+            <field name="name">rechazar.comision.inv.form</field>
+            <field name="model">rechazar.comision</field>
+            <field name="arch" type="xml">
+                <form string="Pop Up">
+                    <p>
+                        <span style="font-size: 16px;">
+                            Describa el motivo del rechazo. <br/>
+                        </span>
+                    </p>
+                    <group>
+                        <field name="rt_service_product_id" invisible="1" readonly="1" force_save="1"/>
+                    </group>
+                    <div>
+                        <field name="motivo"/>
+                    </div>
+                    <footer>
+                        <button class="oe_highlight"
+                                type="object"
+                                name="rechazar_correcion_comision"
+                                string="Enviar"
+                        />
+                        or
+                        <button string="Cancel" class="oe_link" special="cancel"/>
+                    </footer>
+                </form>
+            </field>
+        </record>
+
+        <!--ACCION DEL POP UP PARA RECHAZAR UNA SOLICITUD-->
+        <record id="rechazar_comision_pop_up_action" model="ir.actions.act_window">
+            <field name="name">Rechazar Solicitud de Correción de Comisión</field>
+            <field name="res_model">rechazar.comision</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">form</field>
+            <field name="view_id" ref="view_rechazar_comision_pop_up"/>
+            <field name="target">new</field>
+        </record>
+
+
+
+        <!--Vista Formulario de los productos-->
+        <record id="view_service_product_form_2" model="ir.ui.view">
+            <field name="name">rt.service.product.form</field>
+            <field name="model">rt.service.productos</field>
+            <field name="priority" eval="19"/>
+            <field name="arch" type="xml">
+                <form string="Productos">
+                    <header>
+                        <field name="estado_comision" widget="statusbar"/>
+                        <button class="oe_highlight"
+                                type="object"
+                                name="aprobar_correcion"
+                                string="Aprobar Correcion"
+                        />
+
+                        <button class="oe_highlight"
+                                type="action"
+                                name="%(rechazar_comision_pop_up_action)d"
+                                string="Rechazar Solicitud de  Correcion"
+                                context="{'default_rt_service_product_id': id}"
+                                groups="servicio_base.encargado_comisiones,servicio_base.consulta_comisiones"
+                        >
+                        </button>
+                    </header>
+                    <sheet>
+                        <group>
+                            <field name="solo_lectura"  readonly="0" groups="base.group_no_one" force_save="1"/>
+                            <field name="es_plantilla" groups="base.group_no_one"/>
+                            <field name="estado_comision" readonly="1"  groups="base.group_no_one"/>
+                        </group>
+                        <div style="border: 1px solid #7C7BAD; background-color: #EEEEEE; border-radius: 3px; padding-left: 380px; padding-right: 5px;">
+                            <group colspan="2" col="8">
+                                <field name="is_invoiced" attrs="{'readonly': [('solo_lectura','=', True),('estado_comision','not in', ('correcion_solicitada','comision_ok'))]}"/>
+                                <field name="is_outgoing" attrs="{'readonly': [('solo_lectura','=', True),('estado_comision','not in', ('correcion_solicitada','comision_ok'))]}"/>
+                            </group>
+                        </div>
+                        <group>
+                            <field name="invoiced_rejected" invisible="0" groups="base.group_no_one"/>
+                            <field name="invoiced" invisible="0" groups="base.group_no_one"/>
+                            <field name="product_type"  attrs="{'readonly': [('solo_lectura','=', True),('estado_comision','not in', ('correcion_solicitada','comision_ok'))]}"/>
+                            <field name="pricelist_id" options="{'no_create': True, 'no_open': True}" attrs="{'readonly': [('solo_lectura','=', True),('estado_comision','not in', ('correcion_solicitada','comision_ok'))]}"/>
+                            <field name="rt_carga_id" string="Carpeta" readonly="1" force_save="1"/>
+                            <field name="rt_carga_id" string="Carga" readonly="1" force_save="1"/>
+                        </group>
+                        <div attrs="{'invisible': [('product_type','=', False)]}">
+                            <group>
+                                <group sring="campos funcionales" invisible="1">
+                                    <field name="comision_paga" readonly="1" invisible="1"/>
+                                    <field name="make_origin_readonly" invisible="1"/>
+                                    <field name="operation_type" invisible="1"/>
+                                    <field name="invisible_in_transit" invisible="1"/>
+                                    <field name="regimen" invisible="1"/>
+                                    <field name="partner_invoice_id" invisible="1"/>
+                                    <field name="make_aduana_origen_readonly" invisible="1"/>
+                                    <field name="make_frontera_visible" invisible="1"/>
+                                    <field name="invoiced_supplier" invisible="1"/>
+                                    <field name="invisible_in_transit_out" invisible="1"/>
+                                    <field name="provision_creada" invisible="1"/>
+                                    <field name="rt_service_id" force_save="1" groups="base.group_no_one"/>
+                                    <field name="tramo_inter" invisible="1"/>
+                                    <field name="make_origen_invisible" invisible="1"/>
+                                    <field name="make_destino_invisible" invisible="1"/>
+                                    <field name="make_terminal_de_vacio_invisible" invisible="1"/>
+                                    <field name="make_terminal_de_cargado_invisible" invisible="1"/>
+                                    <field name="tramo_nat" invisible="1"/>
+                                    <field name="load_type" invisible="1"/>
+                                    <field name="chofer_sustituto" invisible="1"/>
+                                    <field name="make_origin_readonly" invisible="1"/>
+                                    <field name="state" invisible="1"/>
+                                </group>
+                                <group sring="Datos de La Venta">
+                                    <separator string="Datos de la Venta" attrs="{'invisible': [('product_type','=', False)]}"/>
+                                    <field name="start" string="Inicio" attrs="{'readonly': [('solo_lectura','=', True),('estado_comision','not in', ('correcion_solicitada','comision_ok'))], 'required': [('es_plantilla', '=', False)], 'invisible': [('es_plantilla', '=', True)]}"/>
+                                    <field name="stop" string="Fin" attrs="{'readonly': [('solo_lectura','=', True),('estado_comision','not in', ('correcion_solicitada','comision_ok'))], 'required': [('es_plantilla', '=', False)], 'invisible': [('es_plantilla', '=', True)]}"/>
+                                    <field name="name" required="1" attrs="{'readonly': [('solo_lectura','=', True),('estado_comision','not in', ('correcion_solicitada','comision_ok'))]}"/>
+                                    <field name="partner_id" options="{'no_open': True,'no_create': True}" attrs="{'readonly': [('solo_lectura','=', True),('estado_comision','not in', ('correcion_solicitada','comision_ok'))]}"/>
+                                    <field name="product_id"  options="{'no_open': True,'no_create': True}" attrs="{'readonly': [('solo_lectura','=', True),('estado_comision','not in', ('correcion_solicitada','comision_ok'))]}"/>
+                                    <field name="action_type_id" options="{'no_open': True,'no_create': True}" attrs="{'readonly': [('solo_lectura','=', True),('estado_comision','not in', ('correcion_solicitada','comision_ok'))]}"/>
+                                    <field name="flujo" attrs="{'invisible': [('operation_type','!=', 'international')]}"/>
+                                    <field name="flujo_id" options="{'no_open': True,'no_create': True}" attrs="{'invisible': ['|',('flujo','=', False),('make_frontera_visible', '=', True)]}"/>
+                                    <field name="ver_importe_flujo" attrs="{'invisible': [('flujo','!=', True)]}"/>
+                                    <field name="currency_id" options="{'no_create': True, 'no_open': True}" attrs="{'readonly': [('solo_lectura','=', True),('estado_comision','not in', ('correcion_solicitada','comision_ok'))], 'invisible': [('flujo','=', True),('ver_importe_flujo','=', False)]}"/>
+                                    <field name="importe" widget="monetary" options="{'currency_field': 'currency_id'}" attrs="{'readonly': [('solo_lectura','=', True),('estado_comision','not in', ('correcion_solicitada','comision_ok'))], 'invisible': [('flujo','=', True),('ver_importe_flujo','=', False)]}"/>
+                                    <field name="origin_id" options="{'no_create': True, 'no_open': True}" attrs="{'readonly': [('solo_lectura','=', True),('estado_comision','not in', ('correcion_solicitada','comision_ok'))], 'invisible': [('flujo','=', True)]}"/>
+                                    <field name="destiny_id" options="{'no_create': True, 'no_open': True}" attrs="{'readonly': [('solo_lectura','=', True),('estado_comision','not in', ('correcion_solicitada','comision_ok'))], 'invisible': [('flujo','=', True)]}"/>
+                                    <field name="frontera_nacional" options="{'no_create': True, 'no_open': True}" attrs="{'invisible': [('make_frontera_visible','=', False)]}"/>
+                                    <field name="frontera_internacional" options="{'no_create': True, 'no_open': True}" attrs="{'invisible': [('make_frontera_visible','=', False)]}"/>
+                                    <field name="terminal_ingreso_cargado" options="{'no_create': True, 'no_open': True}" attrs="{'invisible': ['|','|',('regimen', 'not in', ('expo_nat', 'expo_inter','transit_nat', 'transit_inter')),('make_terminal_de_cargado_invisible','=',True), ('flujo','=', True)]}"/>
+                                    <field name="terminal_return" attrs="{'invisible': ['|','|','|','|', ('invisible_in_transit_out','=', True),('regimen', 'not in', ('impo_nat', 'impo_inter')),( 'load_type','!=', 'contenedor'),('make_terminal_de_vacio_invisible','=',True), ('flujo','=', True)]}"/>
+                                    <label for="remito" string="Remito" attrs="{'invisible': ['|',('es_plantilla', '=', True),('flujo','=', True)]}"/>
+                                    <div attrs="{'invisible': ['|',('es_plantilla', '=', True),('flujo','=', True)]}">
+                                        <field name="remito" style="width: 50%"/>
+                                        <field name="attach_remito" widget="many2many_binary" nolabel="1" style="width: 50%"/>
+                                    </div>
+                                    <field name="currency_id_vendedor" invisible="1"/>
+                                    <field name="partner_seller_id"  options="{'no_create': True, 'no_open': True}" context="{'default_seller': True, 'search_default_seller': True}" attrs="{'invisible': ['|',('es_plantilla', '=', True),('flujo','=', True)], 'readonly': [('operation_type','=', 'national')]}" force_save="1"/>
+                                    <field name="seller_commission" widget='monetary' options="{'currency_field': 'currency_id_vendedor'}" attrs="{'readonly': [('solo_lectura','=', True),('estado_comision','not in', ('correcion_solicitada','comision_ok'))], 'invisible': ['|',('es_plantilla', '=', True),('flujo','=', True)]}"/>
+                                </group>
+                                <group sring="Datos de La Compra" attrs="{'invisible': ['|',('es_plantilla', '=', True),('product_type','=', 'propio')]}">
+                                    <separator string="Datos de la Compra"/>
+                                    <field name="supplier_id" options="{'no_create': True, 'no_open': True}" attrs="{'required': [('product_type','=', 'terceros')], 'invisible': [('product_type','=', 'propio')],'readonly': [('solo_lectura','=', True),('estado_comision','not in', ('correcion_solicitada','comision_ok'))]}"/>
+                                    <field name="valor_compra_currency_id"  options="{'no_open': True,'no_create': True}" attrs="{'required': [('product_type','=', 'terceros')], 'invisible': ['|',('product_type','=', 'propio'), ('flujo','=', True)], 'readonly': [('solo_lectura','=', True),('estado_comision','not in', ('correcion_solicitada','comision_ok'))]}"/>
+                                    <field name="valor_compra" widget="monetary" attrs="{'required': [('product_type','=', 'terceros')], 'invisible': ['|',('product_type','=', 'propio'), ('flujo','=', True)],'readonly': [('solo_lectura','=', True),('estado_comision','not in', ('correcion_solicitada','comision_ok'))]}"/>
+                                </group>
+                                <group sring="Datos de La Matricula" attrs="{'invisible': ['|',('product_type','=', False), ('flujo','=', True)]}">
+                                    <separator string="Datos de la Matrícula"/>
+                                    <field name="alquilado" attrs="{'invisible': ['|',('es_plantilla', '=', True),('product_type','=', 'propio')]}"/>
+                                    <field name="comision_excepcion" attrs="{'readonly': [('solo_lectura','=', True),('estado_comision','not in', ('correcion_solicitada','comision_ok'))], 'invisible': ['|',('es_plantilla', '=', True),('flujo','=', True)]}"/>
+                                    <field name="vehicle_id" options="{'no_create': True, 'no_open': True}" attrs="{'invisible': ['|',('es_plantilla', '=', True),('product_type','!=', 'propio'),('alquilado','=', False)],'readonly': [('solo_lectura','=', True),('estado_comision','not in', ('correcion_solicitada','comision_ok'))]}"/>
+                                    <field name="matricula_dos_id" options='{"no_open": True, "no_create": True}' attrs="{'invisible': ['|',('es_plantilla', '=', True),('product_type','!=', 'propio'),('alquilado','=', False)],'readonly': [('solo_lectura','=', True),('estado_comision','not in', ('correcion_solicitada','comision_ok'))]}"/>
+                                    <field name="matricula_fletero" attrs="{'invisible': ['|','|',('es_plantilla', '=', True),('product_type','=', 'propio'),('alquilado','=', True)],'readonly': [('solo_lectura','=', True),('estado_comision','not in', ('correcion_solicitada','comision_ok'))]}" options="{'no_create': True, 'no_open': True}"/>
+                                    <field name="matricula_dos_fletero" attrs="{'invisible': ['|','|',('es_plantilla', '=', True),('product_type','=', 'propio'),('alquilado','=', True)],'readonly': [('solo_lectura','=', True),('estado_comision','not in', ('correcion_solicitada','comision_ok'))]}"/>
+                                    <field name="driver_id" options="{'no_create': True, 'no_open': True}" attrs="{'invisible': ['|',('es_plantilla', '=', True),('product_type','!=', 'propio'),('alquilado','=', False)], 'required': [('vehicle_id','!=', False)],'readonly': [('solo_lectura','=', True),('estado_comision','not in', ('correcion_solicitada','comision_ok'))]}"/>
+                                    <field name="chofer" attrs="{'invisible': ['|','|',('es_plantilla', '=', True),('product_type','=', 'propio'),('alquilado','=', True)],'readonly': [('solo_lectura','=', True),('estado_comision','not in', ('correcion_solicitada','comision_ok'))]}"/>
+                                    <field name="currency_id_chofer" options="{'no_open': True,'no_create': True}" attrs="{'readonly': [('solo_lectura','=', True),('estado_comision','not in', ('correcion_solicitada','comision_ok'))], 'invisible': [('flujo','=', True)]}"/>
+                                    <field name="driver_commission" widget="monetary" options="{'currency_field': 'currency_id_chofer'}" attrs="{'readonly': [('solo_lectura','=', True),('estado_comision','not in', ('correcion_solicitada','comision_ok'))], 'invisible': [('flujo','=', True)]}"/>
+                                    <field name="motivo_solicitud" string="Motivo"
+                                           attrs="{'required': [('estado_comision','=', 'correcion_solicitada')]}"
+                                    />
+                                    <field name="attach_motivo_correcion_comision"
+                                           widget="many2many_binary"
+                                           attrs="{'required': [('estado_comision','=', 'correcion_solicitada')]}"
+                                           string="Adjunto"
+                                           nolabel="1"
+                                    />
+                                    <button class="oe_stat_button"
+                                            string="Solicitar Correción"
+                                            name="solicitar_correccion"
+                                            type="object"
+                                            icon="fa-check-double"
+                                            style="white-space: normal;border: 1px solid #7C7BAD;"
+
+                                    />
+                                    <span attrs="{'invisible':[('estado_comision','!=', 'correcion_solicitada')]}" class="fa fa-paper-plane" style="position: absolute;font-size: 14px; color: #02e02f;"> Corrección Solicitada</span>
+                                </group>
+                            </group>
+                        </div>
+                        <notebook>
+
+                            <page string="Facturas de Cliente" attrs="{'invisible': [('state', 'in', ('draft','cancel'))]}">
+                                <field name="invoices_ids" readonly="1" context="{'form_view_ref':'account.invoice_form',
+                                                                                 'tree_view_ref':'account.invoice_tree',}"/>
+                            </page>
+                            <page string="Facturas de Proveedor" attrs="{'invisible': [('state', 'in', ('draft','cancel'))]}">
+                                <field name="supplier_invoices_ids" readonly="1" context="{'form_view_ref':'account.invoice_supplier_form',
+                                                                                 'tree_view_ref':'account.invoice_supplier_tree',}"/>
+                            </page>
+                            <page string="Proveedores" attrs="{'invisible': [('product_type','=', 'propio')]}" >
+                                <button class="oe_stat_button"
+                                        string="Añadir Proveedor"
+                                        name="add_supplier_to_product_line"
+                                        type="object"
+                                        icon="fa-hand-o-down"
+                                        style="border: 1px solid #7C7BAD; border-radius: 3px; white-space: normal"
+                                />
+                                <button class="oe_stat_button"
+                                        string="Generar OC"
+                                        name="generar_oc"
+                                        type="object"
+                                        icon="fa-dollar-sign"
+                                        style="border: 1px solid #7C7BAD; border-radius: 3px; white-space: normal"
+                                />
+                                <field name="supplier_ids"  mode="tree" nolabel="1" colspan="4" context="{'default_currency_id':currency_id}" attrs="{'invisible': [('product_type','=', 'propio')]}">
+                                    <tree string="costs" editable="false"
+                                          decoration-primary="state=='draft'"
+                                          decoration-success="state=='oc'"
+                                    >
+                                        <field name="rt_service_product_id" invisible="1"/>
+                                        <field name="service_state" invisible="1"/>
+                                        <field name="state"/>
+                                        <field name="name"/>
+                                        <field name="partner_invoice_id" options="{'no_open': True,'no_create': True}"/>
+                                        <field name="supplier_id" options="{'no_open': True,'no_create': True}"/>
+                                        <field name="product_id" options="{'no_open': True,'no_create': True}"/>
+                                        <field name="output_reference" options="{'no_open': True,'no_create': True}"/>
+                                        <field name="invoice_id" options="{'no_open': True,'no_create': True}"/>
+                                        <field name="currency_id" options="{'no_open': True,'no_create': True}"/>
+                                        <field name="tax_ids" options="{'no_open': True,'no_create': True}" widget="many2many_tags"/>
+                                        <field name="amount" options="{'currency_field': 'currency_id'}"/>
+                                        <field name="price_subtotal" options="{'currency_field': 'currency_id'}"/>
+                                        <field name="dua" readonly="1"/>
+                                        <field name="mic" readonly="1"/>
+                                        <field name="crt" readonly="1"/>
+                                        <field name="tack_id" readonly="1"/>
+                                        <field name="rt_service_id" readonly="1"/>
+                                        <field name="service_state" readonly="1"/>
+                                        <field name="service_date"/>
+                                        <field name="rt_service_product_id" readonly="1"/>
+                                    </tree>
+                                </field>
+                            </page>
+                        </notebook>
+                    </sheet>
+                    <div class="oe_chatter">
+                        <field name="message_follower_ids" widget="mail_followers" groups="base.group_user"/>
+                        <field name="message_ids" widget="mail_thread"/>
+                    </div>
+                </form>
+            </field>
+        </record>
+
+
+
+        <record id="view_service_product_form_3" model="ir.ui.view">
+            <field name="name">rt.service.product.form</field>
+            <field name="model">rt.service.productos</field>
+            <field name="priority" eval="20"/>
+            <field name="arch" type="xml">
+                <form string="Productos">
+                    <header>
+                        <field name="estado_costo" widget="statusbar"/>
+                        <button class="oe_highlight"
+                                type="object"
+                                name="aprobar_correcion"
+                                string="Aprobar Correcion"
+                        />
+                    </header>
+                    <sheet>
+                        <group>
+                            <field name="solo_lectura"  readonly="0" groups="base.group_no_one" force_save="1"/>
+                            <field name="es_plantilla" groups="base.group_no_one"/>
+                            <field name="estado_comision" readonly="1"  groups="base.group_no_one"/>
+                        </group>
+                        <div style="border: 1px solid #7C7BAD; background-color: #EEEEEE; border-radius: 3px; padding-left: 380px; padding-right: 5px;">
+                            <group colspan="2" col="8">
+                                <field name="is_invoiced" attrs="{'readonly': [('solo_lectura','=', True),('estado_comision','not in', ('correcion_solicitada','comision_ok'))]}"/>
+                                <field name="is_outgoing" attrs="{'readonly': [('solo_lectura','=', True),('estado_comision','not in', ('correcion_solicitada','comision_ok'))]}"/>
+                            </group>
+                        </div>
+                        <group>
+                            <field name="invoiced_rejected" invisible="0" groups="base.group_no_one"/>
+                            <field name="invoiced" invisible="0" groups="base.group_no_one"/>
+                            <field name="product_type"  attrs="{'readonly': [('solo_lectura','=', True),('estado_comision','not in', ('correcion_solicitada','comision_ok'))]}"/>
+                            <field name="pricelist_id" options="{'no_create': True, 'no_open': True}" attrs="{'readonly': [('solo_lectura','=', True),('estado_comision','not in', ('correcion_solicitada','comision_ok'))]}"/>
+                            <field name="rt_carga_id" string="Carpeta" readonly="1" force_save="1"/>
+                            <field name="rt_carga_id" string="Carga" readonly="1" force_save="1"/>
+                        </group>
+                        <div attrs="{'invisible': [('product_type','=', False)]}">
+                            <group>
+                                <group sring="campos funcionales" invisible="1">
+                                    <field name="comision_paga" readonly="1" invisible="1"/>
+                                    <field name="make_origin_readonly" invisible="1"/>
+                                    <field name="operation_type" invisible="1"/>
+                                    <field name="invisible_in_transit" invisible="1"/>
+                                    <field name="regimen" invisible="1"/>
+                                    <field name="partner_invoice_id" invisible="1"/>
+                                    <field name="make_aduana_origen_readonly" invisible="1"/>
+                                    <field name="make_frontera_visible" invisible="1"/>
+                                    <field name="invoiced_supplier" invisible="1"/>
+                                    <field name="invisible_in_transit_out" invisible="1"/>
+                                    <field name="provision_creada" invisible="1"/>
+                                    <field name="rt_service_id" force_save="1" groups="base.group_no_one"/>
+                                    <field name="tramo_inter" invisible="1"/>
+                                    <field name="make_origen_invisible" invisible="1"/>
+                                    <field name="make_destino_invisible" invisible="1"/>
+                                    <field name="make_terminal_de_vacio_invisible" invisible="1"/>
+                                    <field name="make_terminal_de_cargado_invisible" invisible="1"/>
+                                    <field name="tramo_nat" invisible="1"/>
+                                    <field name="load_type" invisible="1"/>
+                                    <field name="chofer_sustituto" invisible="1"/>
+                                    <field name="make_origin_readonly" invisible="1"/>
+                                    <field name="state" invisible="1"/>
+                                </group>
+                                <group sring="Datos de La Venta">
+                                    <separator string="Datos de la Venta" attrs="{'invisible': [('product_type','=', False)]}"/>
+                                    <field name="start" string="Inicio" attrs="{'readonly': [('solo_lectura','=', True),('estado_comision','not in', ('correcion_solicitada','comision_ok'))], 'required': [('es_plantilla', '=', False)], 'invisible': [('es_plantilla', '=', True)]}"/>
+                                    <field name="stop" string="Fin" attrs="{'readonly': [('solo_lectura','=', True),('estado_comision','not in', ('correcion_solicitada','comision_ok'))], 'required': [('es_plantilla', '=', False)], 'invisible': [('es_plantilla', '=', True)]}"/>
+                                    <field name="name" required="1" attrs="{'readonly': [('solo_lectura','=', True),('estado_comision','not in', ('correcion_solicitada','comision_ok'))]}"/>
+                                    <field name="partner_id" options="{'no_open': True,'no_create': True}" attrs="{'readonly': [('solo_lectura','=', True),('estado_comision','not in', ('correcion_solicitada','comision_ok'))]}"/>
+                                    <field name="product_id"  options="{'no_open': True,'no_create': True}" attrs="{'readonly': [('solo_lectura','=', True),('estado_comision','not in', ('correcion_solicitada','comision_ok'))]}"/>
+                                    <field name="action_type_id" options="{'no_open': True,'no_create': True}" attrs="{'readonly': [('solo_lectura','=', True),('estado_comision','not in', ('correcion_solicitada','comision_ok'))]}"/>
+                                    <field name="flujo" attrs="{'invisible': [('operation_type','!=', 'international')]}"/>
+                                    <field name="flujo_id" options="{'no_open': True,'no_create': True}" attrs="{'invisible': ['|',('flujo','=', False),('make_frontera_visible', '=', True)]}"/>
+                                    <field name="ver_importe_flujo" attrs="{'invisible': [('flujo','!=', True)]}"/>
+                                    <field name="currency_id" options="{'no_create': True, 'no_open': True}" attrs="{'readonly': [('solo_lectura','=', True),('estado_comision','not in', ('correcion_solicitada','comision_ok'))], 'invisible': [('flujo','=', True),('ver_importe_flujo','=', False)]}"/>
+                                    <field name="importe" widget="monetary" options="{'currency_field': 'currency_id'}" attrs="{'readonly': [('solo_lectura','=', True),('estado_comision','not in', ('correcion_solicitada','comision_ok'))], 'invisible': [('flujo','=', True),('ver_importe_flujo','=', False)]}"/>
+                                    <field name="origin_id" options="{'no_create': True, 'no_open': True}" attrs="{'readonly': [('solo_lectura','=', True),('estado_comision','not in', ('correcion_solicitada','comision_ok'))], 'invisible': [('flujo','=', True)]}"/>
+                                    <field name="destiny_id" options="{'no_create': True, 'no_open': True}" attrs="{'readonly': [('solo_lectura','=', True),('estado_comision','not in', ('correcion_solicitada','comision_ok'))], 'invisible': [('flujo','=', True)]}"/>
+                                    <field name="frontera_nacional" options="{'no_create': True, 'no_open': True}" attrs="{'invisible': [('make_frontera_visible','=', False)]}"/>
+                                    <field name="frontera_internacional" options="{'no_create': True, 'no_open': True}" attrs="{'invisible': [('make_frontera_visible','=', False)]}"/>
+                                    <field name="terminal_ingreso_cargado" options="{'no_create': True, 'no_open': True}" attrs="{'invisible': ['|','|',('regimen', 'not in', ('expo_nat', 'expo_inter','transit_nat', 'transit_inter')),('make_terminal_de_cargado_invisible','=',True), ('flujo','=', True)]}"/>
+                                    <field name="terminal_return" attrs="{'invisible': ['|','|','|','|', ('invisible_in_transit_out','=', True),('regimen', 'not in', ('impo_nat', 'impo_inter')),( 'load_type','!=', 'contenedor'),('make_terminal_de_vacio_invisible','=',True), ('flujo','=', True)]}"/>
+                                    <label for="remito" string="Remito" attrs="{'invisible': ['|',('es_plantilla', '=', True),('flujo','=', True)]}"/>
+                                    <div attrs="{'invisible': ['|',('es_plantilla', '=', True),('flujo','=', True)]}">
+                                        <field name="remito" style="width: 50%"/>
+                                        <field name="attach_remito" widget="many2many_binary" nolabel="1" style="width: 50%"/>
+                                    </div>
+                                    <field name="currency_id_vendedor" invisible="1"/>
+                                    <field name="partner_seller_id"  options="{'no_create': True, 'no_open': True}" context="{'default_seller': True, 'search_default_seller': True}" attrs="{'invisible': ['|',('es_plantilla', '=', True),('flujo','=', True)], 'readonly': [('operation_type','=', 'national')]}" force_save="1"/>
+                                    <field name="seller_commission" widget='monetary' options="{'currency_field': 'currency_id_vendedor'}" attrs="{'readonly': [('solo_lectura','=', True),('estado_comision','not in', ('correcion_solicitada','comision_ok'))], 'invisible': ['|',('es_plantilla', '=', True),('flujo','=', True)]}"/>
+                                </group>
+                                <group sring="Datos de La Compra" attrs="{'invisible': ['|',('es_plantilla', '=', True),('product_type','=', 'propio')]}">
+                                    <separator string="Datos de la Compra"/>
+                                    <field name="supplier_id" options="{'no_create': True, 'no_open': True}" attrs="{'required': [('product_type','=', 'terceros')], 'invisible': [('product_type','=', 'propio')],'readonly': [('solo_lectura','=', True),('estado_costo','not in', ('correcion_solicitada','comision_ok'))]}"/>
+                                    <field name="valor_compra_currency_id"  options="{'no_open': True,'no_create': True}" attrs="{'required': [('product_type','=', 'terceros')], 'invisible': ['|',('product_type','=', 'propio'), ('flujo','=', True)], 'readonly': [('solo_lectura','=', True),('estado_costo','not in', ('correcion_solicitada','comision_ok'))]}"/>
+                                    <field name="valor_compra" widget="monetary" attrs="{'required': [('product_type','=', 'terceros')], 'invisible': ['|',('product_type','=', 'propio'), ('flujo','=', True)],'readonly': [('solo_lectura','=', True),('estado_comision','not in', ('correcion_solicitada','comision_ok'))]}"/>
+                                </group>
+                                <group sring="Datos de La Matricula" attrs="{'invisible': ['|',('product_type','=', False), ('flujo','=', True)]}">
+                                    <separator string="Datos de la Matrícula"/>
+                                    <field name="alquilado" attrs="{'invisible': ['|',('es_plantilla', '=', True),('product_type','=', 'propio')]}"/>
+                                    <field name="comision_excepcion" attrs="{'readonly': [('solo_lectura','=', True),('estado_comision','not in', ('correcion_solicitada','comision_ok'))], 'invisible': ['|',('es_plantilla', '=', True),('flujo','=', True)]}"/>
+                                    <field name="vehicle_id" options="{'no_create': True, 'no_open': True}" attrs="{'invisible': ['|',('es_plantilla', '=', True),('product_type','!=', 'propio'),('alquilado','=', False)],'readonly': [('solo_lectura','=', True),('estado_comision','not in', ('correcion_solicitada','comision_ok'))]}"/>
+                                    <field name="matricula_dos_id" options='{"no_open": True, "no_create": True}' attrs="{'invisible': ['|',('es_plantilla', '=', True),('product_type','!=', 'propio'),('alquilado','=', False)],'readonly': [('solo_lectura','=', True),('estado_comision','not in', ('correcion_solicitada','comision_ok'))]}"/>
+                                    <field name="matricula_fletero" attrs="{'invisible': ['|','|',('es_plantilla', '=', True),('product_type','=', 'propio'),('alquilado','=', True)],'readonly': [('solo_lectura','=', True),('estado_comision','not in', ('correcion_solicitada','comision_ok'))]}" options="{'no_create': True, 'no_open': True}"/>
+                                    <field name="matricula_dos_fletero" attrs="{'invisible': ['|','|',('es_plantilla', '=', True),('product_type','=', 'propio'),('alquilado','=', True)],'readonly': [('solo_lectura','=', True),('estado_comision','not in', ('correcion_solicitada','comision_ok'))]}"/>
+                                    <field name="driver_id" options="{'no_create': True, 'no_open': True}" attrs="{'invisible': ['|',('es_plantilla', '=', True),('product_type','!=', 'propio'),('alquilado','=', False)], 'required': [('vehicle_id','!=', False)],'readonly': [('solo_lectura','=', True),('estado_comision','not in', ('correcion_solicitada','comision_ok'))]}"/>
+                                    <field name="chofer" attrs="{'invisible': ['|','|',('es_plantilla', '=', True),('product_type','=', 'propio'),('alquilado','=', True)],'readonly': [('solo_lectura','=', True),('estado_comision','not in', ('correcion_solicitada','comision_ok'))]}"/>
+                                    <field name="currency_id_chofer" options="{'no_open': True,'no_create': True}" attrs="{'readonly': [('solo_lectura','=', True),('estado_comision','not in', ('correcion_solicitada','comision_ok'))], 'invisible': [('flujo','=', True)]}"/>
+                                    <field name="driver_commission" widget="monetary" options="{'currency_field': 'currency_id_chofer'}" attrs="{'readonly': [('solo_lectura','=', True),('estado_comision','not in', ('correcion_solicitada','comision_ok'))], 'invisible': [('flujo','=', True)]}"/>
+                                    <span attrs="{'invisible': [('estado_comision','!=', 'correcion_solicitada')]}" class="fa fa-paper-plane" style="position: absolute;font-size: 14px; color: #02e02f;"> Corrección Solicitada</span>
+                                </group>
+                            </group>
+                        </div>
+                        <notebook>
+
+                            <page string="Facturas de Cliente" attrs="{'invisible': [('state', 'in', ('draft','cancel'))]}">
+                                <field name="invoices_ids" readonly="1" context="{'form_view_ref':'account.invoice_form',
+                                                                                 'tree_view_ref':'account.invoice_tree',}"/>
+                            </page>
+                            <page string="Facturas de Proveedor" attrs="{'invisible': [('state', 'in', ('draft','cancel'))]}">
+                                <field name="supplier_invoices_ids" readonly="1" context="{'form_view_ref':'account.invoice_supplier_form',
+                                                                                 'tree_view_ref':'account.invoice_supplier_tree',}"/>
+                            </page>
+                            <page string="Proveedores" attrs="{'invisible': [('product_type','=', 'propio')]}" >
+                                <button class="oe_stat_button"
+                                        string="Añadir Proveedor"
+                                        name="add_supplier_to_product_line"
+                                        type="object"
+                                        icon="fa-hand-o-down"
+                                        style="border: 1px solid #7C7BAD; border-radius: 3px; white-space: normal"
+                                />
+                                <button class="oe_stat_button"
+                                        string="Generar OC"
+                                        name="generar_oc"
+                                        type="object"
+                                        icon="fa-dollar-sign"
+                                        style="border: 1px solid #7C7BAD; border-radius: 3px; white-space: normal"
+                                />
+                                <field name="supplier_ids"  mode="tree" nolabel="1" colspan="4" context="{'default_currency_id':currency_id}" attrs="{'invisible': [('product_type','=', 'propio')]}">
+                                    <tree string="costs" editable="false"
+                                          decoration-primary="state=='draft'"
+                                          decoration-success="state=='oc'"
+                                    >
+                                        <field name="rt_service_product_id" invisible="1"/>
+                                        <field name="service_state" invisible="1"/>
+                                        <field name="state"/>
+                                        <field name="name"/>
+                                        <field name="partner_invoice_id" options="{'no_open': True,'no_create': True}"/>
+                                        <field name="supplier_id" options="{'no_open': True,'no_create': True}"/>
+                                        <field name="product_id" options="{'no_open': True,'no_create': True}"/>
+                                        <field name="output_reference" options="{'no_open': True,'no_create': True}"/>
+                                        <field name="invoice_id" options="{'no_open': True,'no_create': True}"/>
+                                        <field name="currency_id" options="{'no_open': True,'no_create': True}"/>
+                                        <field name="tax_ids" options="{'no_open': True,'no_create': True}" widget="many2many_tags"/>
+                                        <field name="amount" options="{'currency_field': 'currency_id'}"/>
+                                        <field name="price_subtotal" options="{'currency_field': 'currency_id'}"/>
+                                        <field name="dua" readonly="1"/>
+                                        <field name="mic" readonly="1"/>
+                                        <field name="crt" readonly="1"/>
+                                        <field name="tack_id" readonly="1"/>
+                                        <field name="rt_service_id" readonly="1"/>
+                                        <field name="service_state" readonly="1"/>
+                                        <field name="service_date"/>
+                                        <field name="rt_service_product_id" readonly="1"/>
+                                    </tree>
+                                </field>
+                            </page>
+                        </notebook>
+                    </sheet>
+                    <div class="oe_chatter">
+                        <field name="message_follower_ids" widget="mail_followers" groups="base.group_user"/>
+                        <field name="message_ids" widget="mail_thread"/>
+                    </div>
+                </form>
+            </field>
+        </record>
+
+        <record id="view_rechazar_costo_pop_up" model="ir.ui.view">
+            <field name="name">rechazar.costo.inv.form</field>
+            <field name="model">rechazar.costo</field>
+            <field name="arch" type="xml">
+                <form string="Pop Up">
+                    <p>
+                        <span style="font-size: 16px;">
+                            Describa el motivo del rechazo. <br/>
+                        </span>
+                    </p>
+                    <group>
+                        <field name="rt_service_product_id" invisible="1" readonly="1" force_save="1"/>
+                    </group>
+                    <div>
+                        <field name="motivo"/>
+                    </div>
+                    <footer>
+                        <button class="oe_highlight"
+                                type="object"
+                                name="rechazar_correcion_costo"
+                                string="Enviar"
+                        />
+                        or
+                        <button string="Cancel" class="oe_link" special="cancel"/>
+                    </footer>
+                </form>
+            </field>
+        </record>
+
+        <!--ACCION DEL POP UP PARA RECHAZAR UNA SOLICITUD DE COSTO-->
+        <record id="rechazar_costo_pop_up_action" model="ir.actions.act_window">
+            <field name="name">Rechazar Solicitud de Correción de costo</field>
+            <field name="res_model">rechazar.costo</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">form</field>
+            <field name="view_id" ref="view_rechazar_costo_pop_up"/>
+            <field name="target">new</field>
+        </record>
+
+        <record id="vista_formulario_productos_para_correccion_de_costos" model="ir.ui.view">
+            <field name="name">rt.service.product.form.correcion.costos</field>
+            <field name="model">rt.service.productos</field>
+            <field name="priority" eval="22"/>
+            <field name="arch" type="xml">
+                <form string="Productos">
+                    <header>
+                        <field name="estado_costo" options="{'clickable': '1'}" widget="statusbar"/>
+                        <button class="oe_highlight"
+                                type="object"
+                                name="aprobar_correcion_costo"
+                                string="Aprobar Correcion"
+                        />
+                        <button class="oe_highlight"
+                                type="action"
+                                name="%(servicio_base.rechazar_costo_pop_up_action)d"
+                                string="Rechazar Solicitud de  Correcion"
+                                context="{'default_rt_service_product_id': id}"
+                                groups="servicio_base.encargado_comisiones,servicio_base.consulta_comisiones"
+                        >
+                        </button>
+                    </header>
+                    <sheet>
+                        <group>
+                            <field name="solo_lectura"  readonly="0" groups="base.group_no_one" force_save="1"/>
+                            <field name="es_plantilla" groups="base.group_no_one"/>
+                            <field name="estado_costo" readonly="1" invisible="1"/>
+                            <field name="estado_costo" readonly="1"  groups="base.group_no_one"/>
+                        </group>
+                        <div style="border: 1px solid #7C7BAD; background-color: #EEEEEE; border-radius: 3px; padding-left: 380px; padding-right: 5px;">
+                            <group colspan="2" col="8">
+                                <field name="is_invoiced" attrs="{'readonly': [('solo_lectura','=', True),('estado_costo','not in', ('correcion_solicitada','comision_ok'))]}"/>
+                                <field name="is_outgoing" attrs="{'readonly': [('solo_lectura','=', True),('estado_costo','not in', ('correcion_solicitada','comision_ok'))]}"/>
+                            </group>
+                        </div>
+                        <group>
+                            <field name="invoiced_rejected" invisible="0" groups="base.group_no_one"/>
+                            <field name="invoiced" invisible="0" groups="base.group_no_one"/>
+                            <field name="product_type"  attrs="{'readonly': [('solo_lectura','=', True),('estado_costo','not in', ('correcion_solicitada','comision_ok'))]}"/>
+                            <field name="pricelist_id" options="{'no_create': True, 'no_open': True}" attrs="{'readonly': [('solo_lectura','=', True),('estado_costo','not in', ('correcion_solicitada','comision_ok'))]}"/>
+                            <field name="rt_carga_id" string="Carpeta" readonly="1" force_save="1"/>
+                            <field name="rt_carga_id" string="Carga" readonly="1" force_save="1"/>
+                        </group>
+                        <div attrs="{'invisible': [('product_type','=', False)]}">
+                            <group>
+                                <group sring="campos funcionales" invisible="1">
+                                    <field name="comision_paga" readonly="1" invisible="1"/>
+                                    <field name="make_origin_readonly" invisible="1"/>
+                                    <field name="operation_type" invisible="1"/>
+                                    <field name="invisible_in_transit" invisible="1"/>
+                                    <field name="regimen" invisible="1"/>
+                                    <field name="partner_invoice_id" invisible="1"/>
+                                    <field name="make_aduana_origen_readonly" invisible="1"/>
+                                    <field name="make_frontera_visible" invisible="1"/>
+                                    <field name="invoiced_supplier" invisible="1"/>
+                                    <field name="invisible_in_transit_out" invisible="1"/>
+                                    <field name="provision_creada" invisible="1"/>
+                                    <field name="rt_service_id" force_save="1" groups="base.group_no_one"/>
+                                    <field name="tramo_inter" invisible="1"/>
+                                    <field name="make_origen_invisible" invisible="1"/>
+                                    <field name="make_destino_invisible" invisible="1"/>
+                                    <field name="make_terminal_de_vacio_invisible" invisible="1"/>
+                                    <field name="make_terminal_de_cargado_invisible" invisible="1"/>
+                                    <field name="tramo_nat" invisible="1"/>
+                                    <field name="load_type" invisible="1"/>
+                                    <field name="chofer_sustituto" invisible="1"/>
+                                    <field name="make_origin_readonly" invisible="1"/>
+                                    <field name="state" invisible="1"/>
+                                </group>
+                                <group sring="Datos de La Venta">
+                                    <separator string="Datos de la Venta" attrs="{'invisible': [('product_type','=', False)]}"/>
+                                    <field name="start" string="Inicio" attrs="{'readonly': [('solo_lectura','=', True),('estado_costo','not in', ('correcion_solicitada','comision_ok'))], 'required': [('es_plantilla', '=', False)], 'invisible': [('es_plantilla', '=', True)]}"/>
+                                    <field name="stop" string="Fin" attrs="{'readonly': [('solo_lectura','=', True),('estado_costo','not in', ('correcion_solicitada','comision_ok'))], 'required': [('es_plantilla', '=', False)], 'invisible': [('es_plantilla', '=', True)]}"/>
+                                    <field name="name" required="1" attrs="{'readonly': [('solo_lectura','=', True),('estado_costo','not in', ('correcion_solicitada','comision_ok'))]}"/>
+                                    <field name="partner_id" options="{'no_open': True,'no_create': True}" attrs="{'readonly': [('solo_lectura','=', True),('estado_costo','not in', ('correcion_solicitada','comision_ok'))]}"/>
+                                    <field name="product_id"  options="{'no_open': True,'no_create': True}" attrs="{'readonly': [('solo_lectura','=', True),('estado_costo','not in', ('correcion_solicitada','comision_ok'))]}"/>
+                                    <field name="action_type_id" options="{'no_open': True,'no_create': True}" attrs="{'readonly': [('solo_lectura','=', True),('estado_costo','not in', ('correcion_solicitada','comision_ok'))]}"/>
+                                    <field name="flujo" attrs="{'invisible': [('operation_type','!=', 'international')]}"/>
+                                    <field name="flujo_id" options="{'no_open': True,'no_create': True}" attrs="{'invisible': ['|',('flujo','=', False),('make_frontera_visible', '=', True)]}"/>
+                                    <field name="ver_importe_flujo" attrs="{'invisible': [('flujo','!=', True)]}"/>
+                                    <field name="currency_id" options="{'no_create': True, 'no_open': True}" attrs="{'readonly': [('solo_lectura','=', True),('estado_costo','not in', ('correcion_solicitada','comision_ok'))], 'invisible': [('flujo','=', True),('ver_importe_flujo','=', False)]}"/>
+                                    <field name="importe" widget="monetary" options="{'currency_field': 'currency_id'}" attrs="{'readonly': [('solo_lectura','=', True),('estado_costo','not in', ('correcion_solicitada','comision_ok'))], 'invisible': [('flujo','=', True),('ver_importe_flujo','=', False)]}"/>
+                                    <field name="origin_id" options="{'no_create': True, 'no_open': True}" attrs="{'readonly': [('solo_lectura','=', True),('estado_costo','not in', ('correcion_solicitada','comision_ok'))], 'invisible': [('flujo','=', True)]}"/>
+                                    <field name="destiny_id" options="{'no_create': True, 'no_open': True}" attrs="{'readonly': [('solo_lectura','=', True),('estado_costo','not in', ('correcion_solicitada','comision_ok'))], 'invisible': [('flujo','=', True)]}"/>
+                                    <field name="frontera_nacional" options="{'no_create': True, 'no_open': True}" attrs="{'invisible': [('make_frontera_visible','=', False)]}"/>
+                                    <field name="frontera_internacional" options="{'no_create': True, 'no_open': True}" attrs="{'invisible': [('make_frontera_visible','=', False)]}"/>
+                                    <field name="terminal_ingreso_cargado" options="{'no_create': True, 'no_open': True}" attrs="{'invisible': ['|','|',('regimen', 'not in', ('expo_nat', 'expo_inter','transit_nat', 'transit_inter')),('make_terminal_de_cargado_invisible','=',True), ('flujo','=', True)]}"/>
+                                    <field name="terminal_return" attrs="{'invisible': ['|','|','|','|', ('invisible_in_transit_out','=', True),('regimen', 'not in', ('impo_nat', 'impo_inter')),( 'load_type','!=', 'contenedor'),('make_terminal_de_vacio_invisible','=',True), ('flujo','=', True)]}"/>
+                                    <label for="remito" string="Remito" attrs="{'invisible': ['|',('es_plantilla', '=', True),('flujo','=', True)]}"/>
+                                    <div attrs="{'invisible': ['|',('es_plantilla', '=', True),('flujo','=', True)]}">
+                                        <field name="remito" style="width: 50%"/>
+                                        <field name="attach_remito" widget="many2many_binary" nolabel="1" style="width: 50%"/>
+                                    </div>
+                                    <field name="currency_id_vendedor" invisible="1"/>
+                                    <field name="partner_seller_id"  options="{'no_create': True, 'no_open': True}" context="{'default_seller': True, 'search_default_seller': True}" attrs="{'invisible': ['|',('es_plantilla', '=', True),('flujo','=', True)], 'readonly': [('operation_type','=', 'national')]}" force_save="1"/>
+                                    <field name="seller_commission" widget='monetary' options="{'currency_field': 'currency_id_vendedor'}" attrs="{'readonly': [('solo_lectura','=', True),('estado_costo','not in', ('correcion_solicitada','comision_ok'))], 'invisible': ['|',('es_plantilla', '=', True),('flujo','=', True)]}"/>
+                                </group>
+                                <group sring="Datos de La Compra" attrs="{'invisible': ['|',('es_plantilla', '=', True),('product_type','=', 'propio')]}">
+                                    <separator string="Datos de la Compra"/>
+                                    <field name="supplier_id" options="{'no_create': True, 'no_open': True}" attrs="{'required': [('product_type','=', 'terceros')], 'invisible': [('product_type','=', 'propio')],'readonly': [('solo_lectura','=', True),('estado_costo','not in', ('correcion_solicitada','comision_ok'))]}"/>
+                                    <field name="valor_compra_currency_id"  options="{'no_open': True,'no_create': True}" attrs="{'required': [('product_type','=', 'terceros')], 'invisible': ['|',('product_type','=', 'propio'), ('flujo','=', True)], 'readonly': [('solo_lectura','=', True),('estado_costo','not in', ('correcion_solicitada','comision_ok'))]}"/>
+                                    <field name="valor_compra" widget="monetary" attrs="{'required': [('product_type','=', 'terceros')], 'invisible': ['|',('product_type','=', 'propio'), ('flujo','=', True)],'readonly': [('estado_costo','not in', ('correcion_solicitada','comision_ok'))]}"/>
+
+                                    <field name="motivo_solicitud_costo" string="Motivo"
+                                           attrs="{'required': [('estado_costo','=', 'correcion_solicitada')]}"
+                                    />
+                                    <field name="attach_motivo_correcion_costo"
+                                           widget="many2many_binary"
+                                           attrs="{'required': [('estado_costo','=', 'correcion_solicitada')]}"
+                                           string="Adjunto"
+                                           nolabel="1"
+                                    />
+                                    <button class="oe_stat_button"
+                                            string="Solicitar Correción Costo"
+                                            name="solicitar_correccion_costo"
+                                            type="object"
+                                            icon="fa-check-double"
+                                            style="white-space: normal;border: 1px solid #7C7BAD;"
+
+                                    />
+                                    <span attrs="{'invisible': [('estado_costo','!=', 'correcion_solicitada')]}" class="fa fa-paper-plane" style="position: absolute;font-size: 14px; color: #02e02f;"> Corrección Solicitada</span>
+
+
+
+                                </group>
+                                <group sring="Datos de La Matricula" attrs="{'invisible': ['|',('product_type','=', False), ('flujo','=', True)]}">
+                                    <separator string="Datos de la Matrícula"/>
+                                    <field name="alquilado" attrs="{'invisible': ['|',('es_plantilla', '=', True),('product_type','=', 'propio')]}"/>
+                                    <field name="comision_excepcion" attrs="{'readonly': [('solo_lectura','=', True),('estado_costo','not in', ('correcion_solicitada','comision_ok'))], 'invisible': ['|',('es_plantilla', '=', True),('flujo','=', True)]}"/>
+                                    <field name="vehicle_id" options="{'no_create': True, 'no_open': True}" attrs="{'invisible': ['|',('es_plantilla', '=', True),('product_type','!=', 'propio'),('alquilado','=', False)],'readonly': [('solo_lectura','=', True),('estado_costo','not in', ('correcion_solicitada','comision_ok'))]}"/>
+                                    <field name="matricula_dos_id" options='{"no_open": True, "no_create": True}' attrs="{'invisible': ['|',('es_plantilla', '=', True),('product_type','!=', 'propio'),('alquilado','=', False)],'readonly': [('solo_lectura','=', True),('estado_costo','not in', ('correcion_solicitada','comision_ok'))]}"/>
+                                    <field name="matricula_fletero" attrs="{'invisible': ['|','|',('es_plantilla', '=', True),('product_type','=', 'propio'),('alquilado','=', True)],'readonly': [('solo_lectura','=', True),('estado_costo','not in', ('correcion_solicitada','comision_ok'))]}" options="{'no_create': True, 'no_open': True}"/>
+                                    <field name="matricula_dos_fletero" attrs="{'invisible': ['|','|',('es_plantilla', '=', True),('product_type','=', 'propio'),('alquilado','=', True)],'readonly': [('solo_lectura','=', True),('estado_costo','not in', ('correcion_solicitada','comision_ok'))]}"/>
+                                    <field name="driver_id" options="{'no_create': True, 'no_open': True}" attrs="{'invisible': ['|',('es_plantilla', '=', True),('product_type','!=', 'propio'),('alquilado','=', False)], 'required': [('vehicle_id','!=', False)],'readonly': [('solo_lectura','=', True),('estado_costo','not in', ('correcion_solicitada','comision_ok'))]}"/>
+                                    <field name="chofer" attrs="{'invisible': ['|','|',('es_plantilla', '=', True),('product_type','=', 'propio'),('alquilado','=', True)],'readonly': [('solo_lectura','=', True),('estado_costo','not in', ('correcion_solicitada','comision_ok'))]}"/>
+                                    <field name="currency_id_chofer" options="{'no_open': True,'no_create': True}" attrs="{'readonly': [('solo_lectura','=', True),('estado_costo','not in', ('correcion_solicitada','comision_ok'))], 'invisible': [('flujo','=', True)]}"/>
+                                    <field name="driver_commission" widget="monetary" options="{'currency_field': 'currency_id_chofer'}" attrs="{'readonly': [('solo_lectura','=', True),('estado_costo','not in', ('correcion_solicitada','comision_ok'))], 'invisible': [('flujo','=', True)]}"/>
+                                </group>
+                            </group>
+                        </div>
+                        <notebook>
+
+                            <page string="Facturas de Cliente" attrs="{'invisible': [('state', 'in', ('draft','cancel'))]}">
+                                <field name="invoices_ids" readonly="1" context="{'form_view_ref':'account.invoice_form',
+                                                                                 'tree_view_ref':'account.invoice_tree',}"/>
+                            </page>
+                            <page string="Facturas de Proveedor" attrs="{'invisible': [('state', 'in', ('draft','cancel'))]}">
+                                <field name="supplier_invoices_ids" readonly="1" context="{'form_view_ref':'account.invoice_supplier_form',
+                                                                                 'tree_view_ref':'account.invoice_supplier_tree',}"/>
+                            </page>
+                            <page string="Proveedores" attrs="{'invisible': [('product_type','=', 'propio')]}" >
+                                <button class="oe_stat_button"
+                                        string="Añadir Proveedor"
+                                        name="add_supplier_to_product_line"
+                                        type="object"
+                                        icon="fa-hand-o-down"
+                                        style="border: 1px solid #7C7BAD; border-radius: 3px; white-space: normal"
+                                />
+                                <button class="oe_stat_button"
+                                        string="Generar OC"
+                                        name="generar_oc"
+                                        type="object"
+                                        icon="fa-dollar-sign"
+                                        style="border: 1px solid #7C7BAD; border-radius: 3px; white-space: normal"
+                                />
+                                <field name="supplier_ids"  mode="tree" nolabel="1" colspan="4" context="{'default_currency_id':currency_id}" attrs="{'invisible': [('product_type','=', 'propio')]}">
+                                    <tree string="costs" editable="false"
+                                          decoration-primary="state=='draft'"
+                                          decoration-success="state=='oc'"
+                                    >
+                                        <field name="rt_service_product_id" invisible="1"/>
+                                        <field name="service_state" invisible="1"/>
+                                        <field name="state"/>
+                                        <field name="name"/>
+                                        <field name="partner_invoice_id" options="{'no_open': True,'no_create': True}"/>
+                                        <field name="supplier_id" options="{'no_open': True,'no_create': True}"/>
+                                        <field name="product_id" options="{'no_open': True,'no_create': True}"/>
+                                        <field name="output_reference" options="{'no_open': True,'no_create': True}"/>
+                                        <field name="invoice_id" options="{'no_open': True,'no_create': True}"/>
+                                        <field name="currency_id" options="{'no_open': True,'no_create': True}"/>
+                                        <field name="tax_ids" options="{'no_open': True,'no_create': True}" widget="many2many_tags"/>
+                                        <field name="amount" options="{'currency_field': 'currency_id'}"/>
+                                        <field name="price_subtotal" options="{'currency_field': 'currency_id'}"/>
+                                        <field name="dua" readonly="1"/>
+                                        <field name="mic" readonly="1"/>
+                                        <field name="crt" readonly="1"/>
+                                        <field name="tack_id" readonly="1"/>
+                                        <field name="rt_service_id" readonly="1"/>
+                                        <field name="service_state" readonly="1"/>
+                                        <field name="service_date"/>
+                                        <field name="rt_service_product_id" readonly="1"/>
+                                    </tree>
+                                </field>
+                            </page>
+                        </notebook>
+                    </sheet>
+                    <div class="oe_chatter">
+                        <field name="message_follower_ids" widget="mail_followers" groups="base.group_user"/>
+                        <field name="message_ids" widget="mail_thread"/>
+                    </div>
+                </form>
+            </field>
+        </record>
+    </data>
+</odoo>

@@ -1,0 +1,130 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data noupdate="1">
+
+        <!--COLORES DE CALENDARIO-->
+        <record id="color_calendar" model="color.picker">
+            <field name="name">Carga Anotada / Reservada</field>
+        </record>
+
+        <record id="color_calendar_2" model="color.picker">
+            <field name="name">Confirmada</field>
+        </record>
+
+        <record id="color_calendar_3" model="color.picker">
+            <field name="name">Carga Realizada y Facturada</field>
+        </record>
+
+        <!--TIPOS DE ACCION-->
+        <record id="tipo_accion1" model="tipo.accion">
+            <field name="name">Viaje</field>
+            <field name="internacional">True</field>
+            <field name="nacional">True</field>
+            <field name="contenedores">True</field>
+            <field name="carga_suelta">True</field>
+            <field name="corresponde_comision">True</field>
+        </record>
+        <record id="tipo_accion2" model="tipo.accion">
+            <field name="name">Retiro de Vacío</field>
+            <field name="internacional">True</field>
+            <field name="nacional">True</field>
+            <field name="contenedores">True</field>
+            <field name="carga_suelta">True</field>
+            <field name="corresponde_comision">True</field>
+        </record>
+        <record id="tipo_accion3" model="tipo.accion">
+            <field name="name">Ingreso Cargado</field>
+            <field name="internacional">True</field>
+            <field name="nacional">True</field>
+            <field name="contenedores">True</field>
+            <field name="carga_suelta">True</field>
+            <field name="corresponde_comision">True</field>
+        </record>
+        <record id="tipo_accion4" model="tipo.accion">
+            <field name="name">Devolución de Vacío</field>
+            <field name="internacional">True</field>
+            <field name="nacional">True</field>
+            <field name="contenedores">True</field>
+            <field name="carga_suelta">True</field>
+            <field name="corresponde_comision">True</field>
+        </record>
+        <record id="tipo_accion5" model="tipo.accion">
+            <field name="name">Retiro de Cargado</field>
+            <field name="internacional">True</field>
+            <field name="nacional">True</field>
+            <field name="contenedores">True</field>
+            <field name="carga_suelta">True</field>
+            <field name="corresponde_comision">True</field>
+        </record>
+        <record id="tipo_accion6" model="tipo.accion">
+            <field name="name">Carga</field>
+            <field name="internacional">True</field>
+            <field name="nacional">True</field>
+            <field name="contenedores">True</field>
+            <field name="carga_suelta">True</field>
+            <field name="corresponde_comision">True</field>
+        </record>
+        <record id="tipo_accion7" model="tipo.accion">
+            <field name="name">Salida</field>
+            <field name="internacional">True</field>
+            <field name="nacional">True</field>
+            <field name="contenedores">True</field>
+            <field name="carga_suelta">True</field>
+            <field name="corresponde_comision">True</field>
+        </record>
+        <record id="tipo_accion8" model="tipo.accion">
+            <field name="name">Frontera</field>
+            <field name="internacional">True</field>
+            <field name="nacional">True</field>
+            <field name="contenedores">True</field>
+            <field name="carga_suelta">True</field>
+            <field name="corresponde_comision">True</field>
+        </record>
+
+        <record id="tipo_accion9" model="tipo.accion">
+            <field name="name">Arribo a fiscal</field>
+            <field name="internacional">True</field>
+            <field name="nacional">True</field>
+            <field name="contenedores">True</field>
+            <field name="carga_suelta">True</field>
+            <field name="corresponde_comision">True</field>
+        </record>
+
+        <record id="tipo_accion10" model="tipo.accion">
+            <field name="name">Liberación fiscal</field>
+            <field name="internacional">True</field>
+            <field name="nacional">True</field>
+            <field name="contenedores">True</field>
+            <field name="carga_suelta">True</field>
+            <field name="corresponde_comision">True</field>
+        </record>
+
+        <record id="tipo_accion11" model="tipo.accion">
+            <field name="name">Descarga</field>
+            <field name="internacional">True</field>
+            <field name="nacional">True</field>
+            <field name="contenedores">True</field>
+            <field name="carga_suelta">True</field>
+            <field name="corresponde_comision">True</field>
+        </record>
+
+        <record id="tipo_accion12" model="tipo.accion">
+            <field name="name">Lastre</field>
+            <field name="internacional">True</field>
+            <field name="nacional">True</field>
+            <field name="contenedores">True</field>
+            <field name="carga_suelta">True</field>
+            <field name="corresponde_comision">True</field>
+        </record>
+        <record id="tipo_accion13" model="tipo.accion">
+            <field name="name">Desconsolidación y Entrega</field>
+            <field name="internacional">True</field>
+            <field name="nacional">True</field>
+            <field name="contenedores">True</field>
+            <field name="carga_suelta">True</field>
+            <field name="corresponde_comision">True</field>
+        </record>
+
+
+    </data>
+</odoo>

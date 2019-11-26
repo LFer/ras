@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+
+        <record id="view_servicio_consolidado_advance_payment_inv" model="ir.ui.view">
+            <field name="name">servicio.consolidado.factura</field>
+            <field name="model">servicio.consolidado.factura</field>
+            <field name="arch" type="xml">
+                <form string="Invoice">
+                    <p>
+                        <span style="font-size: 16px;">
+                            Seleccione cómo quiere facturar este servicio. <br/>
+                            Esto creará una factura borrador que puede ser modificada antes de la validación
+                        </span>
+                    </p>
+                    <group>
+                        <field name="camion_id" style="width:50%%" options="{'no_open': True,'no_create': True}"  groups="base.group_no_one"/>
+                        <field name="advance_payment_method" readonly="0" style="width:50%%"/>
+                        <field name="tramo_a_facturar" readonly="0" style="width:50%%" attrs="{'invisible': [('advance_payment_method', '!=', 'percentage')]}"/>
+                        <field name="amount"  style="width:50%%" attrs="{'invisible': [('advance_payment_method', '!=', 'percentage')], 'required': [('advance_payment_method', '=', 'percentage')] }"/>
+                        <field name="amount_nat"  style="width:50%%" attrs="{'invisible': [('advance_payment_method', '!=', 'all')], 'required': [('advance_payment_method', '=', 'all')] }"/>
+                        <field name="amount_inter"  style="width:50%%" attrs="{'invisible': [('advance_payment_method', '!=', 'all')], 'required': [('advance_payment_method', '=', 'all')] }"/>
+                    </group>
+                    <footer>
+                        <button name="create_invoices" string="Crear y Ver Factura" type="object" context="{'open_invoices': True}" class="oe_highlight" attrs="{'invisible': [('advance_payment_method', '=', 'lineas')]}"/>
+                        <button name="create_invoices" string="Crear Factura" type="object" class="oe_highlight" attrs="{'invisible': [('advance_payment_method', '=', 'lineas')]}"/>
+                        <button name="show_service_lines" string="Mostrar servicios a facturar" type="object" class="oe_highlight" attrs="{'invisible': [('advance_payment_method', '!=', 'lineas')]}"/>
+                        or
+                        <button string="Cancel" class="oe_link" special="cancel"/>
+                    </footer>
+                </form>
+            </field>
+        </record>
+
+        <record id="action_servicio_consolidado_advance_payment_inv" model="ir.actions.act_window">
+            <field name="name">Orden de facturación</field>
+            <field name="res_model">servicio.consolidado.factura</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">form</field>
+            <field name="view_id" ref="view_servicio_consolidado_advance_payment_inv"/>
+            <field name="target">new</field>
+        </record>
+
+
+        <record id="view_servicio_consolidado_product_make_invoice" model="ir.ui.view">
+            <field name="name">Servicio Consolidado Make Invoice</field>
+            <field name="model">servicio.consolidado.crea.factura</field>
+            <field name="arch" type="xml">
+             <form string="Create invoices">
+                 <group>
+                     <field name="partner_invoice_id" readonly="0" style="width:50%%" attrs="{'invisible': [('partner_invoice_id', '!=', False)]}" options="{'no_open': True,'no_create': True}" />
+                     <field name="advance_payment_method" readonly="0" style="width:50%%"/>
+                     <field name="tramo_a_facturar" readonly="0" style="width:50%%" attrs="{'invisible': [('advance_payment_method', '!=', 'percentage')]}"/>
+                     <field name="amount"  style="width:50%%" attrs="{'invisible': [('advance_payment_method', '!=', 'percentage')], 'required': [('advance_payment_method', '=', 'percentage')] }"/>
+                     <field name="amount_nat"  style="width:50%%" attrs="{'invisible': [('advance_payment_method', '!=', 'all')], 'required': [('advance_payment_method', '=', 'all')] }"/>
+                     <field name="amount_inter"  style="width:50%%" attrs="{'invisible': [('advance_payment_method', '!=', 'all')], 'required': [('advance_payment_method', '=', 'all')] }"/>
+                 </group>
+                <p>
+                    <span class="fa fa-info-circle" style="font-size: 24px; margin-right: 10px; color: #DC5F59; float: left;"/>
+                    <span style="font-size: 16px;">Todos los servicios selecionados seran facturados</span>
+                </p>
+                <footer>
+                    <button name="make_invoices" string="Crear &amp; Ver Factura" type="object"
+                        context="{'open_invoices': True}" class="oe_highlight"/>
+                    <button name="make_invoices" string="Crear Facturas" type="object" class="oe_highlight"/>
+                    or
+                    <button string="Cancelar" class="oe_link" special="cancel" />
+                </footer>
+            </form>
+            </field>
+        </record>
+
+        <act_window
+            id="action_view_servicio_consolidado_product_make_invoice"
+            multi="True"
+            key2="client_action_multi"
+            name="Crear Factura"
+            res_model="servicio.consolidado.crea.factura"
+            src_model="producto.servicio.camion"
+            view_mode="form"
+            target="new"
+            view_type="form"
+            view_id="view_servicio_consolidado_product_make_invoice"
+        />
+
+    </data>
+</odoo>
+
+
+
+

@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+
+        <record id="servicio_account_invoice_inh_tree_view" model="ir.ui.view" >
+            <field name="name">fe.account.invoice.inherit</field>
+            <field name="model">account.invoice</field>
+            <field name="inherit_id" ref="account.invoice_tree"/>
+            <field name="arch" type="xml">
+              <xpath expr="//field[@name='partner_id']" position="after">
+                <field name="rt_service_id"/>
+              </xpath>
+            </field>
+        </record>
+
+        <record id="rt_invoice_form" model="ir.ui.view">
+            <field name="name">account.invoice.form</field>
+            <field name="model">account.invoice</field>
+            <field name="inherit_id" ref="account.invoice_form"/>
+            <field name="arch" type="xml">
+                <data>
+                    <notebook position="inside">
+                        <page string="Operativa" name="operativa">
+                            <group style="border-bottom: 1px solid #DDDDDD;">
+                                <field name="rt_service_product_id" invisible="0"/>
+                                <field name="rt_service_id" invisible="0"/>
+                            </group>
+                        </page>
+                    </notebook>
+
+                  <xpath expr="//button[@name='action_invoice_open']" position="attributes">
+                    <attribute name="groups">servicio_base.servicio_validar_cancelar_facturas</attribute>
+                  </xpath>
+
+                  <xpath expr="//form[1]/sheet[1]/notebook[1]/page[1]/field[@name='invoice_line_ids']/tree[1]/field[@name='product_id']" position="after">
+                    <field name="tramo_facturado" invisible="0"/>
+                  </xpath>
+                  <xpath expr="//field[@name='number']" position="attributes">
+                    <attribute name="groups">servicio_base.servicio_ver_numero_interno_factura</attribute>
+                  </xpath>
+
+                </data>
+            </field>
+        </record>
+
+        <record id="invoice_form_cancel_inherit_2" model="ir.ui.view">
+            <field name="name">invoice.form.cancel.inherit</field>
+            <field name="model">account.invoice</field>
+            <field name="inherit_id" ref="account_cancel.invoice_form_cancel_inherit"/>
+            <field name="arch" type="xml">
+                  <xpath expr="//button[@name='action_invoice_cancel']" position="attributes">
+                    <attribute name="groups">servicio_base.servicio_validar_cancelar_facturas</attribute>
+                  </xpath>
+            </field>
+        </record>
+
+        <record id="account_invoice_supplier_form_vehicle" model="ir.ui.view">
+            <field name="name">vehiculo.id</field>
+            <field name="model">account.invoice</field>
+            <field name="inherit_id" ref="account.invoice_supplier_form"/>
+            <field name="arch" type="xml">
+            <xpath expr="//field[@name='invoice_line_ids']/tree/field[@name='company_id']" position="after">
+                <field name="vehicle_id" options="{'no_create': true, 'no_open': true, 'no_create_edit': True}" />
+            </xpath>
+            </field>
+        </record>
+
+    </data>
+</odoo>

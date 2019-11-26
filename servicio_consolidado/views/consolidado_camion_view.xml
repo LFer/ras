@@ -1,0 +1,752 @@
+<odoo>
+    <data>
+
+
+        <record id="action_camiones" model="ir.actions.act_window">
+            <field name="name">Carpeta</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">carpeta.camion</field>
+            <field name="view_mode">tree,form</field>
+            <field name="filter" eval="True"/>
+            <field name="help" type="html">
+                <p class="o_view_nocontent_smiling_face">
+                    No se crearon camiones
+
+                </p>
+            </field>
+        </record>
+
+
+        <record id="camion_tree_view" model="ir.ui.view">
+            <field name="name">Camiones-Tree</field>
+            <field name="model">carpeta.camion</field>
+            <field name="arch" type="xml">
+                <tree string="Carpeta" decoration-primary="state=='draft'" decoration-bf="state=='confirm'" decoration-success="state=='done'" decoration-muted="state=='cancel'" decoration-info="state=='inprocess'">
+                    <field name="name"/>
+                    <field name="partner_invoice_id"/>
+                    <field name="start_datetime"/>
+                    <field name="state"/>
+                    <field name="currency_id" invisible="0"/>
+                </tree>
+            </field>
+        </record>
+
+
+
+        <!--Vista lista de las cargas-->
+        <record id="view_consol_carga_list" model="ir.ui.view">
+            <field name="name">rt.cargas.list.list</field>
+            <field name="model">carga.camion</field>
+            <field name="arch" type="xml">
+                <tree string="Cargas">
+                    <field name="id" widget="handle"/>
+                    <field name="name"/>
+                    <field name="load_type"/>
+                    <field name="regimen"/>
+                    <field name="container_number"/>
+                </tree>
+            </field>
+        </record>
+
+        <!--Vista Formulario de la Carga-->
+        <record id="view_consol_carga_form" model="ir.ui.view">
+            <field name="name">rt.service.carga.form</field>
+            <field name="model">carga.camion</field>
+            <field name="arch" type="xml">
+                <form string="Cargas" create="false">
+                    <sheet>
+                        <!--Campos para visibilidad-->
+                        <field name="make_page_invisible" invisible="1"/>
+                        <field name="partner_invoice_id" invisible="1"/>
+                        <field name="make_presentacion_invisible" invisible="1"/>
+                        <field name="make_container_number_invisible" invisible="1"/>
+                        <field name="make_crt_number_readonly" invisible="1"/>
+                        <field name="valid_cointaner_number_text" invisible="1"/>
+                        <field name="invalid_cointaner_number_text" invisible="1"/>
+                        <field name="company_id" invisible="1"/>
+                        <field name="company_id" invisible="1"/>
+                        <field name="route" invisible="1"/>
+                        <notebook>
+                            <page string="Alerta" name="page_to_show_invisible" attrs="{'invisible': [('make_page_invisible','=',False)]}">
+                                <p>
+                                    <h2>Si esta viendo esta ventana significa que:</h2>
+                                    <separator></separator>
+                                    - No ha selecionado un Régimen
+                                    <br/>
+                                    - No ha selecionado un Cliente a Facturar
+                                    <br/>
+                                    - No ha selecionado un Servicio Asociado
+                                    <br/><br/>
+                                    <h4>Cierre esta ventana y configure los campos</h4>
+                                </p>
+                            </page>
+                            <page string="Principal de la Carga" name="page_principal_carga" attrs="{'invisible': [('make_page_invisible','=',True)]}">
+                                <div name="buttons">
+                                </div>
+                                <group name="grupo_0">
+                                    <h1>
+                                        <field name="name" placeholder="Referencia..."/>
+                                    </h1>
+                                    <field name="dangers_loads"/>
+                                    <field name="camion_id" invisible="1"/>
+
+                                </group>
+                                <group>
+                                    <group>
+                                        <field name="regimen" invisible="0"/>
+                                        <field name="tipo_consolidado" options="{'no_create': True, 'no_open': True}"/>
+                                        <field name="partner_invoice_id" context="{'search_default_customer': 1, 'show_address': 1}" options="{'no_open': True,'no_create': True, 'highlight_first_line':True}"/>
+                                        <field name="load_presentation" options="{'no_create': True, 'no_open': True}"/>
+                                        <label for="dua_aduana" string="DUA"/>
+                                        <div class="address_format">
+                                            <field name="dua_aduana" style="width: 20%" placeholder="Nº Aduana" />
+                                            <span> - </span>
+                                            <field name="dua_anio" style="width: 15%" placeholder="Año" />
+                                            <span> - </span>
+                                            <field name="dua_numero" style="width: 30%" placeholder="Número DUA" />
+                                        </div>
+                                        <field name="aduana_origen_id" invisible="1"/>
+                                        <field name="aduana_destino_id" invisible="1"/>
+                                        <field name="load_presentation" attrs="{'invisible': [('make_presentacion_invisible','=',False)]}"/>
+                                    </group>
+                                    <group>
+                                        <field name="pallet_type" attrs="{'invisible': ['|','|',( 'load_presentation','=','otros'), ('load_presentation','=','paquete'), ('load_presentation','=', False)], 'required': [('load_presentation','=','pallet ')]}"/>
+                                        <separator string="Número CRT"/>
+                                        <field name="crt_origin"/>
+                                        <div>
+                                            <h2>
+                                                <button class="oe_highlight" type="object" name="get_crt_number" string="Generar Nº CRT" confirm="¿Esta seguro?" style="allign: left" attrs="{'invisible': [('crt_origin','!=','propio')]}"/>
+                                            </h2>
+                                            <label for="crt_number" style="font-weight:bold; width: 50%" attrs="{'invisible': [('crt_origin','!=','terceros')]}"/>
+                                        </div>
+                                        <div class="numero_crt">
+                                            <h2>
+                                                <field name="crt_number" style="font-weight:bold" attrs="{'readonly': [('make_crt_number_readonly','=', True)], 'invisible': [('crt_origin','=',False)]}"/>
+                                            </h2>
+                                        </div>
+                                    </group>
+                                </group>
+                                <group>
+                                    <!--TIPO DE CONTENEDOR = BULK-->
+                                    <group>
+                                        <!--Carga Bulk-->
+                                        <field name="volume"/>
+                                        <field name="raw_kg"/>
+                                        <field name="package"/>
+                                        <field name="pricelist_id" invisible="1"/>
+                                        <field name="origin_id" options="{'no_create': True, 'no_open': True}"/>
+                                        <field name="destiny_id" options="{'no_create': True, 'no_open': True}"/>
+                                    </group>
+                                    <group>
+                                        <field name="precio_flete"/>
+                                        <field name="precio_seguro"/>
+                                    </group>
+                                </group>
+                                <notebook>
+                                    <page string="Productos">
+                                        <field name="producto_servicio_carga_ids"
+                                               mode="tree"
+                                               context="{'default_rt_carga_id' : active_id,
+                                                         'default_camion_id' : camion_id,
+                                                         'default_partner_invoice_id': partner_invoice_id,
+                                                         'default_crt_number' : crt_number,
+                                                         }">
+                                            <tree string="Productos" decoration-danger="is_outgoing == True">
+                                                <field name="rt_carga_id" invisible="1"/>
+                                                <field name="camion_id" invisible="1"/>
+                                                <field name="id" widget="handle"/>
+                                                <field name="product_id"/>
+                                                <field name="product_type"/>
+                                                <field name="action_type_id"/>
+                                                <field name="partner_invoice_id"/>
+                                                <field name="supplier_id"/>
+                                                <field name="is_outgoing" invisible="1"/>
+                                                <field name="currency_id"/>
+                                                <field name="importe"/>
+
+                                            </tree>
+                                            <form string="Productos">
+                                                <header>
+                                                    <field name="state" widget="statusbar"/>
+                                                </header>
+                                                <sheet>
+                                                    <div style="border: 1px solid #7C7BAD; background-color: #EEEEEE; border-radius: 3px; padding-left: 380px; padding-right: 5px;">
+                                                        <group colspan="2" col="8">
+                                                            <field name="is_invoiced"/>
+                                                            <field name="is_outgoing"/>
+                                                        </group>
+                                                    </div>
+                                                    <group>
+                                                        <field name="product_type"/>
+                                                        <field name="pricelist_id" options="{'no_create': True, 'no_open': True}"/>
+                                                    </group>
+                                                    <div attrs="{'invisible': [('product_type','=', False)]}">
+                                                        <group>
+                                                            <group>
+                                                                <field name="regimen" invisible="1"/>
+                                                                <field name="partner_invoice_id" invisible="0"/>
+                                                                <field name="name"/>
+                                                                <field name="make_frontera_nacional_visible" invisible="1"/>
+                                                                <field name="make_frontera_internacional_visible" invisible="1"/>
+                                                                <field name="product_id"  options="{'no_open': True,'no_create': True}"/>
+                                                                <field name="action_type_id" options="{'no_open': True,'no_create': True}"/>
+                                                                <field name="supplier_id" attrs="{'invisible': [('product_type','=', 'propio')]}" />
+                                                            </group>
+                                                            <group>
+                                                                <field name="currency_id" options="{'no_create': True, 'no_open': True}"/>
+                                                                <field name="importe" widget="monetary" options="{'currency_field': 'currency_id'}"/>
+                                                                <field name="valor_compra_currency_id"  options="{'no_open': True,'no_create': True}" attrs="{'invisible': [('product_type','=', 'propio')]}"/>
+                                                                <field name="valor_compra" widget="monetary" attrs="{'invisible': [('product_type','=', 'propio')]}"/>
+                                                                <field name="crt_number"/>
+                                                                <field name="invoiced" invisible="1"/>
+                                                                <field name="invoiced_supplier" invisible="1"/>
+                                                                <field name="provision_creada" invisible="1"/>
+                                                            </group>
+                                                            <group>
+                                                                <field name="vehicle_id" options="{'no_create': True, 'no_open': True}"/>
+                                                                <field name="driver_id" options="{'no_create': True, 'no_open': True}"/>
+                                                                <field name="driver_commission" widget="monetary" options="{'currency_field': 'currency_id_chofer'}"/>
+                                                            </group>
+                                                        </group>
+                                                        <group>
+                                                            <group>
+                                                                <field name="rt_carga_id" invisible="1"/>
+                                                                <field name="camion_id" invisible="1"/>
+                                                                <field name="origin_id" options="{'no_create': True, 'no_open': True}"  attrs="{'invisible': [('make_frontera_internacional_visible','=', True)]}"/>
+                                                                <field name="frontera_nacional" options="{'no_create': True, 'no_open': True}" attrs="{'invisible': [('make_frontera_nacional_visible','=', False)]}"/>
+                                                                <field name="frontera_internacional" options="{'no_create': True, 'no_open': True}" attrs="{'invisible': [('make_frontera_internacional_visible','=', False)]}"/>
+                                                                <field name="destiny_id" options="{'no_create': True, 'no_open': True}" attrs="{'invisible': [('make_frontera_nacional_visible','=', True)]}"/>
+                                                                <field name="currency_id_vendedor" invisible="1"/>
+                                                                <field name="partner_seller_id" context="{'default_seller': True, 'search_default_seller': True}" />
+                                                                <field name="seller_commission" widget='monetary' options="{'currency_field': 'currency_id_vendedor'}"/>
+                                                                <label for="remito" string="Remito"/>
+                                                                <div>
+                                                                    <field name="remito" style="width: 50%"/>
+                                                                    <field name="attach_remito" widget="many2many_binary" nolabel="1" style="width: 50%"/>
+                                                                </div>
+                                                            </group>
+                                                        </group>
+                                                    </div>
+                                                    <notebook>
+                                                        <page string="Proveedores de producto" attrs="{'invisible': ['|',('product_type','=', 'propio'),('product_type','=', False)]}">
+                                                            <button class="oe_stat_button"
+                                                                    string="Añadir Proveedor"
+                                                                    name="add_supplier_to_product_line"
+                                                                    type="object"
+                                                                    icon="fa-hand-o-down"
+                                                                    style="border: 1px solid #7C7BAD; border-radius: 3px; white-space: normal"
+                                                            />
+                                                            <field name="supplier_ids"  mode="tree" nolabel="1" colspan="4" context="{'default_currency_id':currency_id}">
+                                                                <tree string="profit" editable="false">
+                                                                    <field name="rt_consol_product_id" invisible="0"/>
+                                                                    <field name="service_state" invisible="1"/>
+                                                                    <field name="partner_invoice_id" options="{'no_open': True,'no_create': True}"/>
+                                                                    <field name="supplier_id" options="{'no_open': True,'no_create': True}"/>
+                                                                    <field name="product_id" options="{'no_open': True,'no_create': True}"/>
+                                                                    <field name="output_reference" options="{'no_open': True,'no_create': True}"/>
+                                                                    <field name="origin_id" options="{'no_create': True, 'no_open': True}"/>
+                                                                    <field name="destiny_id" options="{'no_create': True, 'no_open': True}"/>
+                                                                    <field name="invoice_id" options="{'no_open': True,'no_create': True}"/>
+                                                                    <field name="currency_id" options="{'no_open': True,'no_create': True}"/>
+                                                                    <field name="tax_ids" options="{'no_open': True,'no_create': True}" widget="many2many_tags"/>
+                                                                    <field name="amount" options="{'currency_field': 'currency_id'}"/>
+                                                                    <field name="price_subtotal" options="{'currency_field': 'currency_id'}"/>
+                                                                    <field name="dua" readonly="1"/>
+                                                                    <field name="mic" readonly="1"/>
+                                                                    <field name="rt_service_id" readonly="1"/>
+                                                                    <field name="service_state" readonly="1"/>
+                                                                    <field name="service_date"/>
+                                                                </tree>
+                                                            </field>
+                                                        </page>
+                                                    </notebook>
+                                                </sheet>
+                                            </form>
+                                        </field>
+                                    </page>
+                                    <page string="Documentos de la Carga">
+                                        <separator string="Factura"/>
+                                        <field name="make_factura_invisible"/>
+                                        <field name="factura_carga_ids" context="{'default_rt_carga_id' : active_id}" mode="tree" attrs="{'invisible': [('make_factura_invisible','=', False)]}">
+                                            <tree string="Factura" editable="bottom">
+                                                <field name="rt_carga_id" invisible="1"/>
+                                                <field name="remitente_id"/>
+                                                <field name="partner_remitente_id"/>
+                                                <field name="destinatario_id"/>
+                                                <field name="partner_destinatario_id"/>
+                                                <field name="consigantario_id"/>
+                                                <field name="partner_consigantario_id"/>
+                                                <field name="notificar_id"/>
+                                                <field name="partner_notificar_id"/>
+                                                <field name="invoice_description"/>
+                                                <field name="invoice_list"/>
+                                                <field name="market_value"/>
+                                                <field name="market_value_desc" invisible="1"/>
+                                                <field name="market_value_currency_id"/>
+                                                <field name="ncm"/>
+                                                <field name="market_origin"/>
+                                                <field name="attachment" widget="many2many_binary"/>
+                                            </tree>
+                                        </field>
+                                        <separator string="Packing List"/>
+                                        <field name="make_packing_list_invisible"/>
+                                        <field name="packing_list_carga_ids" context="{'default_rt_carga_id' : active_id}" mode="tree" attrs="{'invisible': [('make_packing_list_invisible','=', False)]}">
+                                            <tree string="Packing List" editable="bottom">
+                                                <field name="rt_carga_id" invisible="1"/>
+                                                <field name="package"/>
+                                                <field name="load_presentation" options="{'no_create': True, 'no_open': True}"/>
+                                                <field name="net_kg"/>
+                                                <field name="raw_kg"/>
+                                                <field name="volume"/>
+                                                <field name="attachment" widget="many2many_binary"/>
+                                            </tree>
+                                        </field>
+                                        <separator string="Bill Of Lading"/>
+                                        <field name="make_bill_of_landing_invisible"/>
+                                        <field name="bill_of_landing_ids" context="{'default_rt_carga_id' : active_id}" mode="tree" attrs="{'invisible': [('make_bill_of_landing_invisible','=', False)]}">
+                                            <tree string="Bill of Lading" editable="bottom">
+                                                <field name="rt_carga_id" invisible="1"/>
+                                                <field name ="bl_number"/>
+                                                <field name="remitente_id"/>
+                                                <field name="partner_remitente_id"/>
+                                                <field name="consigantario_id"/>
+                                                <field name="partner_consigantario_id"/>
+                                                <field name="notificar_id"/>
+                                                <field name="partner_notificar_id"/>
+                                                <field name="package"/>
+                                                <field name="load_presentation"/>
+                                                <field name="ncm"/>
+                                                <field name="raw_kg"/>
+                                                <field name="container_number"/>
+                                                <field name="seal_number"/>
+                                                <field name="container_type"/>
+                                                <field name="attachment" widget="many2many_binary"/>
+                                            </tree>
+                                        </field>
+                                    </page>
+                                </notebook>
+                            </page>
+                        </notebook>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+
+        <!--Accion de la Carga-->
+        <record id="action_service_carga" model="ir.actions.act_window">
+            <field name="name">Cargas</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">carga.camion</field>
+            <field name="view_mode">form</field>
+            <field name="view_id" ref="servicio_consolidado.view_consol_carga_form"/>
+            <field name="target">fullscreen</field>
+            <field name="help" type="html">
+                <p>
+                    Here is a list of each service product to be invoiced. You can
+                    invoice service product partially, by lines of service.
+                </p>
+            </field>
+        </record>
+
+        <!--Vista formulario del wizard que crea facturas-->
+        <record id="view_wizard_crea_factura_form" model="ir.ui.view">
+            <field name="name">crear.factura.wizard</field>
+            <field name="model">crear.factura.wizard</field>
+            <field name="arch" type="xml">
+                <form string="Invoice">
+                    <p>
+                        <span style="font-size: 16px;">
+                            Seleccione cómo quiere facturar este servicio. <br/>
+                            Esto creará una factura borrador que puede ser modificada antes de la validación
+                        </span>
+                    </p>
+                    <group>
+                        <field name="camion_id" style="width:50%%" options="{'no_open': True,'no_create': True}"  groups="base.group_no_one"/>
+                        <field name="advance_payment_method" readonly="0" style="width:50%%"/>
+                    </group>
+                    <footer>
+                        <button name="create_invoices" string="Crear y Ver Factura" type="object" context="{'open_invoices': True}" class="oe_highlight" attrs="{'invisible': [('advance_payment_method', '=', 'lineas')]}"/>
+                        <button name="create_invoices" string="Crear Factura" type="object" class="oe_highlight" attrs="{'invisible': [('advance_payment_method', '=', 'lineas')]}"/>
+                        <button name="show_service_lines" string="Mostrar servicios a facturar" type="object" class="oe_highlight" attrs="{'invisible': [('advance_payment_method', '!=', 'lineas')]}"/>
+                        or
+                        <button string="Cancel" class="oe_link" special="cancel"/>
+                    </footer>
+                </form>
+            </field>
+        </record>
+
+
+        <!--Accion del Wizard-->
+        <record id="action_mostrar_wizard_facturacion" model="ir.actions.act_window">
+            <field name="name">Facturar</field>
+            <field name="res_model">crear.factura.wizard</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">form</field>
+            <field name="target">new</field>
+        </record>
+
+        <record id="camion_form_view" model="ir.ui.view">
+            <field name="name">IMCD 01/07  IMOO x3</field>
+            <field name="model">carpeta.camion</field>
+            <field name="priority">1000</field>
+            <field name="arch" type="xml">
+                <form>
+                    <header>
+                        <button class="oe_highlight"
+                                type="object"
+                                name="borrador_a_confirmado"
+                                string="Confirmar"
+                                states="draft"
+                        />
+                        <button class="oe_highlight"
+                                type="object"
+                                name="a_borrador"
+                                string="Pasar a Borrador"
+                                states="confirm,cancel,invoiced"
+                        />
+                        <button type="object"
+                                name="action_view_invoice"
+                                class="oe_highlight"
+                                attrs="{'invisible':['|', ('invoice_count', '=', 0), ('state', 'in', ('draft','confirm','cancel'))]}"
+                                string="Ver Factura">
+                        </button>
+                        <button class="oe_highlight"
+                                type="action"
+                                name="%(action_mostrar_wizard_facturacion)d"
+                                string="Crear Factura"
+                                states="confirm,inprocess,rejected"
+                                context="{'default_camion_id' : active_id,}"
+                        />
+                        <button
+                                name="show_rejected_service_lines"
+                                string="Ver Servicios Rechazados"
+                                type="object"
+                                states="rejected"
+                                class="oe_highlight"
+                        >
+                        </button>
+
+                        <field name="state" widget="statusbar"/>
+                    </header>
+                    <sheet>
+                        <div name="buttons_mic">
+                            <div class="oe_button_box" name="button_box">
+                                <button name="toggle_active" type="object" class="oe_stat_button" icon="fa-archive">
+                                    <field name="active" widget="boolean_button" options="{'terminology': 'archive'}"/>
+                                </button>
+
+                                <button type="object"  name="action_view_invoice"
+                                        class="oe_stat_button"
+                                        icon="fa-pencil-square-o" attrs="{'invisible':['|', ('invoice_count', '=', 0), ('state', 'in', ('draft','sent'))]}">
+                                    <field name="invoice_count" widget="statinfo" string="Facturas"/>
+                                </button>
+                            </div>
+                        </div>
+
+                        <group name="main_group">
+                            <group name="left_group">
+                                <field name="name"/>
+                                <field name="regimen" required="1"/>
+                                <field name="make_mic_number_readonly" invisible="1"/>
+                                <field name="partner_invoice_id" context="{'search_default_customer': 1, 'show_address': 1}" options="{'no_open': True,'no_create': True, 'highlight_first_line':True}" attrs="{'invisible': [('regimen','=', 'impo_inter')]}"/>
+                                <field name="partner_id" context="{'search_default_customer': 1, 'show_address': 1}" options="{'no_open': True,'no_create': True, 'highlight_first_line':True}" attrs="{'invisible': [('regimen','in', ('expo_inter','transit_inter_out','transit_inter_in'))]}"/>
+                                <field name="crt_number" invisible="1"/>
+                                <field name="product_type"/>
+                                <field name="vehicle_id" options="{'no_create': True, 'no_open': True}" attrs="{'invisible': [('product_type','!=', 'propio')]}"/>
+                                <field name="driver_id" options="{'no_create': True, 'no_open': True}" attrs="{'invisible': [('product_type','!=', 'propio')]}"/>
+                                <field name="matricula_dos_id" options='{"no_open": True, "no_create": True}' attrs="{'invisible': [('product_type','!=', 'propio')]}"/>
+                                <field name="matricula_fletero" options="{'no_create': True, 'no_open': True}" attrs="{'invisible': [('product_type','!=', 'terceros')]}"/>
+                                <field name="chofer" attrs="{'invisible': [('product_type','!=', 'terceros')]}"/>
+                                <field name="matricula_dos_fletero" options="{'no_create': True, 'no_open': True}" attrs="{'invisible': [('product_type','!=', 'terceros')]}"/>
+
+                                <label for="dua_aduana" string="DUA" attrs="{'required': [('state','!=','draft')], 'invisible': [('regimen','=', 'impo_inter')]}"/>
+                                <div class="address_format" attrs="{'required': [('state','!=','draft')], 'invisible': [('regimen','=', 'impo_inter')]}">
+                                    <field name="dua_aduana" style="width: 20%" placeholder="Nº Aduana" />
+                                    <span> - </span>
+                                    <field name="dua_anio" style="width: 15%" placeholder="Año" />
+                                    <span> - </span>
+                                    <field name="dua_numero" style="width: 30%" placeholder="Número DUA" />
+                                </div>
+                                <field name="mensaje_simplificado"/>
+                                <field name="partner_dispatcher_id"  context="{'default_dispatcher': True, 'search_default_dispatcher': True}" attrs="{'required': [('state','!=','draft')]}"  options="{'no_open': True,'no_create': True}"/>
+                            </group>
+                            <group name="right_group">
+                                <field name="pricelist_id" options="{'no_open': True,'no_create': True}"/>
+                                <field name="currency_id" invisible="0"/>
+                                <field name="start_datetime" />
+                                <field name="stop_datetime"/>
+                                <field name="currency_id_chofer"/>
+                                <field name="driver_commission" widget="monetary" options="{'currency_field': 'currency_id_chofer'}"/>
+                                <field name="aduana_origen_id" options="{'no_open': True,'no_create': True, 'always_reload': True}" attrs="{'invisible': [('regimen','in',('expo_nat','expo_inter'))]}"/>
+                                <field name="aduana_destino_id" attrs="{'invisible': [('regimen','in',('impo_nat','impo_inter'))]}" options="{'no_open': True,'no_create': True, 'always_reload': True}"/>
+                                <separator string="Número MIC"/>
+                                <span></span>
+                                <div>
+                                    <h2>
+                                        <button class="oe_highlight" type="object" name="get_mic_number" string="Generar Nº MIC" confirm="¿Esta seguro?" style="allign: left" attrs="{'invisible': [('product_type','!=','propio')]}"/>
+                                    </h2>
+                                    <label for="mic_number" style="font-weight:bold; width: 50%" attrs="{'invisible': [('product_type','!=','terceros')]}"/>
+                                </div>
+                                <div>
+                                    <h2>
+                                        <field name="mic_number" style="font-weight:bold" attrs="{'readonly': [('make_mic_number_readonly','=', True)], 'invisible': [('product_type','=',False)]}"/>
+                                    </h2>
+                                </div>
+                                <field name="route"/>
+                                <field name="user_id" readonly="1" string="Comercial"/>
+                            </group>
+                        </group>
+                        <button class="oe_highlight" type="object" name="get_crt_number" string="Generar Nº CRT" confirm="¿Esta seguro?"/>
+                        <separator string="Generar Cargas"/>
+                        <div>
+                            <field name="qty_cargas" style="width:10%%"/>
+                            <label for="qty_cargas"/>
+                        </div>
+                        <button class="oe_stat_button" type="object" icon="fa-truck" name="generar_cargas" string="Generar Cargas">
+                        </button>
+                        <button class="oe_stat_button" type="object" icon="fa-refresh" name="refrescar_valores" string="Refrescar Valores"/>
+
+                        <group name="campos_visibilidad">
+                            <field name="make_page_invisible" invisible="1"/>
+                        </group>
+                        <separator string="Información Consolidada"/>
+                        <div colspan="4" col="4" style="border: 1px solid #7C7BAD; background-color: #EEEEEE; padding: 5px 10px; border-radius: 3px; width: 49%; float: left; height: 108px;">
+                            <div style="color: #7C7BAD; font-size: 16px; font-weight: bold; margin-bottom: 5px;">Capacidad</div>
+                            <table>
+                                <tbody>
+                                    <tr>
+                                        <td colspan="1" width="1%" style="border-right: 1px solid #C0C0C0;">
+                                            <label for="kg_cap"/>
+                                        </td>
+                                        <td colspan="1" width="49%" style="padding-left: 10px;">
+                                            <field name="kg_cap" attrs="{'readonly': [('state','not in',['draft'])]}"/>
+                                        </td>
+                                        <td colspan="1" width="1%" style="border-right: 1px solid #C0C0C0;">
+                                            <label for="market_value_cap"/>
+                                        </td>
+                                        <td colspan="1" width="49%" style="padding-left: 10px;">
+                                            <field name="market_value_cap" attrs="{'readonly': [('state','not in',['draft'])]}"/>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td colspan="1" width="1%" style="border-right: 1px solid #C0C0C0;">
+                                            <label for="volume_cap"/>
+                                        </td>
+                                        <td colspan="1" width="49%" style="padding-left: 10px;">
+                                            <field name="volume_cap" attrs="{'readonly': [('state','not in',['draft'])]}"/>
+                                        </td>
+                                        <td colspan="1" width="1%" style="border-right: 1px solid #C0C0C0;">
+                                            <label for="package_cap" attrs="{'readonly': [('state','not in',['draft'])]}"/>
+                                        </td>
+                                        <td colspan="1" width="49%" style="padding-left: 10px;">
+                                            <field name="package_cap" attrs="{'readonly': [('state','not in',['draft'])]}"/>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                        <div colspan="4" col="4" style="border: 1px solid #7C7BAD; background-color: #EEEEEE; padding: 5px 10px; border-radius: 3px; width: 49%; float: right; height: 108px;">
+                            <div style="color: #7C7BAD; font-size: 16px; font-weight: bold; margin-bottom: 5px;">Totals</div>
+                            <table>
+                                <tbody>
+                                    <tr>
+                                        <td colspan="1" width="1%" style="border-right: 1px solid #C0C0C0;">
+                                            <label for="kg_total"/>
+                                        </td>
+                                        <td colspan="1" width="49%" style="padding-left: 10px;">
+                                            <field name="kg_total" attrs="{'invisible':[('kg_total','&lt;',0)]}"/>
+                                            <field name="kg_total_indicator" style="color: red; font-weight: bold;" attrs="{'invisible':[('kg_total','&gt;=',0)]}"/>
+                                        </td>
+                                        <td colspan="1" width="1%" style="border-right: 1px solid #C0C0C0;">
+                                            <label for="market_value_total"/>
+                                        </td>
+                                        <td colspan="1" width="49%" style="padding-left: 10px;">
+                                            <field name="market_value_currency_id" invisible="1"/>
+                                            <field name="market_value_total" attrs="{'invisible':[('market_value_total','&lt;',0)]}"  widget="monetary" options="{'currency_field': 'market_value_currency_id'}"/>
+                                            <field name="market_value_total_indicator" style="color: red; font-weight: bold;" attrs="{'invisible':[('market_value_total','&gt;=',0)]}"/>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td colspan="1" width="1%" style="border-right: 1px solid #C0C0C0;">
+                                            <label for="volume_total"/>
+                                        </td>
+                                        <td colspan="1" width="49%" style="padding-left: 10px;">
+                                            <field name="volume_total" attrs="{'invisible':[('volume_total','&lt;',0)]}"/>
+                                            <field name="volume_total_indicator" style="color: red; font-weight: bold;" attrs="{'invisible':[('volume_total','&gt;=',0)]}"/>
+                                        </td>
+                                        <td colspan="1" width="1%" style="border-right: 1px solid #C0C0C0;">
+                                            <label for="package_total"/>
+                                        </td>
+                                        <td colspan="1" width="49%" style="padding-left: 10px;">
+                                            <field name="package_total" attrs="{'invisible':[('package_total','&lt;',0)]}"/>
+                                            <field name="package_total_indicator" style="color: red; font-weight: bold;" attrs="{'invisible':[('package_total','&gt;=',0)]}"/>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                        <notebook>
+                            <page string="Cargas">
+                                <button class="oe_stat_button"
+                                        style="border: 1px solid #7C7BAD; border-radius: 3px; white-space: normal"
+                                        type="action"
+                                        name="%(action_service_carga)d"
+                                        string="Añadir Carga"
+                                        icon="fa-truck"
+                                        context="{'default_camion_id' : active_id,
+                                                  'default_make_page_invisible': make_page_invisible,
+                                                  'default_regimen': regimen,
+                                                  'default_partner_invoice_id': partner_invoice_id,}"/>
+
+                                <field name="cargas_ids" mode="tree" context="{'default_camion_id' : active_id,
+                                                                               'form_view_ref':'servicio_consolidado.view_consol_carga_form',
+                                                                               'tree_view_ref':'servicio_consolidado.view_consol_carga_list',
+                                                                               'default_make_page_invisible': make_page_invisible,
+                                                                               'default_regimen': regimen,
+                                                                               'default_partner_invoice_id': partner_invoice_id,}">
+                                </field>
+                            </page>
+                            <!--VISTA DE LOS PRODUCTOS ASOCIADOS AL CAMION-->
+                            <page string="Productos">
+                                <field name="productos_servicios_camion_ids" mode="tree" context="{'default_camion_id' : active_id,
+                                                                                                   'default_partner_invoice_id': partner_invoice_id,}">
+                                    <tree string="Productos"
+                                          decoration-danger="is_outgoing == True"
+                                          decoration-success="is_invoiced == True"
+                                          decoration-warning="is_invoiced == False and is_outgoing == False"
+                                    >
+                                        <field name="camion_id" invisible="1"/>
+                                        <field name="id" widget="handle"/>
+                                        <field name="product_id"/>
+                                        <field name="product_type"/>
+                                        <field name="action_type_id"/>
+                                        <field name="partner_invoice_id"/>
+                                        <field name="supplier_id"/>
+                                        <field name="currency_id" invisible="1"/>
+                                        <field name="valor_compra_currency_id" invisible="1"/>
+                                        <field name="importe" widget="monetary" options="{'currency_field': 'currency_id'}"/>
+                                        <field name="valor_compra" widget="monetary" options="{'currency_field': 'valor_compra_currency_id'}"/>
+                                        <field name="rt_carga_id" invisible="1"/>
+                                        <field name="camion_id" invisible="1"/>
+                                        <field name="is_outgoing" invisible="1"/>
+                                        <field name="is_invoiced" invisible="1"/>
+                                    </tree>
+                                    <form string="Productos">
+                                        <header>
+                                            <field name="state" widget="statusbar"/>
+                                        </header>
+                                        <sheet>
+                                            <div style="border: 1px solid #7C7BAD; background-color: #EEEEEE; border-radius: 3px; padding-left: 380px; padding-right: 5px;">
+                                                <group colspan="2" col="8">
+                                                    <field name="is_invoiced"/>
+                                                    <field name="is_outgoing"/>
+                                                    <field name="rt_carga_id" invisible="1"/>
+                                                    <field name="invoiced_rejected" invisible="1"/>
+                                                </group>
+                                            </div>
+                                            <group>
+                                                <field name="product_type"/>
+                                                <field name="pricelist_id" options="{'no_create': True, 'no_open': False}"/>
+                                            </group>
+                                            <div attrs="{'invisible': [('product_type','=', False)]}">
+                                                <group>
+                                                    <group>
+                                                        <field name="regimen" invisible="1"/>
+                                                        <field name="crt_number" invisible="1"/>
+                                                        <field name="partner_invoice_id" invisible="0"/>
+                                                        <field name="name"/>
+                                                        <field name="product_id"  options="{'no_open': True,'no_create': True}"/>
+                                                        <field name="action_type_id" options="{'no_open': True,'no_create': True}"/>
+                                                        <field name="supplier_id" attrs="{'invisible': [('product_type','=', 'propio')]}"  options="{'no_open': True,'no_create': True}"/>
+                                                    </group>
+                                                    <group>
+                                                        <field name="currency_id" options="{'no_create': True, 'no_open': True}"/>
+                                                        <field name="importe" widget="monetary" options="{'currency_field': 'currency_id'}"/>
+                                                        <field name="valor_compra_currency_id"  options="{'no_open': True,'no_create': True}" attrs="{'invisible': [('product_type','=', 'propio')]}"/>
+                                                        <field name="valor_compra" widget="monetary" attrs="{'invisible': [('product_type','=', 'propio')]}"/>
+                                                        <field name="invoiced" invisible="1"/>
+                                                        <field name="invoiced_supplier" invisible="1"/>
+                                                        <field name="provision_creada" invisible="1"/>
+                                                    </group>
+                                                </group>
+                                                <group>
+                                                    <group>
+                                                        <field name="rt_carga_id" invisible="1"/>
+                                                        <field name="camion_id" invisible="1"/>
+                                                        <field name="origin_id" options="{'no_create': True, 'no_open': True}"/>
+                                                        <field name="destiny_id" options="{'no_create': True, 'no_open': True}"/>
+                                                        <field name="currency_id_vendedor" invisible="1"/>
+                                                        <field name="partner_seller_id" context="{'default_seller': True, 'search_default_seller': True}" />
+                                                        <field name="seller_commission" widget='monetary' options="{'currency_field': 'currency_id_vendedor'}"/>
+                                                        <label for="remito" string="Remito"/>
+                                                        <div>
+                                                            <field name="remito" style="width: 50%"/>
+                                                            <field name="attach_remito" widget="many2many_binary" nolabel="1" style="width: 50%"/>
+                                                        </div>
+                                                    </group>
+                                                    <group>
+                                                        <field name="vehicle_id" options="{'no_create': True, 'no_open': True}"/>
+                                                        <field name="driver_id" options="{'no_create': True, 'no_open': True}"/>
+                                                        <field name="driver_commission" widget="monetary" options="{'currency_field': 'currency_id_chofer'}"/>
+                                                    </group>
+                                                </group>
+                                            </div>
+                                            <notebook>
+                                                <page string="Proveedores de producto" attrs="{'invisible': ['|',('product_type','=', 'propio'),('product_type','=', False)]}" >
+                                                    <button class="oe_stat_button"
+                                                            string="Añadir Proveedor"
+                                                            name="add_supplier_to_product_line"
+                                                            type="object"
+                                                            icon="fa-hand-o-down"
+                                                            style="border: 1px solid #7C7BAD; border-radius: 3px; white-space: normal"
+                                                    />
+                                                    <field name="supplier_ids"  mode="tree" nolabel="1" colspan="4" context="{'default_currency_id':currency_id}">
+                                                        <tree string="profit" editable="false">
+                                                            <field name="rt_consol_product_id" invisible="0"/>
+                                                            <field name="service_state" invisible="1"/>
+                                                            <field name="partner_invoice_id" options="{'no_open': True,'no_create': True}"/>
+                                                            <field name="supplier_id" options="{'no_open': True,'no_create': True}"/>
+                                                            <field name="product_id" options="{'no_open': True,'no_create': True}"/>
+                                                            <field name="output_reference" options="{'no_open': True,'no_create': True}"/>
+                                                            <field name="origin_id" options="{'no_create': True, 'no_open': True}"/>
+                                                            <field name="destiny_id" options="{'no_create': True, 'no_open': True}"/>
+                                                            <field name="invoice_id" options="{'no_open': True,'no_create': True}"/>
+                                                            <field name="currency_id" options="{'no_open': True,'no_create': True}"/>
+                                                            <field name="tax_ids" options="{'no_open': True,'no_create': True}" widget="many2many_tags"/>
+                                                            <field name="amount" options="{'currency_field': 'currency_id'}"/>
+                                                            <field name="price_subtotal" options="{'currency_field': 'currency_id'}"/>
+                                                            <field name="dua" readonly="1"/>
+                                                            <field name="mic" readonly="1"/>
+                                                            <field name="rt_service_id" readonly="1"/>
+                                                            <field name="service_state" readonly="1"/>
+                                                            <field name="service_date"/>
+                                                        </tree>
+                                                    </field>
+                                                </page>
+                                            </notebook>
+                                        </sheet>
+                                    </form>
+                                </field>
+                            </page>
+                            <page string="Facturas de Cliente">
+                                <field name="invoices_ids" readonly="1" context="{'form_view_ref':'account.invoice_form',
+                                                                                  'tree_view_ref':'account.invoice_tree',}"/>
+                            </page>
+                            <page string="Facturas de Proveedor" attrs="{'invisible': [('state', 'in', ('draft','cancel'))]}">
+                                <field name="suppliers_invoices_ids" readonly="1" context="{'form_view_ref':'account.invoice_supplier_form',
+                                                                                 'tree_view_ref':'account.invoice_supplier_tree',}"/>
+                            </page>
+                        </notebook>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+
+        <menuitem name="Carpetas"
+                  id="consolidado_camiones_main_menu"
+                  parent="menu_service_consolidado_main"
+                  action="action_camiones"
+        />
+
+    </data>
+</odoo>

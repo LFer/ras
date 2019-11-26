@@ -1,0 +1,2 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_product_hierarchy_product_hierarchy,product_hierarchy.product_hierarchy,model_product_hierarchy_product_hierarchy,,1,0,0,0

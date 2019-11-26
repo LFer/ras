@@ -1,0 +1,29 @@
+<?xml version="1.0"?>
+<openerp>
+    <data>
+        <!-- Add CRT Report button to Service Carga -->
+        <record id="view_rt_service_form" model="ir.ui.view">
+            <field name="name">rt.service.form</field>
+            <field name="model">rt.service.carga</field>
+            <field name="inherit_id" ref="servicio_base.view_service_carga_form"/>
+            <field name="arch" type="xml">
+                <div name="buttons" position="inside">
+                    <button class="oe_stat_button" string="Reporte CRT" name="create_crt_report" type="object" icon="fa-file-text-o" style="border: 1px solid #7C7BAD; border-radius: 3px; white-space: normal"/>
+                </div>
+            </field>
+        </record>
+
+
+        <!-- Menu Create CRT Report for Service ListView -->
+        <record id="action_server_rt_service_crt_report" model="ir.actions.server">
+            <field name="name">Create CRT Report</field>
+            <field name="condition">True</field>
+            <field name="type">ir.actions.server</field>
+            <field name="model_id" ref="servicio_base.model_rt_service"/>
+            <field name="binding_model_id" ref="servicio_base.model_rt_service" />
+            <field name="state">code</field>
+            <!--field name="code">self.browse(context.get('active_ids', [])).create_crt_report()</field-->
+            <field name="code">model.create_crt_report()</field>
+        </record>
+    </data>
+</openerp>

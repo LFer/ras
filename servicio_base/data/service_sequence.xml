@@ -1,0 +1,117 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data noupdate="1">
+
+
+        <record id="seq_rt_service" model="ir.sequence">
+            <field name="name">Carpeta Nacional - </field>
+            <field name="code">rt.service.nacional</field>
+            <field name="prefix">Carpeta Nacional/%(range_year)s/</field>
+            <field name="padding">3</field>
+            <field name="company_id" eval="False"/>
+        </record>
+
+        <record id="seq_rt_service_inter" model="ir.sequence">
+            <field name="name">Carpeta Internacional - </field>
+            <field name="code">rt.service.internacional</field>
+            <field name="prefix">Carpeta Internacional/%(range_year)s/</field>
+            <field name="padding">3</field>
+            <field name="company_id" eval="False"/>
+        </record>
+
+
+        <record id="seq_rt_carga_nacional" model="ir.sequence">
+            <field name="name">Carga Nacional</field>
+            <field name="code">rt.carga.nacional</field>
+            <field name="prefix">Carga/%(range_year)s/</field>
+            <field name="padding">3</field>
+            <field name="company_id" eval="False"/>
+        </record>
+
+        <record id="seq_rt_carga_internacional" model="ir.sequence">
+            <field name="name">Carga Internacional</field>
+            <field name="code">rt.carga.internacional</field>
+            <field name="prefix">CI/%(range_year)s/</field>
+            <field name="padding">3</field>
+            <field name="company_id" eval="False"/>
+        </record>
+
+        <record id="seq_rt_servicio_internacional" model="ir.sequence">
+            <field name="name">Servicio Internacional</field>
+            <field name="code">rt.servicio.internacional</field>
+            <field name="prefix">SI/%(range_year)s/</field>
+            <field name="padding">5</field>
+            <field name="company_id" eval="False"/>
+        </record>
+
+        <record id="seq_rt_servicio_nacional" model="ir.sequence">
+            <field name="name">Servicio Nacional</field>
+            <field name="code">rt.servicio.nacional</field>
+            <field name="prefix">SN/%(range_year)s/</field>
+            <field name="padding">5</field>
+            <field name="company_id" eval="False"/>
+        </record>
+
+        <record id="seq_rt_service_crt_argentina" model="ir.sequence">
+            <field name="name">CRT Secuencia Argentina - </field>
+            <field name="code">rt.service.crt.argentina</field>
+            <field name="padding">5</field>
+            <field name="company_id" eval="False"/>
+        </record>
+
+        <record id="seq_rt_service_crt_brasil" model="ir.sequence">
+            <field name="name">CRT Secuencia Brasil- </field>
+            <field name="code">rt.service.crt.brasil</field>
+            <field name="padding">5</field>
+            <field name="company_id" eval="False"/>
+        </record>
+
+        <record id="seq_rt_service_crt_paraguay" model="ir.sequence">
+            <field name="name">CRT Secuencia Paraguay- </field>
+            <field name="code">rt.service.crt.paraguay</field>
+            <field name="padding">5</field>
+            <field name="company_id" eval="False"/>
+        </record>
+
+        <record id="seq_rt_service_mic_argentina" model="ir.sequence">
+            <field name="name">MIC Secuencia Argentina - </field>
+            <field name="code">rt.service.mic.argentina</field>
+            <field name="padding">5</field>
+            <field name="company_id" eval="False"/>
+        </record>
+
+        <record id="seq_rt_service_mic_paraguay" model="ir.sequence">
+            <field name="name">MIC Secuencia Paraguay- </field>
+            <field name="code">rt.service.mic.paraguay</field>
+            <field name="padding">5</field>
+            <field name="company_id" eval="False"/>
+        </record>
+
+
+        <record id="seq_rt_template_nat" model="ir.sequence">
+            <field name="name">Plantilla Nacional - </field>
+            <field name="code">rt.service.template.nacional</field>
+            <field name="prefix">Plantilla Nacional/%(range_year)s/</field>
+            <field name="padding">3</field>
+            <field name="company_id" eval="False"/>
+        </record>
+
+        <record id="seq_rt_service_template_inter" model="ir.sequence">
+            <field name="name">Plantilla Internacional - </field>
+            <field name="code">rt.service.template.internacional</field>
+            <field name="prefix">Plantilla Internacional/%(range_year)s/</field>
+            <field name="padding">3</field>
+            <field name="company_id" eval="False"/>
+        </record>
+
+        <record id="seq_rt_service_cost" model="ir.sequence">
+            <field name="name">OC Costos - </field>
+            <field name="code">cost.sequence</field>
+            <field name="prefix">OC-</field>
+            <field name="padding">3</field>
+            <field name="company_id" eval="False"/>
+        </record>
+
+
+    </data>
+</odoo>

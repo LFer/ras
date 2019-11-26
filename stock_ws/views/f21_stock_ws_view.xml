@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- ACCION PARA f21_deposito -->
+    <act_window
+        id="action_f21_deposito"
+        name="Depósitos"
+        res_model="f21.deposito"
+        view_mode="tree"
+    />
+
+    <!-- MENU PARA f21_deposito -->
+    <menuitem
+        id="menu_f21_in_config_stock"
+        name="Forever 21"
+        parent="stock.menu_stock_config_settings"
+        sequence="6"
+    />
+    <menuitem
+        id="menu_f21_deposito"
+        parent="menu_f21_in_config_stock"
+        action="action_f21_deposito"
+        sequence="10"
+    />
+
+    <!-- VISTA TREE PARA f21_deposito -->
+    <record model="ir.ui.view" id="view_f21_deposito_tree">
+        <field name="name">f21.deposito.tree</field>
+        <field name="model">f21.deposito</field>
+        <field name="type">tree</field>
+        <field name="arch" type="xml">
+            <tree string="f21.deposito" create="true" delete="true" editable="top">
+                <field name="name"/>
+                <field name="codigo"/>
+                <field name="tipo"/>
+            </tree>
+        </field>
+    </record>
+
+    <!-- VISTA FORM PARA f21_wizard_ws_crear_remito -->
+    <record model="ir.ui.view" id="view_f21_wizard_ws_crear_remito_form">
+        <field name="name">f21.wizard.ws.crear.remito.form</field>
+        <field name="model">f21.wizard.ws.crear.remito</field>
+        <field name="type">form</field>
+        <field name="arch" type="xml">
+            <form string="f21.wizard.ws.crear.remito">
+                <sheet string="f21.wizard.ws.crear.remito">
+                    <group colspan="4">
+                        <field name="picking_id" invisible="1"/>
+                        <field name="origen_id" domain="[('tipo','=','origen')]"
+                               options="{'no_create_edit': True, 'no_create': True, 'no_open': True}"/>
+                        <field name="destino_id" domain="[('tipo','=','destino')]"
+                               options="{'no_create_edit': True, 'no_create': True, 'no_open': True}"/>
+                    </group>
+                </sheet>
+                <footer>
+                    <button name="f21_ws_crear_remito" string="Enviar" type="object"/>
+                </footer>
+            </form>
+        </field>
+    </record>
+
+    <record id="stock_picking_view_form_f21_inherit" model="ir.ui.view">
+        <field name="name">stock.picking.form.f21.inherit</field>
+        <field name="model">stock.picking</field>
+        <field name="inherit_id" ref="stock.view_picking_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//div[@name='button_box']" position="inside">
+                <button name="f21_wizard_ws_crear_remito"
+                        icon="fa-toggle-right"
+                        class="oe_stat_button"
+                        string="Remito F21"
+                        type="object"
+                        attrs="{'invisible': ['|', '|', ('state', '!=', 'done'), ('fecha_enviado', '!=', False), ('es_f21', '=', False)]}"
+                />
+                <button name="f21_wizard_ws_crear_remito"
+                        icon="fa-toggle-right"
+                        class="oe_stat_button"
+                        string="Volver a Enviar"
+                        type="object"
+                        attrs="{'invisible': ['|', '|', ('state', '!=', 'done'), ('fecha_enviado', '=', False), ('es_f21', '=', False)]}"
+                />
+            </xpath>
+            <xpath expr="//h1[@class='d-none d-md-block']" position="after">
+                <h5 attrs="{'invisible': [('fecha_enviado', '=', False)]}">Enviado: <field name="fecha_enviado"/></h5>
+                <h5 attrs="{'invisible': [('fecha_enviado', '=', False)]}">Remito: <field name="nro_remito_f21"/></h5>
+                <field name="es_f21" invisible="1"/>
+            </xpath>
+        </field>
+    </record>
+</odoo>

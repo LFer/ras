@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+
+
+        <record id="action_calendar_inter_service" model="ir.actions.act_window">
+            <field name="name">Calendario Interacional</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">servicio.calendario</field>
+            <field name="domain">[('operation_type','=','international')]</field>
+            <field name="context">{"is_from_calendar_view":True ,"default_operation_type":"international"}</field>
+            <field name="view_mode">calendar</field>
+            <field name="view_id" ref="view_calendar_service_product"/>
+            <field name="help" type="html">
+                <p>
+                    Here is a list of each service product to be invoiced. You can
+                    invoice service product partially, by lines of service.
+                </p>
+            </field>
+        </record>
+
+        <menuitem
+                id="menu_calendario_inter_root"
+                name="Calendario Internacional"
+                web_icon="calendar,static/description/icon.png"
+                groups="base.group_user"
+                sequence="76"/>
+
+        <menuitem
+                id="menu_calendario_inter_main"
+                name="Calendario Servicio"
+                parent="menu_calendario_inter_root"
+                groups="base.group_user"
+                action="action_calendar_inter_service"/>
+
+    </data>
+</odoo>

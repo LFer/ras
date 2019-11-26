@@ -1,0 +1,129 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+
+
+
+        <record id="marfrig_templatetree_view" model="ir.ui.view">
+            <field name="name">marfrig-template-Tree</field>
+            <field name="model">marfrig.template</field>
+            <field name="arch" type="xml">
+                <tree string="Marfrig">
+                    <field name="name"/>
+                </tree>
+            </field>
+        </record>
+
+        <!--VISTA LISTA DE LOS SERVICIOS DE MARFRIG-->
+        <record id="marfrig_servive_template_view" model="ir.ui.view">
+            <field name="name">marfrig-service-Tree</field>
+            <field name="model">marfrig.template.service.products</field>
+            <field name="arch" type="xml">
+                <tree string="Marfrig">
+                    <field name="sequence" widget="handle"/>
+                    <field name="name"/>
+                    <field name="product_id"/>
+                </tree>
+            </field>
+        </record>
+
+        <!--VISTA FORMULARIO DE LOS SERVICIOS DE MARFRIG-->
+        <record id="marfrig_service_template_form_view" model="ir.ui.view">
+            <field name="name">Formulario Servicios Marfrig</field>
+            <field name="model">marfrig.template.service.products</field>
+            <field name="arch" type="xml">
+                <form string="Productos">
+                    <sheet>
+                        <group>
+                            <field name="product_type" invisible="1"/>
+                        </group>
+                        <div attrs="{'invisible': [('product_type','=', False)]}">
+                            <group>
+                                <group>
+                                    <field name="name" string="Referencia"/>
+                                    <field name="planta_id" invisible="0"/>
+                                    <field name="product_id"  options="{'no_open': True,'no_create': True}"/>
+                                    <field name="action_type_id" options="{'no_open': True,'no_create': True}"/>
+                                </group>
+                                <group>
+                                </group>
+                            </group>
+                            <group>
+                                <group>
+                                    <field name="mrf_srv_tmpl_id" invisible="1"/>
+                                    <field name="start" string="Inicio" invisible="1"/>
+                                    <field name="stop" string="Fin" invisible="1"/>
+                                    <field name="origin_id" options="{'no_create': True, 'no_open': True}"/>
+                                    <field name="destiny_id" options="{'no_create': True, 'no_open': True}"/>
+                                    <field name="aduana_destino_id" options="{'no_open': True,'no_create': True, 'always_reload': True}"/>
+                                </group>
+                                <group>
+                                    <field name="currency_id_chofer"  options="{'no_open': True,'no_create': True}"/>
+                                    <field name="driver_commission" widget="monetary" options="{'currency_field': 'currency_id_chofer'}"/>
+                                </group>
+                            </group>
+                        </div>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+
+
+
+        <!--VISTA FORMULARIO DE LA CARPETA DE MARFIG-->
+        <record id="operativa_marfrig_template_form_view" model="ir.ui.view">
+            <field name="name">operativa.marfrig.template.form.view</field>
+            <field name="model">marfrig.template</field>
+            <field name="arch" type="xml">
+                <form string="Marfrig" class="o_invoice_form">
+                    <sheet string="Marfrig">
+                        <div class="oe_button_box" name="button_box">
+                        </div>
+                        <group>
+                            <h1 class="mt0">
+                                <field name="name" class="oe_inline"/>
+                            </h1>
+                        </group>
+                        <group>
+                                <field name="partner_invoice_id" style="width: 40%"/>
+                                <field name="output_reference"/>
+                                <field name="product_type" style="width: 40%"/>
+                                <field name="pricelist_id" options="{'no_create': True, 'no_open': True}" class="oe_inline" style="width: 40%"/>
+                                <field name="currency_id" options="{'no_create': True, 'no_open': True}" class="oe_inline" style="width: 40%"/>
+                                <field name="importe" widget="monetary" options="{'currency_field': 'currency_id'}" style="width: 40%"/>
+                        </group>
+                        <group name="contenedor">
+                            <field name="currency_id_vendedor" invisible="1"/>
+                            <field name="currency_id_chofer" invisible="1"/>
+                            <field name="driver_commission" class="oe_inline" widget="monetary" options="{'currency_field': 'currency_id_chofer'}" style="width: 40%"/>
+                            <field name="partner_seller_id" class="oe_inline" context="{'default_seller': True, 'search_default_seller': True}"  style="width: 40%"/>
+                            <field name="seller_commission"  class="oe_inline" widget='monetary' options="{'currency_field': 'currency_id_vendedor'}" style="width: 40%"/>
+                        </group>
+                        <group name="carga" string="Datos de la Carga">
+                            <group>
+                                <field name="aduana_destino_id" options="{'no_open': True,'no_create': True, 'always_reload': True}" style="width: 40%"/>
+                            </group>
+                        </group>
+                        <notebook colspan="4">
+                            <page string="Servicios">
+                                <field name="mrf_srv_tmlp_ids" context="{'default_mrf_srv_tmpl_id': active_id,
+                                                                        'form_view_ref':'operativa_marfrig.marfrig_service_template_form_view',
+                                                                        'tree_view_ref':'operativa_marfrig.marfrig_servive_template_view',
+                                                                        }">
+                                </field>
+                            </page>
+                        </notebook>
+                    </sheet>
+                    <div class="oe_chatter">
+                        <field name="message_follower_ids" widget="mail_followers" groups="base.group_user"/>
+                        <field name="activity_ids" widget="mail_activity"/>
+                        <field name="message_ids" widget="mail_thread"/>
+                    </div>
+                </form>
+            </field>
+        </record>
+
+
+
+    </data>
+</odoo>

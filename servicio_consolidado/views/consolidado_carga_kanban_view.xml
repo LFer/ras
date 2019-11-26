@@ -1,0 +1,99 @@
+<odoo>
+    <data>
+
+        <record id="action_carga_kanban" model="ir.actions.act_window">
+            <field name="name">Consolidado</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">carga.camion</field>
+            <field name="view_mode">kanban,tree,form</field>
+            <field name="filter" eval="True"/>
+            <field name="help" type="html">
+                <p class="o_view_nocontent_smiling_face">
+                    No se crearon fronteras
+
+                </p>
+            </field>
+        </record>
+
+
+
+        <record id="quick_create_carga_form" model="ir.ui.view">
+            <field name="name">carga.camion.form.quick_create</field>
+            <field name="model">carga.camion</field>
+            <field name="priority">1000</field>
+            <field name="arch" type="xml">
+                <form>
+                    <group>
+                        <field name="name"/>
+                        <field name="camion_id"/>
+                        <field name="partner_id" widget="res_partner_many2one" domain="[('customer', '=', True)]" context="{'search_default_customer': 1, 'show_vat': True}"/>
+                    </group>
+                </form>
+            </field>
+        </record>
+
+        <record id="camion_kanban_view" model="ir.ui.view">
+            <field name="name">Cargas</field>
+            <field name="model">carga.camion</field>
+            <field name="arch" type="xml">
+                <kanban default_group_by="camion_id" class="o_res_partner_kanban">
+                    <field name="id"/>
+                    <field name="camion_id"/>
+                    <templates>
+                        <t t-name="kanban-box">
+                            <div class="oe_kanban_global_click o_kanban_record_has_image_fill o_res_partner_kanban">
+                                <div class="oe_kanban_details">
+                                    <h4><a type="open">
+                                        <field name="name"/>
+                                    </a></h4>
+                                    <ul>
+                                        <li>
+                                            <field name="camion_id" />
+                                        </li>
+                                    </ul>
+                                </div>
+                                <div class="oe_kanban_details">
+                                    <ul>
+                                        <li>Peso:
+                                            <field name="raw_kg" />
+                                        </li>
+                                    </ul>
+                                    <ul>
+                                        <li>Volumen:
+                                            <field name="volume" />
+                                        </li>
+                                    </ul>
+                                    <ul>
+                                        <li>Bulto:
+                                            <field name="package" />
+                                        </li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </t>
+                    </templates>
+                </kanban>
+            </field>
+        </record>
+
+
+
+
+
+
+
+        <menuitem name="Consolidado-Cargas"
+                  id="consolidado_carga_camion_menu"
+                  parent="menu_service_consolidado_main"
+                  action="action_carga_kanban"
+        />
+
+        <menuitem name="Carpetas"
+                  id="consolidado_camiones_main_menu"
+                  parent="menu_service_consolidado_main"
+                  action="action_camiones"
+        />
+
+
+    </data>
+</odoo>

@@ -1,0 +1,146 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <record model="ir.actions.act_window" id="view_reportes_vestas_action">
+            <field name="name">Reportes Vestas</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">reportes</field>
+            <field name="view_mode">form</field>
+            <field name="filter" eval="True"/>
+        </record>
+
+        <record model="ir.actions.act_window" id="view_informe_ventas_cliente_action">
+            <field name="name">Informe Ventas Cliente</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">informe.ventas.cliente</field>
+            <field name="view_mode">form</field>
+            <field name="filter" eval="True"/>
+        </record>
+
+        <record model="ir.actions.act_window" id="view_informe_comision_vendedores">
+            <field name="name">Informe Comision Venededores</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">informe.comision.vendedores</field>
+            <field name="view_mode">form</field>
+            <field name="filter" eval="True"/>
+        </record>
+
+        <record model="ir.actions.act_window" id="view_informe_costos">
+            <field name="name">Informe Costos</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">informe.costos</field>
+            <field name="view_mode">form</field>
+            <field name="filter" eval="True"/>
+        </record>
+
+        <record model="ir.actions.act_window" id="view_informe_matricula_tramo">
+            <field name="name">Informe Matricula Tramo</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">informe.matricula.tramo</field>
+            <field name="view_mode">form</field>
+            <field name="filter" eval="True"/>
+        </record>
+
+        <record model="ir.actions.act_window" id="view_informe_terceros">
+            <field name="name">Informe Terceros</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">informe.terceros</field>
+            <field name="view_mode">form</field>
+            <field name="filter" eval="True"/>
+        </record>
+
+        <record model="ir.actions.act_window" id="view_diferencia_gravada">
+            <field name="name">Diferencia Cambio Gravado</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">diferencia.cambio.gravado</field>
+            <field name="view_mode">form</field>
+            <field name="filter" eval="True"/>
+        </record>
+
+        <menuitem
+                id="menu_reportes_root"
+                name="Reportes"
+                web_icon="reportes,static/description/icon.png"
+                groups="base.group_user"
+                sequence="151"
+        />
+
+        <menuitem
+                id="menu_reportes_main"
+                name="Reportes"
+                web_icon=""
+                groups="base.group_user"
+                sequence="151"
+                parent="menu_reportes_root"
+        />
+
+        <menuitem
+                id="menu_reportes_vestas"
+                name="Reporte Vestas"
+                groups="base.group_user"
+                sequence="151"
+                parent="menu_reportes_main"
+                action="view_reportes_vestas_action"
+        />
+
+        <menuitem
+                id="menu_informe_ventas_cliente"
+                name="Informe Ventas Cliente"
+                groups="base.group_user"
+                sequence="151"
+                parent="menu_reportes_main"
+                action="view_informe_ventas_cliente_action"
+        />
+        <menuitem
+                id="menu_informe_comision_vendedores"
+                name="Informe Comision Vendedores"
+                groups="base.group_user"
+                sequence="151"
+                parent="menu_reportes_main"
+                action="view_informe_comision_vendedores"
+        />
+        <menuitem
+                id="menu_informe_costos"
+                name="Informe Costos"
+                groups="base.group_user"
+                sequence="151"
+                parent="menu_reportes_main"
+                action="view_informe_costos"
+        />
+        <menuitem
+                id="menu_informe_matricula_tramo"
+                name="Informe Matricula Tramo"
+                groups="base.group_user"
+                sequence="151"
+                parent="menu_reportes_main"
+                action="view_informe_matricula_tramo"
+        />
+        <menuitem
+                id="menu_informe_terceros"
+                name="Informe Terceros"
+                groups="base.group_user"
+                sequence="151"
+                parent="menu_reportes_main"
+                action="view_informe_terceros"
+        />
+
+        <menuitem
+                id="menu_tipo_cambio_main"
+                name="Tipo de Cambio"
+                web_icon=""
+                groups="base.group_user"
+                sequence="151"
+                parent="menu_reportes_root"
+        />
+
+        <menuitem
+                id="menu_cambio_gravado"
+                name="Diferencia Cambio Gravado"
+                groups="base.group_user"
+                sequence="151"
+                parent="menu_tipo_cambio_main"
+                action="view_diferencia_gravada"
+        />
+
+    </data>
+</odoo>

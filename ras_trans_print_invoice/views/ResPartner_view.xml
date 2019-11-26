@@ -1,0 +1,76 @@
+<odoo>
+	<data>
+		<record model="ir.ui.view" id="res_partner_print_invoice">
+			<field name="name">res.partner.print.form</field>
+			<field name="model">res.partner</field>
+			<field name="inherit_id" ref="base.view_partner_form"/>
+			<field name="type">form</field>
+			<field name="arch" type="xml">
+				<xpath expr="//page[@name='sales_purchases']" position="after">
+					<page string="Impresión de Factura" name="partner_invoice_page_print">
+						<group>
+							<group>
+								<field name="print_output_reference"/>
+								<field name="print_invoice_load"/>
+								<field name="print_invoice_product"/>
+
+							</group>
+							<group>
+								<field name="print_origin_destiny_grouped"/>
+								<field name="print_cont_grouped"/>
+								<field name="print_product_grouped"/>
+							</group>
+						</group>
+						<group>
+							<group>
+								<field name="print_mic"/>
+								<field name="print_crt"/>
+								<field name="print_purchase_order"/>
+								<field name="print_delivery_order"/>
+								<field name="print_dua"/>
+							</group>
+							<group>
+								<field name="print_origin_destiny"/>
+								<field name="print_date_start"/>
+								<field name="print_ms_in_out"/>
+								<field name="print_consignee"/>
+								<field name="print_all_info"/>
+							</group>
+						</group>
+						<group>
+							<group>
+								<field name="print_gex"/>
+								<field name="print_packages"/>
+								<field name="print_kg"/>
+								<field name="print_volume"/>
+							</group>
+							<group>
+								<field name="print_container_number"/>
+								<field name="print_container_size"/>
+								<field name="print_booking"/>
+								<field name="print_sender"/>
+							</group>
+						</group>
+						<group>
+							<div style="margin-bottom: -18px;">
+								<span>
+									<label for="print_extra_info" style="font-weight: bold;"/>
+									<field name="print_extra_info"/>
+								</span>
+								<span>
+									<label for="show_extra_info" string=" " class="fa fa-file-code-o oe_edit_only" style="color: #7C7BAD; margin-left: 10px; font-size: 15px;" attrs="{'invisible':[('print_extra_info','=',False)]}"/>
+									<field name="show_extra_info" invisible="1"/>
+								</span>
+							</div>
+						</group>
+						<group colspan="2">
+							<div>
+								<field name="qweb_extra_info" colspan="4" nolabel="1" attrs="{'invisible':['|',('show_extra_info','=',False),('print_extra_info','=',False)]}"/>
+							</div>
+						</group>
+					</page>
+				</xpath>
+			</field>
+		</record>
+	</data>
+</odoo>

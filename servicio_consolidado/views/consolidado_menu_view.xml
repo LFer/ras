@@ -1,0 +1,51 @@
+<odoo>
+    <data>
+
+        <record id="action_tipo_consolidado" model="ir.actions.act_window">
+            <field name="name">Tipo de Consolidado</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">tipo.consolidado</field>
+            <field name="view_mode">tree,form</field>
+            <field name="filter" eval="True"/>
+            <field name="help" type="html">
+                <p class="o_view_nocontent_smiling_face">
+                    No se crearon Carpetas
+                </p><p>
+            </p>
+            </field>
+        </record>
+
+
+        <menuitem
+                id="menu_consolidado_root"
+                name="Consolidados"
+                web_icon="servicio_consolidado,static/description/icon.png"
+                groups="base.group_user"
+        />
+        <menuitem
+                id="menu_service_consolidado_main"
+                name="Consolidados"
+                parent="menu_consolidado_root"
+                groups="base.group_user"
+        />
+
+        <menuitem
+                id="menu_service_consolidado_config"
+                name="Configuración"
+                parent="menu_consolidado_root"
+                groups="base.group_user"
+        />
+
+
+        <menuitem
+                action="action_tipo_consolidado"
+                id="menu_service_tipo_consolidado"
+                name="Tipo de Consolidado"
+                parent="menu_service_consolidado_config"
+                groups="base.group_user"
+
+
+        />
+
+    </data>
+</odoo>

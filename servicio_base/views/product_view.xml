@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+
+        <record id="product_template_form_view" model="ir.ui.view">
+            <field name="name">product.template.common.form</field>
+            <field name="model">product.template</field>
+            <field name="inherit_id" ref="product.product_template_form_view"/>
+            <field name="arch" type="xml">
+                <field name="categ_id" position="before">
+                    <group colspan="4" col="4">
+                        <field name="bse" invisible="0"/>
+                        <field name="consolidado" invisible="0"/>
+                        <field name="flete" invisible="0"/>
+                    </group>
+                </field>
+                <xpath expr="//notebook[last()]" position="inside">
+                    <page string="Accounting">
+                    <group colspan="2" col="2">
+                        <field name="is_outgoing" widget="boolean_toggle"/>
+                    </group>
+                    <notebook>
+                        <page string="Percentage Invoice">
+                        </page>
+                    </notebook>
+                </page>
+                </xpath>
+                <!-- campos a ocultar -->
+                <field name="sale_ok" position="replace">
+                    <field name="sale_ok" invisible="1"/>
+                </field>
+                <label for="sale_ok" position="replace">
+                    <label for="sale_ok" invisible="1"/>
+                </label>
+                <field name="list_price" position="replace">
+                    <field name="list_price" invisible="1"/>
+                </field>
+
+            </field>
+        </record>
+
+    </data>
+</odoo>

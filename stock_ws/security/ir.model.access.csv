@@ -1,0 +1,2 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_stock_ws_f21_deposito,stock_ws.f21_deposito,model_f21_deposito,,1,1,1,1

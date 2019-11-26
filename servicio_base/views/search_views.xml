@@ -1,0 +1,150 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+
+        <!--Busqueda de la carpeta-->
+        <record id="view_rt_service_search" model="ir.ui.view">
+            <field name="name">rt.service.search</field>
+            <field name="model">rt.service</field>
+            <field name="arch" type="xml">
+                <search string="Busqueda">
+                    <!--Campos para buscar-->
+                    <field name="name" string="Carpeta"/>
+                    <field name="reference" string="Referencia Carpeta"/>
+                    <field name="dua_numero" string="DUA"/>
+                    <field name="mensaje_simplificado" string="Mensaje Simplificado"/>
+                    <field name="partner_invoice_id"/>
+                    <field name="partner_id"/>
+                    <field name="partner_dispatcher_id"/>
+                    <field name="origin_id"/>
+                    <field name="destiny_id"/>
+                    <filter name="noinvoiced" string="No Facturada" domain="[('state', '!=', 'progress')]"/>
+                    <filter string="Facturado" name="invoiced" domain="[('state', '=', 'progress')]"/>
+                    <filter string="Facturable" name="invoiceable" domain="[('state', 'in', ('draft','confirm','inprocess'))]"/>
+                    <filter name="late" string="Overdue" domain="['&amp;', ('stop_datetime', '&lt;', time.strftime('%Y-%m-%d')), ('state', '=', 'progress')]" help="Overdue, maturity date passed"/>
+                    <group expand="1" string="Group By">
+                        <filter name="filter_state" string="Estado" icon="terp-dolar_ok!" domain="[]" context="{'group_by':'state'}"/>
+                        <filter name="filter_partner_invoice_id" string="Cliente a Facturar" icon="terp-gtk-jump-to-rtl" domain="[]" context="{'group_by':'partner_invoice_id'}"/>
+                        <filter name="filter_partner_id" string="Dueño de la Mercaderia" icon="terp-accessories-archiver" domain="[]" context="{'group_by':'partner_id'}"/>
+                        <filter name="filter_partner_dispatcher_id" string="Despachante" icon="terp-accessories-archiver" domain="[]" context="{'group_by':'partner_dispatcher_id'}"/>
+                        <filter name="filter_user_id" string="Responsble" icon="terp-dolar_ok!" domain="[]" context="{'group_by':'user_id'}"/>
+                        <filter name="filter_load_type" string="Tipo de Carga" icon="terp-dolar_ok!" domain="[]" context="{'group_by':'load_type'}"/>
+                        <filter string="Fecha" name="invoicedate" context="{'group_by':'start_datetime'}"/>
+                    </group>
+                </search>
+            </field>
+        </record>
+
+
+        <!--Busqueda para la Carga-->
+        <record id="view_rt_carga_search" model="ir.ui.view">
+            <field name="name">rt.carga.search</field>
+            <field name="model">rt.service.carga</field>
+            <field name="arch" type="xml">
+                <search string="Busqueda">
+                    <!--Campos para buscar-->
+                    <field name="name" string="Referencia Carga"/>
+                    <field name="purchase_order" string="Orden de Compra"/>
+                    <field name="mic_aduana"/>
+                    <field name="mic_number"/>
+                    <field name="dua_numero" string="DUA"/>
+                    <field name="crt_number"/>
+                    <field name="container_number"/>
+                    <field name="container_type"/>
+                    <field name="seal_number"/>
+                    <field name="partner_id"/>
+                    <field name="origin_id"/>
+                    <field name="destiny_id"/>
+                    <group expand="1" string="Group By">
+                        <filter name="filter_state" string="Estado" icon="terp-dolar_ok!" domain="[]" context="{'group_by':'state'}"/>
+                        <filter name="filter_regimen" string="Regimen" icon="terp-dolar_ok!" domain="[]" context="{'group_by':'regimen'}"/>
+                        <filter string="Tipo de Carga" name="load_type" context="{'group_by':'load_type'}"/>
+                        <filter string="Tipo de Contenedor" name="container_type" context="{'group_by':'container_type'}"/>
+                        <filter name="filter_partner_id" string="Dueño de la Mercaderia" icon="terp-accessories-archiver" domain="[]" context="{'group_by':'partner_id'}"/>
+                        <filter string="Fecha" name="invoicedate" context="{'group_by':'start_datetime'}"/>
+                    </group>
+                </search>
+            </field>
+        </record>
+
+
+        <record id="view_rt_service_product_uninvoiced_filter" model="ir.ui.view">
+            <field name="name">rt.service.product.uninvoiced.line</field>
+            <field name="model">rt.service.productos</field>
+            <field name="arch" type="xml">
+                <search string="Search Uninvoiced Service Product">
+                    <filter string="No Facturado" name="uninvoiced" domain="[('invoiced','=',False)]"/>
+                    <filter string="Facturado" name="invoiced" domain="[('invoiced','=',True)]"/>
+                    <filter string="Facturable" name="invoiceable" domain="[('is_invoiced','=',True)]"/>
+                    <filter string="Factura Rechazada" name="invoiced_rejected" domain="[('invoiced_rejected','=',True)]"/>
+                    <field name="product_id"/>
+                    <field name="currency_id"/>
+                    <group expand="1" string="Group By">
+                        <filter name="filter_product" string="Product" icon="terp-accessories-archiver" domain="[]" context="{'group_by':'product_id'}"/>
+                        <filter name="filter_currency" string="Currency" icon="terp-dolar_ok!" domain="[]" context="{'group_by':'currency_id'}"/>
+                    </group>
+                </search>
+            </field>
+        </record>
+
+        <record id="rt_service_product_tree_view" model="ir.ui.view">
+            <field name="name">rt.service.product.tree</field>
+            <field name="model">rt.service.productos</field>
+            <field name="arch" type="xml">
+                <tree string="Servicios" create="false">
+                    <field name="name"/>
+                    <field name="invoiced"/>
+                    <field name="is_invoiced"/>
+                    <field name="tramo_inter"/>
+                    <field name="tramo_nat"/>
+                    <field name="supplier_id"/>
+                    <field name="product_id"/>
+                    <field name="importe"/>
+                    <field name="state"/>
+                    <field name="regimen"/>
+                    <field name="regimen_excepcion"/>
+                </tree>
+            </field>
+        </record>
+
+
+        <record id="action_rt_service_product_tree2" model="ir.actions.act_window">
+            <field name="name">Service Products to Invoice</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">rt.service.productos</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">tree</field>
+            <field name="search_view_id" ref="view_rt_service_product_uninvoiced_filter"/>
+            <field name="view_id" ref="rt_service_product_tree_view"/>
+            <field name="context">{"search_default_uninvoiced":1}</field>
+            <field name="filter" eval="True"/>
+            <field name="help" type="html">
+                <p>
+                    Here is a list of each service product to be invoiced. You can
+                    invoice service product partially, by lines of service.
+                </p>
+            </field>
+        </record>
+
+
+
+
+        <record id="action_servicio_rechazado" model="ir.actions.act_window">
+            <field name="name">Servicios Factura Rechazado</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">rt.service.productos</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">tree</field>
+            <field name="view_id" ref="servicio_base.view_rt_productos_tree"/>
+            <field name="context">{"search_default_invoiced_rejected":1}</field>
+            <field name="filter" eval="True"/>
+            <field name="help" type="html">
+              <p>
+                Here is a list of each service product to be invoiced. You can
+                invoice service product partially, by lines of service.
+              </p>
+            </field>
+        </record>
+
+    </data>
+</odoo>

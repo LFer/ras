@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+
+        <record id="catalogo_tipo_bulto_kanban_view" model="ir.ui.view">
+            <field name="name">Catálogo tipo de Bultos</field>
+            <field name="model">catalogo.tipo.bulto</field>
+            <field name="arch" type="xml">
+                <kanban class="o_res_partner_kanban">
+                    <field name="id"/>
+                    <field name="name"/>
+                    <field name="tipo_bulto"/>
+                    <templates>
+                        <t t-name="kanban-box">
+                            <div class="oe_kanban_global_click o_kanban_record_has_image_fill o_res_partner_kanban">
+                                <div class="oe_kanban_details">
+                                    <h4><a type="open">
+                                        <field name="name"/>
+                                    </a></h4>
+                                    <ul>
+                                        <li>
+                                            <field name="tipo_bulto" />
+                                        </li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </t>
+                    </templates>
+                </kanban>
+            </field>
+        </record>
+
+        <record id="catalogo_tipo_bulto_tree_view" model="ir.ui.view">
+            <field name="name">Catálogo tipo de Bultos-Tree</field>
+            <field name="model">catalogo.tipo.bulto</field>
+            <field name="arch" type="xml">
+                <tree string="Catalogo tipo Bultos">
+                    <field name="name"/>
+                    <field name="desc"/>
+                    <field name="tipo_bulto"/>
+                    <field name="info"/>
+                </tree>
+            </field>
+        </record>
+
+        <record id="catalogo_tipo_bulto_form_view" model="ir.ui.view">
+            <field name="name">Catálogo tipo de Bultos - Form</field>
+            <field name="model">catalogo.tipo.bulto</field>
+            <field name="arch" type="xml">
+                <form string="Catalogo tipo Bultos">
+                    <sheet>
+                        <group>
+                            <field name="name"/>
+                            <field name="desc"/>
+                            <field name="tipo_bulto"/>
+                            <field name="info"/>
+                        </group>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+
+        <record id="action_catalogo_tipo_bulto" model="ir.actions.act_window">
+            <field name="name">Catálogo tipo de Bultos</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">catalogo.tipo.bulto</field>
+            <field name="view_mode">kanban,tree,form</field>
+            <field name="filter" eval="True"/>
+            <field name="help" type="html">
+                <p class="o_view_nocontent_smiling_face">
+                    No se crearon Catálogo
+
+                </p>
+            </field>
+        </record>
+
+        <menuitem action="action_catalogo_tipo_bulto"
+                  parent="menu_asociados_a_carpeta"
+                  id="menu_catalogo"
+                  groups="base.group_user"
+                  sequence="40"
+        />
+
+        <menuitem action="action_catalogo_tipo_bulto"
+                  parent="menu_asociados_a_carpeta_inter"
+                  id="menu_catalogo_inter"
+                  groups="base.group_user"
+                  sequence="40"
+        />
+
+
+    </data>
+</odoo>

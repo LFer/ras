@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+
+        <record id="codigos_contenedores_kanban_view" model="ir.ui.view">
+            <field name="name">Codigos Contenedores</field>
+            <field name="model">codigos.contenedores</field>
+            <field name="arch" type="xml">
+                <kanban class="o_res_partner_kanban">
+                    <field name="id"/>
+                    <field name="image"/>
+                    <templates>
+                        <t t-name="kanban-box">
+                            <div class="oe_kanban_global_click o_kanban_record_has_image_fill o_res_partner_kanban">
+                                <div class="oe_kanban_details">
+                                    <div>
+                                        <img class="o_kanban_image" t-att-src="kanban_image('codigos.contenedores', 'image', record.id.raw_value)" t-att-alt="record.name"/>
+                                    </div>
+                                    <h4><a type="open">
+                                        <field name="name"/>
+                                    </a></h4>
+                                    <ul>
+                                        <li>
+                                            <field name="codigo" />
+                                        </li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </t>
+                    </templates>
+                </kanban>
+            </field>
+        </record>
+
+        <record id="codigos_contenedores_tree_view" model="ir.ui.view">
+            <field name="name">Codigos Contenedores-Tree</field>
+            <field name="model">codigos.contenedores</field>
+            <field name="arch" type="xml">
+                <tree string="Codigos Contenedores">
+                    <field name="name"/>
+                    <field name="codigo"/>
+                    <field name="teu"/>
+                </tree>
+            </field>
+        </record>
+
+        <record id="codigos_contenedores_form_view" model="ir.ui.view">
+            <field name="name">Codigos Contenedores-Form</field>
+            <field name="model">codigos.contenedores</field>
+            <field name="arch" type="xml">
+                <form string="Fronteras">
+                    <sheet>
+                        <field name="image" widget="image" class="oe_avatar"/>
+                        <group>
+                            <field name="name"/>
+                            <field name="codigo"/>
+                            <field name="teu"/>
+                        </group>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+
+        <record id="action_codigos_contenedores" model="ir.actions.act_window">
+            <field name="name">Códigos Contenedores</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">codigos.contenedores</field>
+            <field name="view_mode">kanban,tree,form</field>
+            <field name="filter" eval="True"/>
+            <field name="help" type="html">
+                <p class="o_view_nocontent_smiling_face">
+                    No se crearon codigos de contenedores
+
+                </p>
+            </field>
+        </record>
+
+
+        <menuitem action="action_codigos_contenedores"
+                  parent="menu_asociados_a_carpeta"
+                  id="menu_codigo_contenedores"
+                  groups="base.group_user"
+                  sequence="45"
+        />
+
+        <menuitem action="action_codigos_contenedores"
+                  parent="menu_asociados_a_carpeta_inter"
+                  id="menu_codigo_contenedores_inter"
+                  groups="base.group_user"
+                  sequence="45"
+        />
+
+    </data>
+</odoo>

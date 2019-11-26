@@ -1,0 +1,170 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <record id="view_employee_inht_form" model="ir.ui.view">
+            <field name="name">hr.employee.form</field>
+            <field name="model">hr.employee</field>
+            <field eval="50" name="priority"/>
+            <field name="inherit_id" ref="hr.view_employee_form"/>
+            <field name="arch" type="xml">
+                <data>
+                    <xpath expr="//form[1]/sheet[1]/div[not(@name)][1]/div[1]/div[1]/h1[1]/field[@name='name']" position="attributes">
+                        <attribute name="invisible">1</attribute>
+                    </xpath>
+                    <xpath expr="//form[1]/sheet[1]/div[not(@name)][1]/div[1]/div[1]/h1[1]/field[@name='name']" position="after">
+                        <h1>
+                            <field name="name_gen" placeholder="Employee's Name" readonly="True" force_save="1"/>
+                        </h1>
+                    </xpath>
+                    <xpath expr="//form[1]/sheet[1]/div[not(@name)][1]/div[1]/div[1]/h1[1]/field[@name='name']" position="attributes">
+                        <attribute name="attrs">{}</attribute>
+                        <attribute name="readonly">1</attribute>
+                    </xpath>
+
+                    <xpath expr="//form[1]/sheet[1]/div[not(@name)][1]/div[1]/notebook[1]/page[@name='personal_information']/group[1]/group[1]" position="after">
+                        <group string="Nombre Completo">
+                            <field name="first_name" />
+                            <field name="second_name" />
+                            <field name="first_surname"/>
+                            <field name="second_surname"/>
+                        </group>
+                    </xpath>
+
+                    <xpath expr="//form[1]/sheet[1]/div[2]/div[1]/notebook[1]/page[@name='personal_information']/group[1]/group[1]/field[@name='country_id']" position="after">
+                        <field name="telfono_personal" string="Teléfono Personal" widget="phone"/>
+                    </xpath>
+                    <xpath expr="//field[@name='passport_id']" position="attributes">
+                        <attribute name="attrs">{}</attribute>
+                        <attribute name="invisible">1</attribute>
+                    </xpath>
+                    <field name="job_id"  position="attributes">
+                        <attribute name="options">{'no_open': True,'no_create': True, 'always_reload': True}</attribute>
+                    </field>
+                    <xpath expr="//field[@name='address_home_id']" position="attributes">
+                        <attribute name="attrs">{}</attribute>
+                        <attribute name="invisible">1</attribute>
+                    </xpath>
+                    <xpath expr="//field[@name='emergency_phone']" position="attributes">
+                        <attribute name="attrs">{}</attribute>
+                        <attribute name="invisible">1</attribute>
+                    </xpath>
+
+                    <xpath expr="//field[@name='km_home_work']" position="attributes">
+                        <attribute name="attrs">{}</attribute>
+                        <attribute name="invisible">1</attribute>
+                    </xpath>
+
+                    <xpath expr="//field[@name='emergency_contact']" position="attributes">
+                        <attribute name="attrs">{}</attribute>
+                        <attribute name="invisible">1</attribute>
+                    </xpath>
+
+                    <xpath expr="//field[@name='bank_account_id']" position="replace">
+                        <field name="bank_account_ids" mode="tree" context="{'default_hr_employee_id': active_id}" >
+                            <tree string="Direcciones" editable="bottom">
+                                <field name="acc_number"/>
+                                <field name="hr_employee_id" invisible="1"/>
+                                <field name="bank_id"/>
+                                <field name="currency_id"/>
+                                <field name="acc_holder_name" invisible="1"/>
+                            </tree>
+                        </field>
+                    </xpath>
+
+
+                    <field name="address_home_id" position="after">
+                        <field name="address_ext_ids" mode="tree" context="{'default_hr_employee_id': active_id}" >
+                            <tree string="Direcciones" editable="bottom">
+                                <field name="name" invisible="1"/>
+                                <field name="hr_employee_id" invisible="1"/>
+                                <field name="country_id"/>
+                                <field name="state_id"/>
+                                <field name="city_id"/>
+                                <field name="street"/>
+                                <field name="street2"/>
+                            </tree>
+                        </field>
+                        <field name="hr_employee_family_ids" mode="tree" context="{'default_hr_employee_id': active_id}" >
+                            <tree string="Direcciones" editable="bottom">
+                                <field name="name"/>
+                                <field name="hr_employee_id" invisible="1"/>
+                                <field name="document"/>
+                                <field name="date_of_birth"/>
+                                <field name="relation_id"/>
+                                <field name="in_charge"/>
+                            </tree>
+                        </field>
+                    </field>
+                    <field name="additional_note" position="after">
+                        <group name="vehiculo_propio">
+                            <field name="hr_employee_vehicles_ids" mode="tree" context="{'default_hr_employee_id': active_id}" >
+                                <tree string="Vehiculo" editable="bottom">
+                                    <field name="name"/>
+                                    <field name="license_plate"/>
+                                    <field name="color"/>
+                                    <field name="attachment" string="Adjunto" widget="many2many_binary"/>
+                                    <field name="hr_employee_id" invisible="1"/>
+                                </tree>
+                            </field>
+                        </group>
+                    </field>
+                    <xpath expr="//field[@name='google_drive_link']" position="replace"/>
+                    <xpath expr="//form[1]/sheet[1]/div[2]/div[1]/notebook[1]/page[@name='personal_information']/group[1]/group[6]" position="replace">
+                        <group string="Datos de Salud">
+                            <field name="mutualist_id"/>
+                            <field name="emergency_id"/>
+                            <field name="emergency_contacs_ids" mode="tree" context="{'default_hr_employee_id': active_id}" >
+                                <tree string="Contactos de Emergencia" editable="bottom">
+                                    <field name="name"/>
+                                    <field name="relation_id"/>
+                                    <field name="cel"/>
+                                    <field name="hr_employee_id" invisible="1"/>
+                                </tree>
+                            </field>
+                            <field name="alergies_ids" mode="tree" context="{'default_hr_employee_id': active_id}" >
+                                <tree string="Alergias" editable="bottom">
+                                    <field name="name"/>
+                                    <field name="hr_employee_id" invisible="1"/>
+                                </tree>
+                            </field>
+                        </group>
+                    </xpath>
+                    <notebook position="inside">
+                        <page string="Documentos Adjuntos" name="employee_documents">
+                            <group>
+                                <field name="hr_employee_document_ids" mode="tree" context="{'default_hr_employee_id': active_id}" >
+                                    <tree string="Documentos" editable="bottom">
+                                        <field name="document_type_id"/>
+                                        <field name="name"/>
+                                        <field name="date"/>
+                                        <field name="attachment" string="Adjunto" widget="many2many_binary"/>
+                                        <field name="hr_employee_id" invisible="1"/>
+                                    </tree>
+                                </field>
+
+                                <field name="hr_employee_admonition_ids" mode="tree" context="{'default_hr_employee_id': active_id}" >
+                                    <tree string="Amonstaciónes" editable="bottom">
+                                        <field name="admonition_type_id"/>
+                                        <field name="date_start"/>
+                                        <field name="date_end"/>
+                                        <field name="attachment" string="Adjunto" widget="many2many_binary"/>
+                                        <field name="hr_employee_id" invisible="1"/>
+                                    </tree>
+                                </field>
+
+                            </group>
+                        </page>
+                        <page string="Permisos" name="permisos">
+                            <group>
+                                <field name="revisa_comisiones" widget="boolean_toggle"/>
+                                <field name="revisa_costos" widget="boolean_toggle"/>
+                                <field name="revisa_cargas" widget="boolean_toggle"/>
+                            </group>
+                        </page>
+
+                    </notebook>
+                </data>
+            </field>
+        </record>
+    </data>
+</odoo>

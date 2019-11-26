@@ -1,0 +1,42 @@
+<odoo>
+    <data>
+
+        <record id="carga_camion_tree_view" model="ir.ui.view">
+            <field name="name">carga_camion_tree_view</field>
+            <field name="model">carga.camion</field>
+            <field name="arch" type="xml">
+                <tree string="Cargas">
+                    <field name="name"/>
+                    <field name="partner_id"/>
+                    <field name="load_type"/>
+                </tree>
+            </field>
+        </record>
+
+
+        
+        <record id="action_cargas" model="ir.actions.act_window">
+            <field name="name">Cargas</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">carga.camion</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">tree,form,kanban</field>
+        </record>
+
+        <record id="action_cargas_form" model="ir.actions.act_window">
+            <field name="name">Cargas</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">carga.camion</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">form</field>
+            <field name="view_id" ref="servicio_consolidado.view_consol_carga_form"/>
+        </record>
+
+        <menuitem name="Cargas"
+                  id="consolidado_carga_menu"
+                  parent="menu_service_consolidado_main"
+                  action="action_cargas"
+        />
+
+    </data>
+</odoo>

@@ -1,0 +1,51 @@
+<odoo>
+    <data>
+
+        <record id="stock_barcode_custom_form_view" model="ir.ui.view">
+            <field name="name">stock.barcode.custom.form</field>
+            <field name="model">stock.move.line</field>
+            <field name="inherit_id" ref="stock_barcode.stock_move_line_product_selector"/>
+            <field name="arch" type="xml">
+
+                <field name="product_id" position="replace">
+                    <field name="product_id"
+                           attrs="{'readonly': ['|', ('state', '=', 'done'), ('move_id', '!=', False)]}"
+                           domain="[('type', 'in', ['product', 'consu'])]"
+                           required="1"
+                           options="{'no_create': True, 'no_open': True}"
+                    />
+                    <field name="paquete_roto" string="Paquete roto"/>
+                    <field name="attach_foto" widget="many2many_binary" attrs="{&quot;invisible&quot;: [[&quot;paquete_roto&quot;,&quot;=&quot;,False]]}"/>
+                </field>
+
+                <field name="product_uom_id" position="replace">
+                    <field name="product_uom_id"
+                           groups="uom.group_uom"
+                           attrs="{'readonly': [('product_uom_qty', '!=', 0.0)]}"
+                           options="{'no_create': True, 'no_open': True}"
+                    />
+                </field>
+
+                <field name="location_id" position="replace">
+                    <field name="location_id"
+                           groups="stock.group_stock_multi_locations"
+                           options="{'no_create': True, 'no_open': True}"
+                    />
+                </field>
+
+                <field name="location_dest_id" position="replace">
+                    <field name="location_dest_id"
+                           groups="stock.group_stock_multi_locations"
+                           options="{'no_create': True, 'no_open': True}"
+                    />
+                </field>
+
+
+
+
+
+            </field>
+        </record>
+
+    </data>
+</odoo>

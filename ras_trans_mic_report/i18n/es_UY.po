@@ -1,0 +1,105 @@
+# Translation of Odoo Server.
+# This file contains the translation of the following modules:
+#	* ras_trans_crt_report
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: Odoo Server 8.0-20151027\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2016-04-12 03:19+0000\n"
+"PO-Revision-Date: 2016-04-12 03:19+0000\n"
+"Last-Translator: <>\n"
+"Language-Team: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: \n"
+"Plural-Forms: \n"
+
+#. module: ras_trans_crt_report
+#: code:addons/ras_trans_crt_report/wizard/crt_consol_wzd.py:62
+#: code:addons\ras_trans_crt_report\wizard\crt_consol_wzd.py:62
+#: code:addons/ras_trans_crt_report/wizard/crt_consol_wzd.py:76
+#: code:addons\ras_trans_crt_report\wizard\crt_consol_wzd.py:76
+#: model:ir.actions.act_window,name:ras_trans_crt_report.action_rt_service_crt_consol_wzd
+#: view:rt.service.crt.consol.wzd:ras_trans_crt_report.view_rt_service_crt_consol_wzd
+#, python-format
+msgid "CRT Consolidated Report"
+msgstr "Reporte CRT Consolidado"
+
+#. module: ras_trans_crt_report
+#: view:rt.service.crt.consol.wzd:ras_trans_crt_report.view_rt_service_crt_consol_wzd
+msgid "Close"
+msgstr "Cerrar"
+
+#. module: ras_trans_crt_report
+#: model:ir.actions.server,name:ras_trans_crt_report.action_server_rt_service_crt_report
+#: view:rt.service:ras_trans_crt_report.view_rt_service_form
+msgid "Create CRT Report"
+msgstr "Crear Reporte CRT"
+
+#. module: ras_trans_crt_report
+#: field:rt.service.crt.consol.wzd,create_uid:0
+msgid "Created by"
+msgstr "Created by"
+
+#. module: ras_trans_crt_report
+#: field:rt.service.crt.consol.wzd,create_date:0
+msgid "Created on"
+msgstr "Created on"
+
+#. module: ras_trans_crt_report
+#: code:addons/ras_trans_crt_report/wizard/crt_consol_wzd.py:59
+#: code:addons\ras_trans_crt_report\wizard\crt_consol_wzd.py:59
+#, python-format
+msgid "Error"
+msgstr "Error"
+
+#. module: ras_trans_crt_report
+#: field:rt.service,xls_name:0
+#: field:rt.service.crt.consol.wzd,xls_name:0
+msgid "File Name"
+msgstr "Archivo"
+
+#. module: ras_trans_crt_report
+#: view:rt.service.crt.consol.wzd:ras_trans_crt_report.view_rt_service_crt_consol_wzd
+msgid "Generate"
+msgstr "Generar"
+
+#. module: ras_trans_crt_report
+#: field:rt.service.crt.consol.wzd,id:0
+msgid "ID"
+msgstr "ID"
+
+#. module: ras_trans_crt_report
+#: field:rt.service.crt.consol.wzd,write_uid:0
+msgid "Last Updated by"
+msgstr "Last Updated by"
+
+#. module: ras_trans_crt_report
+#: field:rt.service.crt.consol.wzd,write_date:0
+msgid "Last Updated on"
+msgstr "Last Updated on"
+
+#. module: ras_trans_crt_report
+#: model:ir.model,name:ras_trans_crt_report.model_rt_service
+msgid "Ras Transport Service"
+msgstr "Servicio de Ras Transport"
+
+#. module: ras_trans_crt_report
+#: code:addons/ras_trans_crt_report/wizard/crt_consol_wzd.py:59
+#: code:addons\ras_trans_crt_report\wizard\crt_consol_wzd.py:59
+#, python-format
+msgid "Results not found, please check the CRT numbers of the selected services."
+msgstr "Resultados no encontrados, verifique los números CRT en los Servicios seleccionados."
+
+#. module: ras_trans_crt_report
+#: view:rt.service.crt.consol.wzd:ras_trans_crt_report.view_rt_service_crt_consol_wzd
+msgid "Use this form if you want generate a CRT Consolidated Report with all selected Services."
+msgstr "Use este formulario si desea generar un Reporte CRT Consolidado con todos los Servicios seleccionados."
+
+#. module: ras_trans_crt_report
+#: field:rt.service,xls_file:0
+#: field:rt.service.crt.consol.wzd,xls_file:0
+msgid "XLS File"
+msgstr "Archivo XLSX"
+

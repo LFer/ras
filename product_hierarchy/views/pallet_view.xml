@@ -1,0 +1,213 @@
+<odoo>
+    <data>
+
+        <record id="pallet_form_view" model="ir.ui.view">
+            <field name="name">product.template.pallet.form</field>
+            <field name="model">product.template</field>
+            <field name="mode">primary</field>
+            <field name="arch" type="xml">
+                <form string="Product">
+                    <header>
+                    </header>
+                    <sheet>
+                        <div class="oe_button_box" name="button_box">
+                            <button string="Product Moves"
+                                    type="object"
+                                    name= "action_view_stock_move_lines"
+                                    attrs="{'invisible':[('type', 'not in', ['product', 'consu'])]}"
+                                    class="oe_stat_button" icon="fa-arrows-v"
+                                    groups="stock.group_stock_user">
+
+                            </button>
+                            <button class="oe_stat_button"
+                                    name="%(stock.product_open_quants)d"
+                                    icon="fa-building-o"
+                                    type="action" attrs="{'invisible':[('type', '!=', 'product')]}">
+                                <div class="o_field_widget o_stat_info">
+                                    <span class="o_stat_value">
+                                        <field name="qty_available" widget="statinfo" nolabel="1" class="mr4"/>
+                                        <field name="uom_name"/>
+                                    </span>
+                                    <span class="o_stat_text">En Mano</span>
+                                </div>
+                            </button>
+
+                            <button name="toggle_active" type="object"
+                                    class="oe_stat_button" icon="fa-archive">
+                                <field name="active" widget="boolean_button"
+                                       options='{"terminology": "archive"}'/>
+                            </button>
+                        </div>
+                        <field name="image_medium" widget="image" class="oe_avatar"/>
+                        <div class="oe_title">
+                            <label class="oe_edit_only" for="name" string="Número de Contenedor"/>
+                            <h1>
+                                <field name="name" placeholder="Nombre"/>
+                            </h1>
+
+                            <div name="options" groups="base.group_user">
+                                <div>
+                                    <field name="is_pallet"/>
+                                    <label for="is_pallet"/>
+                                </div>
+                            </div>
+                        </div>
+                        <notebook>
+                            <page string="Informacion General" name="general_information">
+                                <group>
+                                    <group name="group_general">
+                                        <field name="type" invisible="1"/>
+                                        <field name="barcode"/>
+                                        <field name="partner_owner_id" options="{'no_create': True, 'no_open': True}"/>
+                                        <field name="uom_id" options="{'no_create': True, 'no_open': True}"/>
+                                    </group>
+                                </group>
+                            </page>
+                            <page string="Cajas" name="boxes" autofocus="autofocus">
+                                <field name="product_template_box_ids" mode="kanban" context="{'default_box_id': active_id, 'default_uom_id': 1,'default_is_box': 1,}">
+                                    <kanban>
+                                        <field name="id"/>
+                                        <field name="uom_id"/>
+                                        <field name="image_small"/>
+                                        <field name="lst_price"/>
+                                        <field name="product_variant_count"/>
+                                        <field name="currency_id"/>
+                                        <field name="type"/>
+                                        <templates>
+                                            <t t-name="kanban-box">
+                                                <div class="oe_kanban_global_click">
+                                                    <div class="o_kanban_image">
+                                                        <img t-att-src="kanban_image('product.template', 'image_small', record.id.raw_value)" alt="Product"/>
+                                                    </div>
+                                                    <div class="oe_kanban_details">
+                                                        <strong class="o_kanban_record_title">
+                                                            <field name="name"/>
+                                                            <!--<small t-if="record.default_code.value">[<field name="default_code"/>]</small>-->
+                                                        </strong>
+
+                                                        <div name="tags"/>
+                                                        <ul>
+                                                            <!--<li>Price: <field name="lst_price" widget="monetary" options="{'currency_field': 'currency_id', 'field_digits': True}"></field></li>-->
+                                                            <li t-if="record.type.raw_value == 'product'">Stock: <field name="qty_available"/> <field name="uom_id"/></li>
+                                                        </ul>
+                                                        <div name="tags"/>
+
+                                                    </div>
+                                                </div>
+                                            </t>
+                                        </templates>
+                                    </kanban>
+                                    <form string="Product">
+                                        <header>
+                                        </header>
+                                        <sheet>
+                                            <div class="oe_button_box" name="button_box">
+                                                <button string="Product Moves"
+                                                        type="object"
+                                                        name= "action_view_stock_move_lines"
+                                                        attrs="{'invisible':[('type', 'not in', ['product', 'consu'])]}"
+                                                        class="oe_stat_button" icon="fa-arrows-v"
+                                                        groups="stock.group_stock_user">
+
+                                                </button>
+                                                <button class="oe_stat_button"
+                                                        name="%(stock.product_open_quants)d"
+                                                        icon="fa-building-o"
+                                                        type="action" attrs="{'invisible':[('type', '!=', 'product')]}">
+                                                    <div class="o_field_widget o_stat_info">
+                                                        <span class="o_stat_value">
+                                                            <field name="qty_available" widget="statinfo" nolabel="1" class="mr4"/>
+                                                            <field name="uom_name"/>
+                                                        </span>
+                                                        <span class="o_stat_text">En Mano</span>
+                                                    </div>
+                                                </button>
+
+                                                <button name="toggle_active" type="object"
+                                                        class="oe_stat_button" icon="fa-archive">
+                                                    <field name="active" widget="boolean_button"
+                                                           options='{"terminology": "archive"}'/>
+                                                </button>
+                                            </div>
+                                            <field name="image_medium" widget="image" class="oe_avatar"/>
+                                            <div class="oe_title">
+                                                <label class="oe_edit_only" for="name" string="Número de Contenedor"/>
+                                                <h1>
+                                                    <field name="name" placeholder="Nombre"/>
+                                                </h1>
+
+                                                <div name="options" groups="base.group_user">
+                                                    <div>
+                                                        <field name="is_box"/>
+                                                        <label for="is_box"/>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <notebook>
+                                                <page string="Informacion General" name="general_information">
+                                                    <group>
+                                                        <group name="group_general">
+                                                            <field name="type" invisible="1"/>
+                                                            <field name="uom_id" options="{'no_create': True, 'no_open': True}"/>
+                                                            <field name="barcode"/>
+                                                            <field name="partner_owner_id" options="{'no_create': True, 'no_open': True}"/>
+                                                        </group>
+                                                    </group>
+                                                </page>
+                                            </notebook>
+                                        </sheet>
+                                    </form>
+                                </field>
+                            </page>
+                        </notebook>
+                    </sheet>
+                    <div class="oe_chatter">
+                        <field name="message_follower_ids" widget="mail_followers"/>
+                        <field name="activity_ids" widget="mail_activity"/>
+                        <field name="message_ids" widget="mail_thread"/>
+                    </div>
+                </form>
+            </field>
+        </record>
+
+
+        <record id="pallet_kanban_view" model="ir.ui.view">
+            <field name="name">pallet.kanban.view</field>
+            <field name="model">product.template</field>
+            <field name="arch" type="xml">
+                <kanban>
+                    <field name="id"/>
+                    <field name="image_small"/>
+                    <field name="lst_price"/>
+                    <field name="product_variant_count"/>
+                    <field name="currency_id"/>
+                    <field name="type"/>
+                    <templates>
+                        <t t-name="kanban-box">
+                            <div class="oe_kanban_global_click">
+                                <div class="o_kanban_image">
+                                    <img t-att-src="kanban_image('product.template', 'image_small', record.id.raw_value)" alt="Product"/>
+                                </div>
+                                <div class="oe_kanban_details">
+                                    <strong class="o_kanban_record_title">
+                                        <field name="name"/>
+                                        <!--<small t-if="record.default_code.value">[<field name="default_code"/>]</small>-->
+                                    </strong>
+
+                                    <div name="tags"/>
+                                    <ul>
+                                        <!--<li>Price: <field name="lst_price" widget="monetary" options="{'currency_field': 'currency_id', 'field_digits': True}"></field></li>-->
+                                        <li t-if="record.type.raw_value == 'product'">Stock: <field name="qty_available"/> <field name="uom_id"/></li>
+                                    </ul>
+                                    <div name="tags"/>
+
+                                </div>
+                            </div>
+                        </t>
+                    </templates>
+                </kanban>
+            </field>
+        </record>
+
+    </data>
+</odoo>

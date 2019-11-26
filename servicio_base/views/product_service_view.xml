@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+
+
+
+
+
+
+
+        <record id="action_rt_service_product_inter_tree_normal" model="ir.actions.act_window">
+            <field name="name">Servicios Internacional</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">rt.service.productos</field>
+            <field name="domain">[('operation_type','=','international')]</field>
+            <field name="view_mode">tree,form</field>
+            <field name="help" type="html">
+                <p>
+                    Here is a list of each service product to be invoiced. You can
+                    invoice service product partially, by lines of service.
+                </p>
+            </field>
+        </record>
+
+
+
+
+
+<!--        <menuitem action="action_rt_service_product_inter_tree_normal"-->
+<!--                  parent="menu_service_internacional_root"-->
+<!--                  id="service_product_intnacional_menu"-->
+<!--                  groups="base.group_user"-->
+<!--                  sequence="109"-->
+<!--        />-->
+
+
+    </data>
+</odoo>

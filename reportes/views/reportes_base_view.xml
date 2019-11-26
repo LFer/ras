@@ -1,0 +1,273 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <record model="ir.ui.view" id="reportes_vestas_view_form">
+            <field name="name">reporte.vestas.form</field>
+            <field name="model">reportes</field>
+            <field name="type">form</field>
+            <field name="arch" type="xml">
+                <form>
+                    <sheet>
+                        <group string="Reporte Vestas">
+                            <field name="start" style="width: 30%"/>
+                            <field name="stop" style="width: 30%"/>
+                        </group>
+                        <group>
+                            <button class="oe_stat_button"
+                                    string="Generar Excel"
+                                    name="excel_vestas"
+                                    type="object"
+                                    icon="fa-file-excel-o"
+                                    style="border: 1px solid #7C7BAD; border-radius: 3px; white-space: normal"
+                            />
+                        </group>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+
+        <record model="ir.ui.view" id="informe_ventas_cliente_view_form">
+            <field name="name">informe.ventas.form</field>
+            <field name="model">informe.ventas.cliente</field>
+            <field name="type">form</field>
+            <field name="arch" type="xml">
+                <form>
+                    <sheet>
+                        <group string="Informe Ventas Cliente">
+                            <field name="info_type" style="width: 30%"/>
+                            <field name="start" style="width: 30%"/>
+                            <field name="stop" style="width: 30%"/>
+                            <field name="partner_invoice_id" style="width: 30%" options="{'no_open': True,'no_create': True}"/>
+                            <field name="product_id" style="width: 30%" options="{'no_open': True,'no_create': True}"/>
+                            <field name="regimen" style="width: 30%"/>
+                            <field name="origin_id" style="width: 30%" options="{'no_open': True,'no_create': True}"/>
+                            <field name="destiny_id" style="width: 30%" options="{'no_open': True,'no_create': True}"/>
+                            <field name="tipo_informe" style="width: 30%" attrs="{'invisible': [('make_informe_all','=', True)], 'required': [('make_informe_all','=',False)]}"/>
+                            <field name="make_informe_all" invisible="1"/>
+                        </group>
+                        <group>
+                            <button class="oe_stat_button"
+                                    string="Generar Informe"
+                                    attrs="{'invisible': [('tipo_informe', '=', False)]}"
+                                    name="informe_ventas_cliente"
+                                    type="object"
+                                    icon="fa-file-excel-o"
+                                    style="border: 1px solid #7C7BAD; border-radius: 3px; white-space: normal"
+                            />
+                        </group>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+
+        <record model="ir.ui.view" id="informe_comision_vendedores">
+            <field name="name">informe.comision.vendedores.form</field>
+            <field name="model">informe.comision.vendedores</field>
+            <field name="type">form</field>
+            <field name="arch" type="xml">
+                <form>
+                    <sheet>
+                        <group string="Informe Comision Vendedores">
+                            <field name="informe" style="width: 30%" required="1"/>
+                            <field name="start" style="width: 30%" attrs="{'invisible': [('informe','=', 'list')], 'required': [('informe','=', 'informe')]}"/>
+                            <field name="stop" style="width: 30%" attrs="{'invisible': [('informe','=', 'list')], 'required': [('informe','=', 'informe')]}"/>
+                            <field name="partner_seller_id" style="width: 30%" options="{'no_open': True,'no_create': True}" attrs="{'invisible': [('informe','=', 'list')]}"/>
+                        </group>
+                        <group>
+                            <button class="oe_stat_button"
+                                    string="Generar Informe"
+                                    name="informe_comision_cliente"
+                                    type="object"
+                                    icon="fa-file-excel-o"
+                                    style="border: 1px solid #7C7BAD; border-radius: 3px; white-space: normal"
+                                    attrs="{'invisible': [('informe','=', 'list')]}"
+                            />
+                            <button class="oe_stat_button"
+                                    string="Listado Vendedores"
+                                    name="listado_vendedores"
+                                    type="object"
+                                    icon="fa-file-excel-o"
+                                    style="border: 1px solid #7C7BAD; border-radius: 3px; white-space: normal"
+                                    attrs="{'invisible': [('informe','=', 'informe')]}"
+                            />
+                        </group>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+
+        <record model="ir.ui.view" id="informe_costos">
+            <field name="name">informe.costos.form</field>
+            <field name="model">informe.costos</field>
+            <field name="type">form</field>
+            <field name="arch" type="xml">
+                <form>
+                    <sheet>
+                        <group string="Informe Costos">
+                            <field name="informacion" style="width: 30%" required="1"/>
+                            <field name="start" style="width: 30%"/>
+                            <field name="stop" style="width: 30%"/>
+                            <field name="supplier_id" style="width: 30%" options="{'no_open': True,'no_create': True}" attrs="{'invisible': [('informacion','=', 'crudo')]}"/>
+                            <field name="regimen" style="width: 30%" attrs="{'invisible': [('informacion','=', 'crudo')]}"/>
+                            <field name="tipo_informe" style="width: 30%" attrs="{'invisible': ['|', ('make_informe_all','=', True), ('informacion','=', 'crudo')], 'required': [('make_informe_all','=',False), ('informacion','!=', 'crudo')]}"/>
+                            <field name="make_informe_all" invisible="1" attrs="{'invisible': [('informacion','=', 'crudo')]}"/>
+                        </group>
+                        <group>
+                            <button class="oe_stat_button"
+                                    string="Generar Informe"
+                                    attrs="{'invisible': ['|', ('tipo_informe', '=', False), ('informacion', '=', 'crudo')]}"
+                                    name="informe_costos"
+                                    type="object"
+                                    icon="fa-file-excel-o"
+                                    style="border: 1px solid #7C7BAD; border-radius: 3px; white-space: normal"
+                            />
+                            <button class="oe_stat_button"
+                                    string="Generar Informe Crudo"
+                                    attrs="{'invisible': [('informacion', '=', 'modulo')]}"
+                                    name="informe_proveedor_crudo"
+                                    type="object"
+                                    icon="fa-file-excel-o"
+                                    style="border: 1px solid #7C7BAD; border-radius: 3px; white-space: normal"
+                            />
+                        </group>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+
+        <record model="ir.ui.view" id="informe_matricula_tramo">
+            <field name="name">informe.matricula.tramo.form</field>
+            <field name="model">informe.matricula.tramo</field>
+            <field name="type">form</field>
+            <field name="arch" type="xml">
+                <form>
+                    <sheet>
+                        <group string="Informe Matricula Tramo">
+                            <field name="start" style="width: 30%"/>
+                            <field name="stop" style="width: 30%"/>
+                            <field name="vehicle_id" style="width: 30%" options="{'no_open': True,'no_create': True}"/>
+                            <field name="tipo_informe" style="width: 30%" attrs="{'invisible': [('make_informe_all','=', True)], 'required': [('make_informe_all','=',False)]}"/>
+                            <field name="make_informe_all" invisible="1"/>
+
+                        </group>
+                        <group>
+                            <button class="oe_stat_button"
+                                    string="Generar Informe"
+                                    name="informe_tramo_matricula"
+                                    type="object"
+                                    icon="fa-file-excel-o"
+                                    style="border: 1px solid #7C7BAD; border-radius: 3px; white-space: normal"
+                            />
+                        </group>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+
+        <record model="ir.ui.view" id="informe_terceros">
+            <field name="name">informe.terceros.form</field>
+            <field name="model">informe.terceros</field>
+            <field name="type">form</field>
+            <field name="arch" type="xml">
+                <form>
+                    <sheet>
+                        <group string="Informe Terceros">
+                            <field name="start" style="width: 30%"/>
+                            <field name="stop" style="width: 30%"/>
+                            <field name="supplier_id" style="width: 30%" options="{'no_open': True,'no_create': True}"/>
+                            <field name="tipo_informe" style="width: 30%" attrs="{'invisible': [('make_informe_all','=', True)], 'required': [('make_informe_all','=',False)]}"/>
+                            <field name="make_informe_all" invisible="1"/>
+
+                        </group>
+                        <group>
+                            <button class="oe_stat_button"
+                                    string="Generar Informe"
+                                    name="informe_terceros"
+                                    type="object"
+                                    icon="fa-file-excel-o"
+                                    style="border: 1px solid #7C7BAD; border-radius: 3px; white-space: normal"
+                            />
+                        </group>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+
+        <record model="ir.ui.view" id="informe_diferencia_cambio_gravado">
+            <field name="name">diferencia.cambio.gravado.form</field>
+            <field name="model">diferencia.cambio.gravado</field>
+            <field name="type">form</field>
+            <field name="arch" type="xml">
+                <form>
+                    <sheet>
+                        <group>
+                            <button class="oe_stat_button"
+                                    string="Diferencia Cambio Gravado"
+                                    name="informe_diferencia_cambio_gravado"
+                                    type="object"
+                                    icon="fa-file-excel-o"
+                                    style="border: 1px solid #7C7BAD; border-radius: 3px; white-space: normal"
+                            />
+                        </group>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+
+        <record id="action_comision_choferes" model="ir.actions.act_window">
+            <field name="name">Reporte de Viajes</field>
+            <field name="res_model">comision.choferes</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">form</field>
+            <field name="target">new</field>
+        </record>
+
+        <record id="comision_chofer_form_view" model="ir.ui.view">
+            <field name="name">Reporte de Viajes - FORM</field>
+            <field name="model">comision.choferes</field>
+            <field name="type">form</field>
+            <field name="arch" type="xml">
+                <form>
+                    <sheet>
+                        <group string="Reporte de Viajes" colspan="4">
+                            <field name="operation_type" required="1" style="width: 30%" options="{'no_create': True, 'no_open': True}"/>
+                            <field name="driver_id" style="width: 30%" options="{'no_create': True, 'no_open': True}"/>
+                            <field name="categ_id" style="width: 30%" options="{'no_create': True, 'no_open': True}"/>
+                            <field name="inicio" style="width: 30%"/>
+                            <field name="fin" style="width: 30%"/>
+
+                        </group>
+                        <footer>
+                            <button class="oe_highlight"
+                                    type="object"
+                                    name="gen_report_xls_ventas_fleteros"
+                                    string="Excel">
+                            </button>
+                            or
+                            <button string="Cancel" class="oe_link" special="cancel"/>
+                        </footer>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+
+        <menuitem
+                id="menu_commission_root"
+                name="Reporte de Viajes"
+                web_icon="fleet,static/description/icon-commission.png"
+                groups="servicio_base.encargado_comisiones,servicio_base.consulta_comisiones"
+                sequence="151"
+        />
+
+        <menuitem
+                id="menu_comision"
+                parent="reportes.menu_reportes_root"
+                name="Reporte de Viajes de Choferes"
+                groups="servicio_base.encargado_comisiones"
+                sequence="155"
+                action="action_comision_choferes"
+        />
+
+
+    </data>
+</odoo>

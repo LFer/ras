@@ -1,0 +1,150 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <record id="tarifario_search_view" model="ir.ui.view">
+            <field name="name">tarifario.search.view</field>
+            <field name="model">product.pricelist.item</field>
+            <field name="arch" type="xml">
+                <search string="Búscar Tarifas">
+                    <field name="name"/>
+                    <field name="currency_id"/>
+                    <field name="partner_id"/>
+                    <group expand="1" string="Group By">
+                        <filter name="filter_customer" string="Cliente" icon="terp-gtk-jump-to-rtl" domain="[]" context="{'group_by':'partner_id'}"/>
+                        <filter name="filter_currency" string="Moneda" icon="terp-dolar_ok!" domain="[]" context="{'group_by':'currency_id'}"/>
+                        <filter name="filter_load_type" string="Tipo de Carga" icon="terp-dolar_ok!" domain="[]" context="{'group_by':'load_type'}"/>
+                    </group>
+                </search>
+            </field>
+        </record>
+        <record id="action_pricelist_item_frm_marfrig" model="ir.actions.act_window">
+            <field name="name">Lineas Tarifario</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">product.pricelist.item</field>
+            <field name="domain">[('es_marfrig','=',True)]</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">tree,form</field>
+            <field name="search_view_id" ref="tarifario_search_view"/>
+            <field name="help" type="html">
+                <p class="o_view_nocontent_smiling_face">
+                    Crear un nuevo tarifario
+                </p><p>
+                Un precio es un conjunto de precios de venta o reglas para calcular el precio de las líneas de orden de venta basadas en productos, categorías de productos, fechas y cantidades pedidas.
+                                 Esta es la herramienta perfecta para manejar varios precios.
+            </p><p>
+                Puede asignar listas de precios a sus clientes.
+            </p>
+            </field>
+        </record>
+
+        <record id="action_pricelist_marfrig" model="ir.actions.act_window">
+            <field name="name">Tarifario</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">product.pricelist</field>
+            <field name="domain">[('es_marfrig','=',True)]</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">tree,form</field>
+            <field name="help" type="html">
+                <p class="o_view_nocontent_smiling_face">
+                    Crear un nuevo tarifario
+                </p><p>
+                Un precio es un conjunto de precios de venta o reglas para calcular el precio de las líneas de orden de venta basadas en productos, categorías de productos, fechas y cantidades pedidas.
+                                 Esta es la herramienta perfecta para manejar varios precios.
+            </p><p>
+                Puede asignar listas de precios a sus clientes.
+            </p>
+            </field>
+        </record>
+
+        <record id="action_marfrig_template_main" model="ir.actions.act_window">
+            <field name="name">Plantilla Marfrig</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">marfrig.template</field>
+            <field name="view_mode">tree,form</field>
+            <field name="filter" eval="True"/>
+            <field name="help" type="html">
+                <p class="o_view_nocontent_smiling_face">
+                    No se crearon Plantillas
+                </p><p>
+            </p>
+            </field>
+        </record>
+
+
+        <record id="action_marfrig_main" model="ir.actions.act_window">
+            <field name="name">Carpeta-Marfrig</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">marfrig.service.base</field>
+            <field name="view_mode">tree,form,kanban</field>
+            <field name="filter" eval="True"/>
+            <field name="help" type="html">
+                <p class="o_view_nocontent_smiling_face">
+                    No se crearon Carpetas
+                </p><p>
+            </p>
+            </field>
+        </record>
+
+
+
+        <!-- Top menu item -->
+        <menuitem
+                id="menu_marfrig_root"
+                name="Marfrig"
+                web_icon="operativa_marfrig,static/description/icon.png"
+                groups="base.group_user"
+                sequence="100"
+        />
+
+        <menuitem
+                id="menu_marfrig_top"
+                name="Servicios Marfrig"
+                parent="menu_marfrig_root"
+                groups="base.group_user"
+                sequence="101"
+        />
+
+
+        <menuitem action="action_marfrig_main"
+                  parent="menu_marfrig_top"
+                  id="menu_marfrig_main"
+                  groups="base.group_user"
+                  sequence="103"
+        />
+
+        <menuitem
+                id="menu_marfrig_config_top"
+                name="Configuración"
+                parent="menu_marfrig_root"
+                groups="base.group_user"
+                sequence="101"
+        />
+
+
+        <menuitem action="action_marfrig_template_main"
+                  parent="menu_marfrig_config_top"
+                  id="menu_marfrig_template_main"
+                  groups="base.group_user"
+                  sequence="103"
+        />
+
+        <menuitem
+                id="marfrig_pricelist_item"
+                name="Lineas Tarifario"
+                parent="menu_marfrig_config_top"
+                action="action_pricelist_item_frm_marfrig"
+                sequence="4"
+        />
+
+        <menuitem
+                id="marfrig_service_menu_pricelist"
+                name="Tarifario"
+                parent="menu_marfrig_config_top"
+                action="action_pricelist_marfrig"
+                sequence="3"
+        />
+
+
+
+    </data>
+</odoo>

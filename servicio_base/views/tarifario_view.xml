@@ -1,0 +1,311 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <record id="rt_product_pricelist_tree_view" model="ir.ui.view">
+        <field name="name">rt.product.pricelist.base.tree</field>
+        <field name="model">product.pricelist.item</field>
+        <field name="inherit_id" ref="product.product_pricelist_item_tree_view"/>
+        <field name="arch" type="xml">
+            <data>
+                <tree position="replace">
+                    <tree string="Ras Transport Products Listprices" edit="false" create="false" delete="false">
+                        <field name="sequence" widget="handle"/>
+                        <field name="name"/>
+                        <field name="regimen"/>
+                        <field name="pcurrency_id" invisible="0"/>
+                        <field name="load_type"/>
+                        <field name="sale_price" widget='monetary' options="{'currency_field': 'pcurrency_id'}"/>
+                        <field name="comision_chofer_currency_id"  invisible="1" options='{"no_open": True, "no_create": True}'/>
+                        <field name="comision_chofer" widget='monetary' options="{'currency_field': 'comision_chofer_currency_id'}"/>
+                        <field name="comision_vendedor_currency_id"  invisible="1" options='{"no_open": True, "no_create": True}'/>
+                        <field name="comision_vendedor" widget='monetary' options="{'currency_field': 'comision_vendedor_currency_id'}"/>
+                    </tree>
+                </tree>
+            </data>
+        </field>
+    </record>
+
+    <record id="rt_product_pricelist_form_view" model="ir.ui.view">
+        <field name="name">tarifario.inherit</field>
+        <field name="model">product.pricelist.item</field>
+        <field name="inherit_id" ref="product.product_pricelist_item_form_view"/>
+        <field name="arch" type="xml">
+            <form position="replace">
+                <form string="Tarifas Ras Transport" edit="false" create="false" delete="false">
+                    <h1>
+                        <field name="name" invisible="1"/>
+
+                        <field name="nombre"/>
+                    </h1>
+                    <group>
+                        <field name="sequence" style="width:50%%"/>
+                        <field name="pcurrency_id" style="width:50%%" invisible="0" options='{"no_open": True, "no_create": True}'/>
+                        <field name="partner_id" style="width:50%%" invisible="0" options="{'no_open': True,'no_create': True, 'always_reload': True}"/>
+                    </group>
+                    <group>
+                        <group>
+                            <field name="id" invisible="1"/>
+                            <field name="regimen"/>
+                            <field name="load_type" style="width:70%"/>
+                            <field name="product_id" style="width:70%"/>
+                            <field name="action_type_id" style="width:70%"/>
+                            <field name="partner_seller_id" style="width:70%" options="{'no_create': True, 'no_open': True}"/>
+                            <field name="aduana_origen_id" attrs="{'invisible': [('regimen','in',('expo_inter','expo_nat','interno_plaza_inter','interno_plaza_nat'))]}" options="{'no_open': True,'no_create': True, 'always_reload': True}"/>
+                            <field name="origin_dir" attrs="{'invisible': [('regimen','in',('impo_nat','impo_inter','transit_inter','transit_nat'))]}" options="{'no_open': True,'no_create': True, 'always_reload': True}"/>
+                            <field name="aduana_destino_id" attrs="{'invisible': [('regimen','in',('impo_nat','impo_inter','interno_plaza_nat','interno_plaza_inter'))]}" options="{'no_open': True,'no_create': True, 'always_reload': True}"/>
+                            <field name="destiny_dir" attrs="{'invisible': [('regimen','in',('expo_inter','expo_nat','transit_inter','transit_nat'))]}" options="{'no_open': True,'no_create': True, 'always_reload': True}"/>
+                        </group>
+                        <group string="Tramos">
+                            <field name="invoice_int_per"/>
+                            <field name="invoice_nat_per"/>
+                        </group>
+                    </group>
+                    <group>
+                        <group>
+                            <field name="sale_price" required="0" widget='monetary' options="{'currency_field': 'pcurrency_id'}"/>
+                        </group>
+                        <group>
+                            <group>
+                                <separator string="Horas" colspan="2" />
+                                <field name="wait_hours_currency_id" style="width:50%%" invisible="0" options="{'no_open': True,'no_create': True, 'always_reload': True}"/>
+                                <field name="hours_from" string="Desde" widget='float_time'/>
+                                <field name="hours_to" string="Hasta" widget='float_time'/>
+
+                            </group>
+                            <group>
+                                <separator string="Jornales" colspan="2"/>
+                                <field name="wage_from" string="Desde" />
+                                <field name="wage_to" string="Hasta" />
+                            </group>
+                        </group>
+                    </group>
+
+                    <group col="2">
+                        <group>
+                            <separator string="Por KG"/>
+                            <field name="kg_from" string="Desde" />
+                            <field name="kg_to" string="Hasta" />
+                        </group>
+                        <group>
+                            <separator string="Por MT3" colspan="2"/>
+                            <field name="mt3_from" string="Desde" />
+                            <field name="mt3_to" string="Hasta" />
+                        </group>
+                        <group attrs="{'invisible':[('load_type', '!=', 'contenedor')]}">
+                            <separator string="Por Tamaño Contenedor"/>
+                            <field name="size_from" string="Desde" />
+                            <field name="size_to" string="Hasta" />
+                        </group>
+                        <group>
+                            <separator string="Por KM" colspan="2"/>
+                            <field name="km_from" string="Desde" />
+                            <field name="km_to" string="Hasta" />
+                        </group>
+                        <group attrs="{'invisible':[('load_type', '!=', 'bulk')]}">
+                            <separator string="Por Bultos" colspan="2"/>
+                            <field name="package_from" string="Desde" />
+                            <field name="package_to" string="Hasta" />
+                        </group>
+                        <group name="invoicing">
+                            <separator string="Por Periodo de Tiempo" colspan="2"/>
+                            <label for="recurring_interval" string="Periodo"/>
+                            <div class="o_row">
+                                <span class="mr-1">Cada</span>
+                                <field name="recurring_interval" required="1"/>
+                                <field name="recurring_rule_type" class="field_rule_type" required="1"/>
+                            </div>
+                            <field name="recurring_rule_boundary" widget="radio" options="{'horizontal':true}"/>
+                            <label for="" attrs="{'invisible': [('recurring_rule_boundary','=','unlimited')]}"/>
+                            <div class="o_row" attrs="{'invisible': [('recurring_rule_boundary','=','unlimited')]}">
+                                <span class="mr-1">For</span>
+                                <field name="recurring_rule_count"/>
+                                 <field name="recurring_rule_type_readonly" invisible="1"/>
+                                <span class="mr-1">period(s)</span>
+                            </div>
+                            <field name="load_presentation" options='{"no_open": True, "no_create": True}'/>
+                        </group>
+                    </group>
+                    <group string="Comisión de choferes">
+                        <group>
+                            <field name="comision_chofer_currency_id" options='{"no_open": True, "no_create": True}'/>
+                            <field name="comision_chofer" widget='monetary' options="{'currency_field': 'comision_chofer_currency_id'}"/>
+                        </group>
+                        <group>
+                            <field name="horas_espera" widget="radio"/>
+                            <field name="horas_libres" attrs="{'invisible':[('load_type', '!=', 'horas')]}"/>
+                            <field name="wait_hours_to" attrs="{'invisible':[('horas_espera', '!=', 'si')]}"/>
+                            <field name="wait_value" attrs="{'invisible':[('horas_espera', '!=', 'si')]}" widget="monetary" options="{'currency_field': 'currency_id'}"/>
+                        </group>
+                    </group>
+
+                    <group string="Comisión de vendedores">
+                        <field name="comision_vendedor_currency_id" options='{"no_open": True, "no_create": True}'/>
+                        <field name="comision_vendedor" widget='monetary' options="{'currency_field': 'comision_vendedor_currency_id'}"/>
+                    </group>
+                    <separator string="Información adicional"/>
+                    <field name="description" nolabel="1" colspan="4" />
+
+                    <notebook>
+                        <page string="Productos Asociados">
+                            <group colspan="4">
+                                <field name="expenses_ids" nolabel="1"  context="{'default_pricelist_item_parent_id': active_id}">
+                                    <tree editable="botton">
+                                        <field name="product_id" options="{'no_create_edit': True, 'no_create': True}"/>
+                                        <field name="action_type_id" options="{'no_create_edit': True, 'no_create': True}"/>
+                                        <!--field name="product_qty"/-->
+                                        <field name="comision" widget="monetary" options="{'currency_field': 'currency_id'}"/>
+                                        <field name="sale_price" widget="monetary" options="{'currency_field': 'currency_id'}"/>
+                                        <field name="cost_price" widget="monetary" options="{'currency_field': 'currency_id'}"/>
+                                        <field name="currency_id" options="{'no_open': True,'no_create': True, 'always_reload': True}"/>
+                                        <field name="pricelist_item_parent_id"/>
+                                        <field name="is_outgoing"/>
+                                        <field name="invoiceable"/>
+                                    </tree>
+                                </field>
+                            </group>
+                        </page>
+                    </notebook>
+                </form>
+            </form>
+        </field>
+    </record>
+
+    <record id="product_pricelist_view_tre" model="ir.ui.view">
+        <field name="name">pricelist-Tree</field>
+        <field name="model">product.pricelist</field>
+        <field name="arch" type="xml">
+            <tree string="pricelist">
+                <field name="name"/>
+                <field name="partner_id"/>
+            </tree>
+        </field>
+    </record>
+
+    <record id="rt_product_pricelist_view_form" model="ir.ui.view">
+        <field name="name">pricelist - Form</field>
+        <field name="model">product.pricelist</field>
+        <field name="arch" type="xml">
+            <form string="Products Price List">
+                <sheet>
+                    <div class="oe_button_box" name="button_box">
+                        <button name="toggle_active" type="object" class="oe_stat_button" icon="fa-archive">
+                            <field name="active" widget="boolean_button" options="{&quot;terminology&quot;: &quot;archive&quot;}"/>
+                        </button>
+                    </div>
+                    <div class="oe_title">
+                        <h1><field name="name" placeholder="e.g. USD Retailers"/></h1>
+                    </div>
+                    <group>
+                        <field name="partner_id" style="width:40%%"/>
+                        <field name="currency_id" style="width:40%%" options='{"no_open": True, "no_create": True}' required="True"/>
+                        <field name="company_id" groups="base.group_multi_company" options='{"no_open": True, "no_create": True}'/>
+                        <field name="es_generica"/>
+
+                    </group>
+                    <div>
+                        <separator string="Pricelist Items"/>
+                        <field name="item_ids" nolabel="1" context="{'default_partner_id':partner_id,
+                                                                     'default_pcurrency_id':currency_id,
+                                                                     'tree_view_ref':'servicio_base.rt_product_pricelist_tree_view',
+                                                                     'form_view_ref':'servicio_base.rt_product_pricelist_form_view',
+                                                                     }">
+
+                        </field>
+                    </div>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+
+
+
+
+    <record id="tarifario_search_view" model="ir.ui.view">
+        <field name="name">tarifario.search.view</field>
+        <field name="model">product.pricelist.item</field>
+        <field name="arch" type="xml">
+            <search string="Búscar Tarifas">
+                <field name="name"/>
+                <field name="currency_id"/>
+                <field name="partner_id"/>
+                <group expand="1" string="Group By">
+                    <filter name="filter_customer" string="Cliente" icon="terp-gtk-jump-to-rtl" domain="[]" context="{'group_by':'partner_id'}"/>
+                    <filter name="filter_currency" string="Moneda" icon="terp-dolar_ok!" domain="[]" context="{'group_by':'currency_id'}"/>
+                    <filter name="filter_load_type" string="Tipo de Carga" icon="terp-dolar_ok!" domain="[]" context="{'group_by':'load_type'}"/>
+                </group>
+            </search>
+        </field>
+    </record>
+
+    <record id="action_pricelist_item_frm" model="ir.actions.act_window">
+        <field name="name">Lineas Tarifario</field>
+        <field name="type">ir.actions.act_window</field>
+        <field name="res_model">product.pricelist.item</field>
+        <field name="view_type">form</field>
+        <field name="view_mode">tree,form</field>
+        <field name="search_view_id" ref="tarifario_search_view"/>
+        <field name="view_id" ref="rt_product_pricelist_tree_view"/>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                Crear un nuevo tarifario
+            </p><p>
+            Un precio es un conjunto de precios de venta o reglas para calcular el precio de las líneas de orden de venta basadas en productos, categorías de productos, fechas y cantidades pedidas.
+                             Esta es la herramienta perfecta para manejar varios precios.
+        </p><p>
+            Puede asignar listas de precios a sus clientes.
+        </p>
+        </field>
+    </record>
+
+    <record id="action_pricelist" model="ir.actions.act_window">
+        <field name="name">Tarifario</field>
+        <field name="type">ir.actions.act_window</field>
+        <field name="res_model">product.pricelist</field>
+        <field name="view_type">form</field>
+        <field name="view_mode">tree,form</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                Crear un nuevo tarifario
+            </p><p>
+            Un precio es un conjunto de precios de venta o reglas para calcular el precio de las líneas de orden de venta basadas en productos, categorías de productos, fechas y cantidades pedidas.
+                             Esta es la herramienta perfecta para manejar varios precios.
+        </p><p>
+            Puede asignar listas de precios a sus clientes.
+        </p>
+        </field>
+    </record>
+
+    <menuitem
+            id="service_menu_product_pricelist_main"
+            name="Lineas Tarifario"
+            parent="menu_service_config_national"
+            action="action_pricelist_item_frm"
+            sequence="3"
+    />
+    <menuitem
+            id="service_menu_product_pricelist_main_inter"
+            name="Lineas Tarifario"
+            parent="menu_service_config_inter"
+            action="action_pricelist_item_frm"
+            sequence="4"
+    />
+
+    <menuitem
+            id="service_menu_pricelist"
+            name="Tarifario"
+            parent="menu_service_config_national"
+            action="action_pricelist"
+            sequence="3"
+    />
+    <menuitem
+            id="service_menu_pricelist_inter"
+            name="Tarifario"
+            parent="menu_service_config_inter"
+            action="action_pricelist"
+            sequence="3"
+    />
+
+</odoo>
+
+

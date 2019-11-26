@@ -1,0 +1,787 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <template id="ras_report_invoice_document" name="Account Invoice Extended">&lt;!DOCTYPE html&gt;
+        <t t-if="o.type not in ['in_refund','in_invoice']">
+            <div class="page">
+                <!--                				<t t-debug="ipdb"/>-->
+                <!-- ENCABEZADO -->
+                <table width="100%" height="150" cellspacing="0">
+                    <tr>
+                        <td height="0" colspan="8" style="font-size:16px;"></td>
+                    </tr>
+                    <tr>
+                        <td width="29"></td>
+                        <td width="11" height="0"></td>
+                        <td width="734" style="font-size:20px;">NUVLIR S.A.</td>
+                        <td width="100"></td>
+                        <td width="11"></td>
+                        <td width="20"></td>
+                        <td width="218" style="font-weight:bold; font-size:20px;">RUT: 217071280011</td>
+                        <td width="10"></td>
+                    </tr>
+                    <tr>
+                        <td height="23" colspan="8" align="center" style="font-weight:bold; font-size:20px;">EMPRESA PROFESIONAL DE TRANSPORTE DE CARGA No. 07062124</td>
+                    </tr>
+                    <tr>
+                        <td rowspan="4"></td>
+                        <td colspan="2" rowspan="4">
+                            <span>
+                                <t t-set="company" t-value="o.company_id"/>
+                                <img t-if="company.logo" t-att-src="image_data_uri(company.logo)" height="120" style="height:120px; width:620px; max-height:120px; max-width:620px;" alt="Logo"/>
+                            </span>
+                        </td>
+                        <td height="26" colspan="4" style="font-size:26px; height:26px; font-weight:bold;">
+                            <t t-esc="o.doct_type"/>
+                        </td>
+                        <td></td>
+                    </tr>
+                    <tr>
+                        <td height="20" style="font-size:20px;"></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                    </tr>
+                    <tr>
+                        <td style="font-weight:bold; font-size:18px;"><t>SERIE <span t-esc="o.fe_Serie"/> N<sup>o</sup></t><span style="display:inline; font-size:24px; color:#f73432;" t-esc="o.fe_DocNro"/></td>
+                        <!--<td style="font-weight:bold; font-size:18px;">N<sup>o</sup>  <p style="display:inline; font-size:20px; color:#f73432;" t-esc="o.fe_DocNro"/></td>-->
+                    </tr>
+                </table>
+                <table width="1185" height="112" cellspacing="0">
+                    <tr>
+                        <td width="11" height="16" style="font-size:18px;"></td>
+                        <td width="350" height="16" style="font-size:18px;">Rambla Baltasar Brum 3129</td>
+                        <td width="362"></td>
+                        <td width="322"></td>
+                        <td width="70"></td>
+                        <td width="42"></td>
+                    </tr>
+                    <tr>
+                        <td></td>
+                        <td height="16" style="font-size:18px;">e-mail: info@rastransport.com.uy</td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                    </tr>
+                    <tr>
+                        <td></td>
+                        <td height="16" style="font-size:18px;">Tel.: (+598) 22030505</td>
+                        <td></td>
+                        <td align="center" style="border-top:1px black solid; border-left:1px black solid; border-bottom:1px black solid; font-weight:bold; vertical-align:middle; color:#fff; background-color:#5dbfe8; font-size:18px;">R.U.T. COMPRADOR</td>
+                        <td align="center" style="border:1px black solid; font-weight:bold; vertical-align:middle; color:#fff; background-color:#5dbfe8; font-size:18px;">C.FINAL</td>
+                        <td></td>
+                    </tr>
+                    <tr>
+                        <td></td>
+                        <td height="16" style="font-size:18px;">CP 11800 - Montevideo - Uruguay</td>
+                        <td></td>
+                        <td rowspan="3" align="center" style="border-left:1px black solid; border-bottom:1px black solid; vertical-align:middle; font-size:24px;">
+                            <t t-if="o.partner_id.vat"><t t-esc="o.partner_id.vat[2:]"/></t>
+                        </td>
+                        <td rowspan="3" align="center" style="border-left:1px black solid; border-right:1px black solid; border-bottom:1px black solid; vertical-align:middle; font-weight:bold;"></td>
+                        <td style="font-size:24px;">
+                            <t t-if="not o.partner_id.vat">X</t>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td height="10" style="font-size:10px;"></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                    </tr>
+                    <tr>
+                        <td height="10" style="font-size:10px;"></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                    </tr>
+                    <tr>
+                        <td height="10" style="font-size:10px;"></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                    </tr>
+                </table>
+                <!-- NOMBRE, DOMICILIO Y FECHA -->
+                <div style="width:914px; float:left; display:inline;">
+                    <table width="916" height="98" cellspacing="0">
+                        <tr>
+                            <td width="10" height="22"></td>
+                            <td width="108" style="font-weight:bold; font-size:20px;">NOMBRE:</td>
+                            <td width="790" style="border-bottom:1px black solid; font-size:24px; font-weight:bold;">
+                                <t t-esc="o.partner_id.name"/>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td height="28" style="font-size:16px;"></td>
+                            <td></td>
+                            <td></td>
+                        </tr>
+                        <tr>
+                            <td height="21"></td>
+                            <td style="font-weight:bold; font-size:20px;">DOMICILIO:</td>
+                            <td style="border-bottom:1px black solid; font-size:24px;">
+                                <t t-esc="o.partner_id.street"/>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td height="10" style="font-size:16px;"></td>
+                            <td></td>
+                            <td></td>
+                        </tr>
+                    </table>
+                </div>
+                <div style="width:225px; display:inline;">
+                    <table width="224" height="88" cellspacing="0">
+                        <tr>
+                            <td width="10" height="10"></td>
+                            <td width="64"></td>
+                            <td width="65"></td>
+                            <td width="65"></td>
+                        </tr>
+                        <tr>
+                            <td width="10" height="28"></td>
+                            <td width="65" align="center" style="font-weight:bold; border-top:1px black solid; border-left:1px black solid; border-bottom:1px black solid; vertical-align:middle; color:#fff; background-color:#5dbfe8;">DIA</td>
+                            <td width="65" align="center" style="font-weight:bold; border-top:1px black solid; border-left:1px black solid; border-bottom:1px black solid; vertical-align:middle; color:#fff; background-color:#5dbfe8;">MES</td>
+                            <td width="65" align="center" style="font-weight:bold; border-top:1px black solid; border-left:1px black solid; border-right:1px black solid; border-bottom:1px black solid; vertical-align:middle; color:#fff; background-color:#5dbfe8;">AÑO</td>
+                        </tr>
+                        <tr>
+                            <td height="16"></td>
+                            <td rowspan="3" align="center" style="font-size:22px; vertical-align:middle; border-left:1px black solid; border-bottom:1px black solid;">
+                                <t t-if="o.date_invoice">
+                                    <t t-esc="o.date_invoice.day or ''"/>
+                                </t>
+                                <t t-if="not o.date_invoice">
+                                    <t t-esc="''"/>
+                                </t>
+                            </td>
+                            <td rowspan="3" align="center" style="font-size:22px; vertical-align:middle; border-left:1px black solid; border-bottom:1px black solid;">
+                                <t t-if="o.date_invoice">
+                                    <t t-esc="o.date_invoice.month or ''"/>
+                                </t>
+                                <t t-if="not o.date_invoice">
+                                    <t t-esc="''"/>
+                                </t>
+                            </td>
+                            <td rowspan="3" align="center" style="font-size:22px; vertical-align:middle; border-left:1px black solid; border-right:1px black solid; border-bottom:1px black solid;">
+                                <t t-if="o.date_invoice">
+                                    <t t-esc="o.date_invoice.year or ''"/>
+                                </t>
+                                <t t-if="not o.date_invoice">
+                                    <t t-esc="''"/>
+                                </t>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td height="16" style="font-size:16px;"></td>
+                        </tr>
+                        <tr>
+                            <td height="14" style="font-size:14px;">
+
+                            </td>
+                        </tr>
+                    </table>
+                </div>
+                <!-- DESCRIPCION E IMPORTE  -->
+                <table width="1182" cellspacing="0">
+                    <tr>
+                        <td width="8" height="10" style="font-size:10px;"></td>
+                        <td width="963"></td>
+                        <td width="175"></td>
+                        <td width="8"></td>
+                    </tr>
+                    <tr>
+                        <td height="30" style="font-size:18px;"></td>
+                        <td align="center" style="font-weight:bold; vertical-align:middle; border-top:1px black solid; border-bottom:1px black solid; border-left:1px black solid; color:#fff; background-color:#5dbfe8; font-size:18px;">DESCRIPCION</td>
+                        <td align="center" style="font-weight:bold; vertical-align:middle; border-top:1px black solid; border-bottom:1px black solid; border-left:1px black solid; border-right:1px black solid; color:#fff; background-color:#5dbfe8; font-size:18px;">IMPORTE</td>
+                        <td></td>
+                    </tr>
+                    <tr>
+                        <td height="1000" style="font-size:18px;"></td>
+                        <td style="border-left:1px black solid; border-bottom:1px black solid; padding:0px; vertical-align:top; overflow: hidden; font-size:18px;">
+                            <div style="position:absolute; left: 23px; top: 450px; width: 1167px; height: 900px; overflow:hidden; padding-top:40px; padding-bottom:5px;">
+                                <table width="1167" cellpadding="0" cellspacing="0">
+                                    <!-- Solo para Notas de Creditos -->
+                                    <tr t-if="o.doct_type == 'Nota de Credito de e-Factura' and o.name !=False">
+                                        <td style="width:828px; padding-left:10px; padding-right:10px;">
+                                            <span>Afecta Factura: </span>
+                                            <span t-raw="o.name"/>
+                                        </td>
+                                        <td style="width:152px; text-align:center; vertical-align:bottom;"></td>
+                                    </tr>
+                                    <t t-if="o.print_origin_destiny_grouped and not o.print_product_grouped and not o.print_cont_grouped">
+                                        <tr t-foreach="o.group_origin_destiny()" t-as="lista">
+                                            <td style="width:828px; padding-left:10px; padding-right:10px; font-size:18px">
+                                                <span>
+                                                    <t t-esc="lista[0]"/>
+                                                </span>
+                                            </td>
+                                            <tr t-foreach="lista[1]" t-as="datos">
+                                                <tr t-foreach="datos[0]" t-as="data">
+                                                    <td style="width:828px; padding-left:10px; padding-right:10px; font-size:18px">
+                                                        <span>
+                                                            <t t-esc="data"/>
+                                                        </span>
+                                                    </td>
+                                                    <td style="width:152px; text-align:center; vertical-align:bottom; padding-right:30px">
+                                                    </td>
+                                                    <td style="width:170px; text-align:center; vertical-align:bottom;  padding-right:60px;">
+                                                        <t t-if="datos[1] != 0 and data[1] != 'º'">
+                                                            <span><t t-esc="datos[1]"/></span>
+                                                        </t>
+                                                    </td>
+                                                </tr>
+                                            </tr>
+                                            <td>
+                                                <br></br>
+                                            </td>
+                                        </tr>
+                                    </t>
+                                    <t t-if="o.print_origin_destiny_grouped and o.print_cont_grouped">
+                                        <tr t-foreach="o.group_origin_destiny_carga()" t-as="lista">
+                                            <td style="width:828px; padding-left:10px; padding-right:10px; font-size:18px">
+                                                <span>
+                                                    <t t-esc="lista[0]"/>
+                                                </span>
+                                            </td>
+                                            <tr>
+                                                <td style="width:828px; padding-left:10px; padding-right:10px; font-size:18px">
+                                                    <span>
+                                                        <t t-esc="lista[1][0]"/>
+                                                    </span>
+                                                </td>
+                                                <td style="width:152px; text-align:center; vertical-align:bottom; padding-right:30px"/>
+                                                <td style="width:170px; text-align:center; vertical-align:bottom; padding-right:60px;">
+                                                    <t t-if="lista[1][1] != 0">
+                                                        <span>
+                                                            <t t-esc="lista[1][1]"/>
+                                                        </span>
+                                                    </t>
+                                                </td>
+                                            </tr>
+                                        </tr>
+                                    </t>
+                                    <t t-if="o.print_origin_destiny_grouped and o.print_product_grouped">
+                                        <t t-set="lista_total" t-value="o.group_origin_destiny()"/>
+                                        <tr t-foreach="lista_total[0]" t-as="lista">
+                                            <td style="width:828px; padding-left:10px; padding-right:10px; font-size:18px">
+                                                <span>
+                                                    <t t-esc="lista[0]"/>
+                                                </span>
+                                            </td>
+                                            <tr t-foreach="lista[1]" t-as="datos">
+                                                <tr t-foreach="datos[0]" t-as="data">
+                                                    <td style="width:828px; padding-left:10px; padding-right:10px; font-size:18px">
+                                                        <span>
+                                                            <t t-esc="data"/>
+                                                        </span>
+                                                    </td>
+                                                    <td style="width:152px; text-align:center; vertical-align:bottom; padding-right:30px">
+                                                    </td>
+                                                    <td style="width:170px; text-align:center; vertical-align:bottom;  padding-right:60px;">
+                                                        <t t-if="datos[1] != 0 and data[1] != 'º'">
+                                                            <span><t t-esc="datos[1]"/></span>
+                                                        </t>
+                                                    </td>
+                                                </tr>
+                                            </tr>
+                                            <td>
+                                                <br></br>
+                                            </td>
+                                        </tr>
+                                        <tr t-foreach="lista_total[1]" t-as="datos_producto">
+                                            <td style="width:828px; padding-left:10px; padding-right:10px; font-size:18px">
+                                                <span>
+                                                    <t t-esc="datos_producto[0]"/>
+                                                </span>
+                                            </td>
+                                            <td style="width:152px; text-align:center; vertical-align:bottom; padding-right:30px"/>
+                                            <td style="width:170px; text-align:center; vertical-align:bottom;  padding-right:60px;">
+                                                <t t-if="datos_producto[1] != 0">
+                                                    <span><t t-esc="datos_producto[1]"/></span>
+                                                </t>
+                                            </td>
+                                        </tr>
+                                    </t>
+                                    <t t-if="o.print_product_grouped and not o.print_origin_destiny_grouped">
+                                        <t t-set="lista_prod" t-value="o.group_product()"/>
+                                        <td style="width:828px; padding-left:10px; padding-right:10px; font-size:18px">
+                                            <span>
+                                                <t t-esc="lista_prod[0]"/>
+                                            </span>
+                                        </td>
+                                        <tr t-foreach="lista_prod[1]" t-as="datos_carga">
+                                            <td style="width:828px; padding-left:10px; padding-right:10px; font-size:18px">
+                                                <span>
+                                                    <t t-esc="datos_carga"/>
+                                                </span>
+                                            </td>
+                                        </tr>
+                                        <tr t-foreach="lista_prod[2]" t-as="datos_producto">
+                                            <td style="width:828px; padding-left:10px; padding-right:10px; font-size:18px">
+                                                <span>
+                                                    <t t-esc="datos_producto[0]"/>
+                                                </span>
+                                            </td>
+                                            <td style="width:152px; text-align:center; vertical-align:bottom; padding-right:30px"/>
+                                            <td style="width:170px; text-align:center; vertical-align:bottom;  padding-right:60px;">
+                                                <t t-if="datos_producto[1] != 0">
+                                                    <span><t t-esc="datos_producto[1]"/></span>
+                                                </t>
+                                            </td>
+                                        </tr>
+                                        <t t-if="o.print_origin_destiny and o.camion_id">
+                                            <tr t-foreach="o.return_origin_destiny()" t-as="origin_destiny">
+                                                <td style="width:828px; padding-left:10px; padding-right:10px; font-size:18px">
+                                                    <t t-esc="origin_destiny"/>
+                                                </td>
+                                            </tr>
+                                        </t>
+                                    </t>
+                                    <t t-if="o.print_cont_grouped and not o.print_origin_destiny_grouped">
+                                        <t t-set="lista" t-value="o.group_carga()"/>
+                                        <tr t-foreach="lista" t-as="datos">
+                                            <td style="width:828px; padding-left:10px; padding-right:10px; font-size:18px">
+                                                <span>
+                                                    <t t-esc="datos[0]"/>
+                                                </span>
+                                            </td>
+                                            <td style="width:152px; text-align:center; vertical-align:bottom; padding-right:30px">
+                                            </td>
+                                            <td style="width:170px; text-align:center; vertical-align:bottom;  padding-right:60px;">
+                                                <t t-if="datos[1] != 0">
+                                                    <span><t t-esc="datos[1]"/></span>
+                                                </t>
+                                            </td>
+                                        </tr>
+                                    </t>
+                                    <t t-if="o.print_all_info">
+                                        <t t-set ="tupla" t-value="o.print_all()"/>
+                                        <tr t-foreach="tupla[0]" t-as="datos_carpeta">
+                                            <td style="width:828px; padding-left:10px; padding-right:10px; font-size:18px">
+                                                <span>
+                                                    <t t-esc="datos_carpeta"/>
+                                                </span>
+                                            </td>
+                                        </tr>
+                                        <tr t-foreach="tupla[1]" t-as="datos_carga">
+                                            <tr t-foreach="datos_carga" t-as="carga">
+                                                <td style="width:828px; padding-left:10px; padding-right:10px; font-size:18px">
+                                                    <span>
+                                                        <t t-esc="carga"/>
+                                                    </span>
+                                                </td>
+                                            </tr>
+                                        </tr>
+                                        <tr t-foreach="tupla[2]" t-as="datos_prod">
+                                            <td style="width:828px; padding-left:10px; padding-right:10px; font-size:18px">
+                                                <span>
+                                                    <t t-esc="datos_prod[0]"/>
+                                                </span>
+                                            </td>
+                                            <td style="width:152px; text-align:center; vertical-align:bottom; padding-right:30px"/>
+                                            <td style="width:170px; text-align:center; vertical-align:bottom;  padding-right:60px;">
+                                                <t t-if="datos_prod[1] != 0">
+                                                    <span><t t-esc="datos_prod[1]"/></span>
+                                                </t>
+                                            </td>
+                                        </tr>
+                                    </t>
+                                    <t t-if="(not o.print_origin_destiny_grouped) and (not o.print_product_grouped) and (not o.print_cont_grouped) and (not o.print_all_info) ">
+                                        <t t-set ="tupla" t-value="o.get_information()"/>
+                                        <tr t-foreach="tupla[0]" t-as="datos_carga">
+                                            <td style="width:828px; padding-left:10px; padding-right:10px; font-size:18px">
+                                                <span>
+                                                    <t t-esc="datos_carga"/>
+                                                </span>
+                                            </td>
+                                        </tr>
+                                        <tr t-foreach="tupla[1]" t-as="lista">
+                                            <t t-if="lista[0]">
+                                                <tr t-foreach="lista[0]" t-as="datos_carga">
+                                                    <td style="width:828px; padding-left:10px; padding-right:10px; font-size:18px">
+                                                        <span>
+                                                            <t t-esc="datos_carga"/>
+                                                        </span>
+                                                    </td>
+                                                </tr>
+                                            </t>
+                                            <td style="width:828px; padding-left:10px; padding-right:10px; font-size:18px">
+                                                <span>
+                                                    <t t-esc="lista[1]"/>
+                                                </span>
+                                            </td>
+                                            <td style="width:152px; text-align:center; vertical-align:bottom; padding-right:30px"/>
+                                            <td style="width:170px; text-align:center; vertical-align:bottom;  padding-right:60px;">
+                                                <t t-if="lista[2] != 0 and lista[2] != ''">
+                                                    <span><t t-esc="round(lista[2], 2)"/></span>
+                                                </t>
+                                            </td>
+                                        </tr>
+
+                                        <!--SOLO PARA CONSOLIDADOS PONEMOS ORIGEN Y DESTINO AL FINAL-->
+                                        <t t-if="o.print_origin_destiny and o.camion_id">
+                                            <tr t-foreach="o.return_origin_destiny()" t-as="origin_destiny">
+                                                <td style="width:828px; padding-left:10px; padding-right:10px; font-size:18px">
+                                                    <t t-esc="origin_destiny"/>
+                                                </td>
+                                            </tr>
+                                        </t>
+
+                                    </t>
+                                    <tr t-if="o.print_extra_info not in ['',False]">
+                                        <td style="width:828px; padding-left:10px; padding-right:10px; font-size:18px">
+                                            <span t-field="o.qweb_extra_info"/>
+                                        </td>
+                                        <td style="width:152px; text-align:center; vertical-align:bottom;"></td>
+                                    </tr>
+
+                                </table>
+
+                            </div>
+
+                        </td>
+                        <td align="center" style="border-left:1px black solid; border-right:1px black solid; border-bottom:1px black solid">
+                        </td>
+
+                        <td></td>
+                        <td></td>
+                    </tr>
+                    <tr>
+                        <t t-if="o.partner_id.country_id.code == 'AR'">
+                            <div style="position:absolute; width:900px; margin-top:1030px; margin-left:9px;font-size:20px;font-weight:bold;">
+                                <span>
+                                    &#160;Término de pago:
+                                    <span>
+                                        <span t-field="o.payment_term_id.name"/>
+                                    </span>
+                                    &#160;Vencimiento:
+                                    <span>
+                                        <span t-field="o.date_due"/>
+                                    </span>
+                                </span>
+                            </div>
+                        </t>
+                    </tr>
+
+                </table>
+
+
+                <!-- QRCODE, SUBTOTAL, IVA PORCENTAJE, IVA IMPORTE, TOTAL -->
+                <!-- Codigo QR-->
+                <img t-if="o.qr_img" t-att-src="image_data_uri(o.qr_img)" style="float:left; height:145px; width:145px; margin-top:10px" alt="QR"/>
+                <!-- Informacion CFE-->
+                <table cellspacing="0" style="float:left; width:500px;">
+                    <tr>
+                        <td height="16" style="font-size:16px; margin-top:50px"></td>
+                        <td></td>
+                    </tr>
+                    <tr>
+                        <td width="1" height="16" style="font-size:16px;"></td>
+                        <td width="13"></td>
+                        <td width="21"></td>
+                        <td>
+                            <span t-if="o.fe_CAEFVD">Resolución DGI No.</span>
+                            <span t-if="o.DgiParam"><t t-esc="o.DgiParam"/></span>
+                        </td>
+                    </tr>
+                    <tr  style="padding-left:30px;">
+                        <td height="16" style="font-size:16px;"></td>
+                        <td></td>
+                        <td></td>
+                        <td>Puede verificar comprobante en:</td>
+                    </tr>
+                    <tr>
+                        <td height="16" style="font-size:16px;"></td>
+                        <td></td>
+                        <td></td>
+                        <td style="font-size:16px;">
+                            <t t-esc="o.fe_URLParaVerificarTexto"/>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td height="16" style="font-size:16px;"></td>
+                        <td></td>
+                        <td></td>
+                        <td>I.V.A. AL DÍA</td>
+                    </tr>
+                    <tr>
+                        <td height="16" style="font-size:16px;"></td>
+                        <td></td>
+                        <td></td>
+                        <td>Nro. de CAE <t t-esc="o.fe_CAENA"/></td>
+                        <td rowspan="3" style="border:1px black solid; padding-left:20px">
+                            <table height="40" width="162" cellspacing="0" cellpadding="3">
+                                <tr>
+                                    <td height="20" align="center" style="font-size:18px; vertical-align:top">Fec. Vencimiento</td>
+                                </tr>
+                                <tr>
+                                    <td height="20" align="center" style="font-size:18px; vertical-align:bottom;">
+                                        <!--span t-field="o.fe_CAEFVD" t-options='{"format": "yyyy-MM-dd"}'/-->
+                                        <span t-field="o.fe_CAEFVD"/>
+                                    </td>
+                                </tr>
+                            </table>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td height="16" style="font-size:16px;"></td>
+                        <td></td>
+                        <td></td>
+                        <td>Serie: <t t-esc="o.fe_Serie"/> desde <t t-esc="o.fe_CAEDNro"/> hasta <t t-esc="o.fe_CAEHNro"/></td>
+                    </tr>
+                    <tr>
+                        <td height="16" style="font-size:16px;"></td>
+                        <td></td>
+                        <td></td>
+                        <td style="vertical-align:top"/>
+
+                    </tr>
+                    <tr>
+                        <td height="5" style="font-size:5px;"></td>
+                    </tr>
+                </table>
+
+                <!-- MONTO SUBTOTAL, MONTO IVA, TOTAL-->
+                <table cellspacing="30" style="position:absolute; width:180px; margin-top:10px; margin-left:995px; border:1px black solid;height:120px;">
+                    <tr>
+                        <td height="18" style="font-size:18px;text-align:center;">
+                            <t>
+                                <span>
+                                    <span t-field="o.currency_id.name"/>
+                                    <span t-esc="o.amount_untaxed"/>
+                                </span>
+                            </t>
+                        </td>
+                    </tr>
+
+                    <tr>
+                        <td style="font-size:18px;text-align:center;">
+                            <t>
+                                <span t-field="o.currency_id.name"/>
+                                <span t-esc="o.format_fmt(o.amount_tax)"/>
+                            </t>
+                        </td>
+                    </tr>
+
+                    <tr>
+                        <td style="font-size:18px;text-align:center;">
+                            <t>
+                                <span t-field="o.currency_id.name"/>
+                                <span t-esc="o.format_fmt(o.amount_total)"/>
+                            </t>
+                        </td>
+                    </tr>
+
+                </table>
+
+                <table cellspacing="20" style="position:absolute; width:200px; margin-top:10px; margin-left:882px">
+                    <tr>
+                        <td height="18" style="font-size:18px; font-weight:bold">
+                            <t>SUB TOTAL: </t>
+                        </td>
+                    </tr>
+                    <!-- solo muestra IVA 22 e IVA 10 -->
+                    <t t-set="amount22" t-value="o.get_amount_taxed_by_22()"/>
+                    <tr t-if="amount22 > 0">
+                        <t t-set="symbol" t-value="o.currency_id.symbol"/>
+                        <td style="font-size:18px; font-weight:bold">
+                            <t>IVA 22% </t>
+                        </td>
+                    </tr>
+                    <t t-set="amount10" t-value="o.get_amount_taxed_by_10()"/>
+                    <tr t-if="amount10 > 0">
+                        <t t-set="symbol" t-value="o.currency_id.symbol"/>
+                        <td style="font-size:18px; font-weight:bold">
+                            <t>IVA 10% </t>
+                        </td>
+                    </tr>
+                    <tr t-if="o.amount_tax == 0">
+                        <t t-set="symbol" t-value="o.currency_id.symbol"/>
+                        <td style="font-size:18px; font-weight:bold">
+                            <t>IVA 0% </t>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td style="font-size:18px; font-weight:bold;height">TOTAL: </td>
+                    </tr>
+                </table>
+            </div>
+        </t>
+        <!-- Supplier -->
+        <t t-if="o.type in ['in_refund','in_invoice']">
+            <t t-call="web.external_layout">
+                <div class="page">
+                    <div class="row">
+                        <div class="col-xs-5 col-xs-offset-7">
+                            <address t-field="o.partner_id"
+                                     t-options='{"widget": "contact", "fields": ["address", "name"], "no_marker": true}' />
+                            <span t-if="o.partner_id.vat">RUT: <span t-field="o.partner_id.vat"/></span>
+                        </div>
+                    </div>
+
+                    <h2>
+                        <span t-if="o.type == 'out_invoice' and (o.state == 'open' or o.state == 'paid')">Invoice</span>
+                        <span t-if="o.type == 'out_invoice' and o.state == 'proforma2'">PRO-FORMA</span>
+                        <span t-if="o.type == 'out_invoice' and o.state == 'draft'">Draft Invoice</span>
+                        <span t-if="o.type == 'out_invoice' and o.state == 'cancel'">Cancelled Invoice</span>
+                        <span t-if="o.type == 'out_refund'">Refund</span>
+                        <span t-if="o.type == 'in_refund'">Supplier Refund</span>
+                        <span t-if="o.type == 'in_invoice'">Supplier Invoice</span>
+                        <span t-field="o.number"/>
+                    </h2>
+
+                    <div class="row mt32 mb32">
+                        <div class="col-xs-2" t-if="o.name">
+                            <strong>Description:</strong>
+                            <p t-field="o.name"/>
+                        </div>
+                        <div class="col-xs-2" t-if="o.date_invoice">
+                            <strong>Invoice Date:</strong>
+                            <p t-field="o.date_invoice"/>
+                        </div>
+                        <div class="col-xs-2" t-if="o.origin">
+                            <strong>Source:</strong>
+                            <p t-field="o.origin"/>
+                        </div>
+                        <div class="col-xs-2" t-if="o.partner_id.ref">
+                            <strong>Customer Code:</strong>
+                            <p t-field="o.partner_id.ref"/>
+                        </div>
+                        <div class="col-xs-2" t-if="o.reference">
+                            <strong>Reference:</strong>
+                            <p t-field="o.reference"/>
+                        </div>
+                    </div>
+
+                    <table class="table table-condensed">
+                        <thead>
+                            <tr>
+                                <th>Description</th>
+                                <th>Quantity</th>
+                                <th class="text-right">Unit Price</th>
+                                <th class="text-right" groups="sale.group_discount_per_so_line">Discount (%)</th>
+                                <th class="text-right">Taxes</th>
+                                <th class="text-right">Amount</th>
+                            </tr>
+                        </thead>
+                        <tbody class="invoice_tbody">
+                            <tr t-foreach="o.invoice_line_ids" t-as="l">
+                                <td><span t-field="l.name"/></td>
+                                <td>
+                                    <span t-field="l.quantity"/>
+                                    <span t-field="l.uos_id"  groups="product.group_uom"/>
+                                </td>
+                                <td class="text-right">
+                                    <span t-field="l.price_unit"/>
+                                </td>
+                                <td class="text-right" groups="sale.group_discount_per_so_line"><span t-field="l.discount"/></td>
+                                <td class="text-right">
+                                    <span t-esc="', '.join(map(lambda x: x.name, l.invoice_line_tax_ids))"/>
+                                </td>
+                                <td class="text-right">
+                                    <span t-field="l.price_subtotal"
+                                          t-options='{"widget": "monetary", "display_currency": "o.currency_id"}'/>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+
+                    <div class="row" >
+                        <div class="col-xs-4 pull-right">
+                            <table class="table table-condensed" >
+                                <tr class="border-black">
+                                    <td><strong>Total Without Taxes</strong></td>
+                                    <td class="text-right">
+                                        <span t-field="o.amount_untaxed" t-options='{"widget": "monetary", "display_currency": "o.currency_id"}'/>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>Taxes</td>
+                                    <td class="text-right">
+                                        <span t-field="o.amount_tax" t-options='{"widget": "monetary", "display_currency": "o.currency_id"}'/>
+                                    </td>
+                                </tr>
+                                <tr class="border-black">
+                                    <td><strong>Total</strong></td>
+                                    <td class="text-right">
+                                        <span t-field="o.amount_total" t-options='{"widget": "monetary", "display_currency": "o.currency_id"}'/>
+                                    </td>
+                                </tr>
+                            </table>
+                        </div>
+                    </div>
+
+                    <div class="row" t-if="o.tax_line">
+                        <div class="col-xs-6">
+                            <table class="table table-condensed">
+                                <thead>
+                                    <tr>
+                                        <th>Tax</th>
+                                        <th class="text-right">Base</th>
+                                        <th class="text-right">Amount</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr t-foreach="o.tax_line" t-as="t">
+                                        <td><span t-field="t.name"/></td>
+                                        <td class="text-right">
+                                            <span t-field="t.base" t-options='{"widget": "monetary", "display_currency": "o.currency_id"}'/>
+                                        </td>
+                                        <td class="text-right">
+                                            <span t-field="t.amount" t-options='{"widget": "monetary", "display_currency": "o.currency_id"}'/>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </t>
+        </t>
+    </template>
+
+    <template id="layout" name="Report layout">&lt;!DOCTYPE html&gt;
+        <html>
+            <body class="container" style="position: fixed;">
+                <main>
+                    <t t-raw="0"/>
+                </main>
+            </body>
+        </html>
+    </template>
+
+    <template id="account.report_invoice">
+        <t t-name="web.report_invoice">
+            <t t-foreach="docs" t-as="o">
+                <t t-set="body_classname" t-value="'container'"/>
+                <t t-call="ras_trans_print_invoice.layout">
+                    <div class="article"  t-att-data-oe-model="o and o._name" t-att-data-oe-id="o and o.id">
+                        <t t-set="lang" t-value="o.user_id.lang if o.type in ('in_invoice', 'in_refund') else o.partner_id.lang"/>
+                        <t t-call="ras_trans_print_invoice.ras_report_invoice_document" t-lang="lang"/>
+                    </div>
+                </t>
+            </t>
+        </t>
+    </template>
+
+
+    <template id="account.report_invoice_with_payments">
+        <t t-name="web.report_invoice">
+            <t t-foreach="docs" t-as="o">
+                <t t-set="body_classname" t-value="'container'"/>
+                <t t-call="ras_trans_print_invoice.layout">
+                    <div class="article"  t-att-data-oe-model="o and o._name" t-att-data-oe-id="o and o.id">
+                        <t t-set="lang" t-value="o.user_id.lang if o.type in ('in_invoice', 'in_refund') else o.partner_id.lang"/>
+                        <t t-call="ras_trans_print_invoice.ras_report_invoice_document" t-lang="lang"/>
+                    </div>
+                </t>
+            </t>
+        </t>
+    </template>
+
+
+</odoo>

@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+
+        <record id='fleet_flota_nacional_action' model='ir.actions.act_window'>
+            <field name="name">Fleteros Nacional</field>
+            <field name="res_model">fleet.vehicle</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">kanban,tree,form,activity</field>
+            <field name="domain">[('operativa_nacional','=',True),('is_ras_property','=',False)]</field>
+            <field name="context">{"default_is_ras_property":False,"default_is_fletero":True,"default_operativa_nacional":True}</field>
+            <field name="help" type="html">
+                <p class="o_view_nocontent_smiling_face">
+                    Create a new vehicle
+                </p><p>
+                Manage your fleet by keeping track of the contracts, services, odometers and fuel logs associated to each vehicle.
+            </p>
+            </field>
+        </record>
+
+        <record id='fleet_flota_internacional_action' model='ir.actions.act_window'>
+            <field name="name">Fleteros Internacional</field>
+            <field name="res_model">fleet.vehicle</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">kanban,tree,form,activity</field>
+            <field name="domain">[('operativa_internacional','=',True),('is_ras_property','=',False)]</field>
+            <field name="context">{"default_is_ras_property":False,"default_is_fletero":True,"default_operativa_internacional":True}</field>
+            <field name="help" type="html">
+                <p class="o_view_nocontent_smiling_face">
+                    Create a new vehicle
+                </p><p>
+                Manage your fleet by keeping track of the contracts, services, odometers and fuel logs associated to each vehicle.
+            </p>
+            </field>
+        </record>
+
+        <menuitem
+                id="menu_flota_fleteros_root"
+                name="Flota Fleteros"
+                web_icon="fleet,static/description/icon.png"
+                groups="base.group_user"
+                sequence="115"/>
+
+        <menuitem
+                id="menu_fleteros_nacional_main"
+                name="Fleteros Nacional"
+                parent="menu_flota_fleteros_root"
+                sequence="3"/>
+
+        <menuitem
+                id="menu_fleteros_nacional_vehiculos"
+                name="Vehiculos Nacional"
+                parent="menu_fleteros_nacional_main"
+                sequence="4"
+                action="fleet_flota_nacional_action"/>
+
+        <menuitem
+                id="menu_fleteros_internacional_main"
+                name="Fleteros Internacional"
+                parent="menu_flota_fleteros_root"
+                sequence="3"/>
+
+        <menuitem
+                id="menu_fleteros_internacional_vehiculos"
+                name="Vehiculos Internacional"
+                parent="menu_fleteros_internacional_main"
+                sequence="4"
+                action="fleet_flota_internacional_action"/>
+
+    </data>
+</odoo>

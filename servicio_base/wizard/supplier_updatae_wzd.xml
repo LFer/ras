@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+    <data>
+
+        <record id="rt_supplier_invoice_update_form" model="ir.ui.view">
+            <field name="name">rt.supplier.invoice.update.form</field>
+            <field name="model">rt.supplier.update</field>
+            <field name="arch" type="xml">
+                <form string="Add Supplier Invoice">
+                    <footer>
+                        <button name="update_values" string="Actualizar" type="object" class="oe_highlight"/>
+                        <button string="Cancelar" class="oe_highlight" special="cancel"/>
+                    </footer>
+                </form>
+            </field>
+        </record>
+
+        <record id="action_rt_supplier_invoice_wzd_update" model="ir.actions.act_window">
+            <field name="name">Add Supplier Invoice</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">rt.supplier.update</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">form</field>
+            <field name="view_id" ref="rt_supplier_invoice_update_form"/>
+            <field name="target">new</field>
+            <field name="multi">True</field>
+        </record>
+
+        <act_window
+            id="rt_supplier_invoice_wzd_2"
+            multi="True"
+            key2="client_action_multi"
+            name="Acualizar"
+            res_model="rt.supplier.update"
+            src_model="rt.service.product.supplier"
+            view_mode="form"
+            target="new"
+            view_type="form"
+            view_id="rt_supplier_invoice_update_form"
+        />
+
+    </data>
+</openerp>

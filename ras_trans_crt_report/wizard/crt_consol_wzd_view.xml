@@ -1,0 +1,46 @@
+<?xml version="1.0"?>
+<openerp>
+    <data>
+        <!-- Create CRT Consolidated Report Wizard -->
+        <record id="view_rt_service_crt_consol_wzd" model="ir.ui.view">
+            <field name="name">rt.service.crt.consol.wzd.form</field>
+            <field name="model">rt.service.crt.consol.wzd</field>
+            <field name="arch" type="xml">
+                <form string="CRT Consolidated Report">
+                    <p>
+                        <span class="fa fa-info-circle" style="font-size: 24px; margin-right: 10px; color: #DC5F59; float: left;"/>
+                        <span style="font-size: 16px;">
+                            Use this form if you want generate a CRT Consolidated Report with all selected Services.
+                        </span>
+                    </p>
+                    <group col="4" name="report_rows">
+                        <span style="margin-right: 5px;" attrs="{'invisible':[('xls_name','=', False)]}">
+                            <span>
+                                <field name="xls_name" invisible="1"/>
+                                <field name="xls_file" nolabel="1" readonly="1" filename="xls_name" attrs="{'invisible':[('xls_name','=', False)]}" style="font-size: 14px;"/>
+                            </span>
+                            <span>
+                                <button class="oe_i oe_inline" string="d" name="delete_crt_report" type="object" style="background: white none repeat scroll 0% 0%; border: 0px solid; padding: 0px;"/>
+                            </span>
+                        </span>
+                    </group>
+                    <footer>
+                        <button name="create_crt_report" string="Generate" type="object" class="oe_highlight" attrs="{'invisible': [('xls_file', '!=', False)]}"/>
+                        <button string="Close" special="cancel"/>
+                    </footer>
+                </form>
+            </field>
+        </record>
+
+        <!-- Menu Create CRT Consolidated Report for Wizard -->
+        <record id="action_rt_service_crt_consol_wzd" model="ir.actions.act_window">
+            <field name="name">CRT Consolidated Report</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">rt.service.crt.consol.wzd</field>
+            <field name="binding_model_id" ref="servicio_base.model_rt_service" />
+            <field name="view_type">form</field>
+            <field name="view_mode">form</field>
+            <field name="target">new</field>
+        </record>
+    </data>
+</openerp>

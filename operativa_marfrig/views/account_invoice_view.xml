@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+
+
+        <record id="operativa_marfrig_tab" model="ir.ui.view">
+            <field name="name">account.invoice.form</field>
+            <field name="model">account.invoice</field>
+            <field name="inherit_id" ref="account.invoice_form"/>
+            <field name="arch" type="xml">
+                <data>
+                    <xpath expr="//page[@name='operativa']" position="inside">
+                        <group col="2" string="Marfrig" style="border-bottom: 1px solid #DDDDDD;">
+                            <field name="marfrig_operation_id" readonly="1"/>
+                            <field name="service_marfrig_ids" nolabel="1" widget="one2many_list">
+                                <tree string="Services" create="false" edit="false" delete="false">
+                                    <field name="name" string="Service Number"/>
+                                    <field name="product_id"/>
+                                    <field name="state"/>
+                                    <button class="oe_highlight"
+                                            type="object"
+                                            name="reject_service"
+                                            string="Rechazar"
+                                    />
+                                </tree>
+                            </field>
+                        </group>
+                    </xpath>
+                </data>
+            </field>
+        </record>
+
+
+    </data>
+</odoo>

@@ -1,0 +1,81 @@
+<odoo>
+    <data>
+
+        <record id="marfrig_service_informe_tree_view" model="ir.ui.view">
+            <field name="name">marfrig-service-Tree</field>
+            <field name="model">marfrig.service.products</field>
+            <field name="arch" type="xml">
+                <tree string="Marfrig" edit="false" create="false" delete="false">
+                    <field name="name"/>
+                    <field name="origin_id" invisible="1"/>
+                    <field name="product_type" invisible="1"/>
+                    <field name="destiny_id" invisible="1"/>
+                    <field name="driver_commission" invisible="1"/>
+                    <field name="vehicle_id" invisible="1"/>
+                    <field name="driver_id" invisible="1"/>
+                    <field name="matricula_fletero" invisible="1"/>
+                    <field name="matricula_dos_fletero" invisible="1"/>
+                    <field name="vehicle_type" invisible="1"/>
+                    <field name="matricula_dos_id" invisible="1"/>
+                    <field name="product_id"/>
+                    <field name="action_type_id"/>
+                    <field name="planta_id"/>
+                    <field name="kg_planta"/>
+                    <field name="kg_symbol" string=" " sum="Total"/>
+                    <field name="importe_linea" sum="Total" options="{'currency_field': 'currency_id'}" />
+                    <field name="currency_id" string=" "/>
+                </tree>
+            </field>
+        </record>
+
+        <record id="marfrig_productos_search" model="ir.ui.view">
+            <field name="name">operativa.marfirg.productos.search</field>
+            <field name="model">marfrig.service.products</field>
+            <field name="arch" type="xml">
+                <search string="Busqueda">
+                    <!--Campos para buscar-->
+                    <field name="name"/>
+                    <field name="planta_id"/>
+                    <field name="driver_id"/>
+                    <field name="origin_id"/>
+                    <field name="destiny_id"/>
+                    <group expand="1" string="Group By">
+                        <filter name="group_planta_id" string="Planta" icon="terp-accessories-archiver" domain="[]" context="{'group_by':'planta_id'}"/>
+                        <filter name="group_action_type_id" string="Tipo de Acción" icon="terp-accessories-archiver" domain="[]" context="{'group_by':'action_type_id'}"/>
+                        <filter name="group_product_id" string="Servicio" icon="terp-accessories-archiver" domain="[]" context="{'group_by':'product_id'}"/>
+                    </group>
+                </search>
+            </field>
+        </record>
+
+
+        <record id="action_ventas_por_planta" model="ir.actions.act_window">
+            <field name="name">Ventas por Planta</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">marfrig.service.products</field>
+            <field name="domain">[('planta_id','!=',False)]</field>
+            <field name="context">{'search_default_group_planta_id': 1}</field>
+            <field name="view_id" ref="marfrig_service_informe_tree_view"/>
+            <field name="view_mode">tree</field>
+            <field name="filter" eval="True"/>
+        </record>
+
+
+        <menuitem
+                id="menu_marfrig_report_top"
+                name="Informes"
+                parent="operativa_marfrig.menu_marfrig_root"
+                groups="base.group_user"
+                sequence="101"
+        />
+
+        <menuitem
+                id="marfrig_report_menu"
+                name="Viajes por Planta"
+                parent="menu_marfrig_report_top"
+                action="action_ventas_por_planta"
+                sequence="3"
+        />
+
+    </data>
+</odoo>

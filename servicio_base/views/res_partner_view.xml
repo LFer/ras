@@ -1,0 +1,138 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+
+        <record model="ir.ui.view" id="res_partner_boton">
+            <field name="name">partner.view.buttons</field>
+            <field name="model">res.partner</field>
+            <field name="inherit_id" ref="account.partner_view_buttons" />
+            <field name="priority" eval="11"/>
+            <field name="arch" type="xml">
+                <button name="action_view_partner_invoices" position="replace">
+                    <button type="object" class="oe_stat_button" icon="fa-pencil-square-o" name="action_view_partner_invoices"
+                        attrs="{'invisible': ['|',('customer', '=', False),('only_usd', '=', True)]}" context="{'default_partner_id': active_id}">
+                        <div class="o_form_field o_stat_info">
+                            <span class="o_stat_value">
+                                <field name="total_invoiced" widget='monetary' options="{'currency_field': 'currency_id'}"/>
+                                <field name="only_usd" invisible="1"/>
+                            </span>
+                            <span class="o_stat_text">Invoiced</span>
+                        </div>
+                    </button>
+                </button>
+            </field>
+        </record>
+
+        <record model="ir.ui.view" id="partner_view_buttons_service_base">
+            <field name="name">partner.view.buttons</field>
+            <field name="model">res.partner</field>
+            <field name="inherit_id" ref="base.view_partner_form" />
+            <field name="priority" eval="14"/>
+            <field name="groups_id" eval="[(4, ref('account.group_account_invoice'))]"/>
+            <field name="arch" type="xml">
+                <button name="toggle_active" position="before">
+                    <button type="object" class="oe_stat_button" icon="fa-pencil-square-o" name="action_view_partner_invoices"
+                            attrs="{'invisible': ['|',('customer', '=', False),('only_usd', '=', False)]}" context="{'default_partner_id': active_id}">
+                        <div class="o_form_field o_stat_info">
+                            <span class="o_stat_value">
+                                <field name="total_invoiced_usd" widget='monetary' options="{'currency_field': 'currency_id_usd'}"/>
+                            </span>
+                            <span class="o_stat_text">USD Facturado</span>
+                        </div>
+                    </button>
+                </button>
+            </field>
+        </record>
+
+        <record id="view_res_partner_filter_assign" model="ir.ui.view">
+            <field name="name">res.partner.service.inherit.search</field>
+            <field name="model">res.partner</field>
+            <field name="inherit_id" ref="base.view_res_partner_filter"/>
+            <field name="arch" type="xml">
+                <field name="name" position="replace">
+                    <field name="name" filter_domain="['|','|','|','|',('name','ilike',self),('ref','=',self),('email','ilike',self),('social_reason','ilike',self),('vat','ilike',self)]"/>
+                </field>
+            </field>
+        </record>
+
+        <record id="view_res_partner_filter" model="ir.ui.view">
+            <field name="name">res.partner.service.inherit.filter</field>
+            <field name="model">res.partner</field>
+            <field name="inherit_id" ref="base.view_res_partner_filter"/>
+            <field name="arch" type="xml">
+                <xpath expr="//filter[@name='supplier']" position="after">
+                    <filter string="Despachante" name="despachante" domain="[('dispatcher','=',True)]"/>
+                    <filter string="Fletero" name="fletero" domain="[('freighter','=',True)]"/>
+                    <filter string="MTOP" name="mtop" domain="[('ministries','=',True)]"/>
+                    <filter string="Chofer" name="chofer" domain="[('driver','=',True)]"/>
+                    <filter string="Generador de Mensaje Simplificado" name="generador_de_mensaje_simplificado" domain="[('gen_of_message','=',True)]"/>
+                    <filter string="Usuario ZF" name="usuario zf" domain="[('user_zf','=',True)]"/>
+                    <filter string="Remitente" name="remitente" domain="[('remittent','=',True)]"/>
+                    <filter string="Destinatrio" name="destinatario" domain="[('receiver','=',True)]"/>
+                    <filter string="Proveedor de Peones" name="proveedor_de_peones" domain="[('supplier_peons','=',True)]"/>
+                    <filter string="Proveedor Montacargas" name="proveedor_montacargas" domain="[('supplier_hoist','=',True)]"/>
+                    <filter string="Consignatario" name="consignatario" domain="[('consignee','=',True)]"/>
+                    <filter string="Notificar" name="notificar_f" domain="[('notificar','=',True)]"/>
+                    <filter string="Porteador" name="porteador" domain="[('carrier','=',True)]"/>
+                    <filter string="Donde quedan los papeles" name="donde_quedan_los_papeles" domain="[('where_paper','=',True)]"/>
+                    <filter string="Agente de Carga" name="agente_de_carga" domain="[('load_agent','=',True)]"/>
+                    <filter string="Vendedor" name="vendedor" domain="[('seller','=',True)]"/>
+                    <filter string="Depósito" name="deposito_f" domain="[('deposito','=',True)]"/>
+                    <filter string="Playa de Contenedores" name="playa_de_contenedores" domain="[('playa','=',True)]"/>
+                </xpath>
+                <xpath expr="//filter[@name='group_country']" position="after" >
+                    <separator/>
+                    <filter string="Despachante" name="groupo_despachante" domain="[]" context="{'group_by' : 'dispatcher'}"/>
+                    <filter string="Fletero" name="group_fletero" domain="[]" context="{'group_by' : 'freighter'}"/>
+                    <filter string="MTOP" name="group_mtop" domain="[]" context="{'group_by' : 'ministries'}"/>
+                    <filter string="Chofer" name="group_chofer" domain="[]" context="{'group_by' : 'driver'}"/>
+                    <filter string="Generador de Mensaje Simplificado" name="group_generador_de_mensaje_simplificado" domain="[]" context="{'group_by' : 'gen_of_message'}"/>
+                    <filter string="Usuario ZF" name="group_usuario_zf" domain="[]" context="{'group_by' : 'user_zf'}"/>
+                    <filter string="Remitente" name="group_remitente" domain="[]" context="{'group_by' : 'remittent'}"/>
+                    <filter string="Destinatrio" name="group_destinatario" domain="[]" context="{'group_by' : 'receiver'}"/>
+                    <filter string="Proveedor de Peones" name="group_proveedor_de_peones" domain="[]" context="{'group_by' : 'supplier_peons'}"/>
+                    <filter string="Proveedor Montacargas" name="group_proveedor_montacargas" domain="[]" context="{'group_by' : 'supplier_hoist'}"/>
+                    <filter string="Consignatario" name="group_consignatario" domain="[]" context="{'group_by' : 'consignee'}"/>
+                    <filter string="Notificar" name="group_notificar_f" domain="[]" context="{'group_by' : 'notificar'}"/>
+                    <filter string="Porteador" name="group_porteador" domain="[]" context="{'group_by' : 'carrier'}"/>
+                    <filter string="Donde quedan los papeles" name="group_donde_quedan_los_papeles" domain="[]" context="{'group_by' : 'where_paper'}"/>
+                    <filter string="Agente de Carga" name="group_agente_de_carga" domain="[]" context="{'group_by' : 'load_agent'}"/>
+                    <filter string="Vendedor" name="group_vendedor" domain="[]" context="{'group_by' : 'seller'}"/>
+                    <filter string="Depósito" name="group_deposito_f" domain="[]" context="{'group_by' : 'deposito'}"/>
+                    <filter string="Playa de Contenedores" name="group_playa_de_contenedores" domain="[]" context="{'group_by' : 'playa'  }"/>
+                </xpath>
+            </field>
+        </record>
+
+
+        <record id="action_city" model="ir.actions.act_window">
+            <field name="name">Ciudades</field>
+            <field name="res_model">res.country.city</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">tree,form</field>
+        </record>
+
+        <menuitem id="contacts_ciudades_menu" name="Ciudades" parent="contacts.menu_localisation" action="action_city" sequence="2"/>
+
+
+        <record id="partner_search_inherit_base" model="ir.ui.view">
+            <field name="name">res.partner.select</field>
+            <field name="model">res.partner</field>
+            <field name="inherit_id" ref="base.view_res_partner_filter"/>
+            <field name="arch" type="xml">
+                <field name="name" position="after">
+                    <field name="street" string="Direccion"/>
+                </field>
+                <field name="category_id" position="after">
+                    <field name="currency_id_usd"/>
+                    <field name="only_usd" invisible="1"/>
+                </field>
+
+            </field>
+        </record>
+
+
+
+
+    </data>
+</odoo>

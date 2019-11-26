@@ -1,0 +1,2 @@
+name,perm_create,perm_write,perm_unlink,perm_read,group_id/id,model_id/id
+ver_reportes,True,True,True,True,servicio_base.fleet_group_manager,reportes.model_reportes

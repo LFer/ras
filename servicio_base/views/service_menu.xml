@@ -1,0 +1,299 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+
+        <!--Busqueda para los productos-->
+        <record id="view_rt_service_product_search_view" model="ir.ui.view">
+            <field name="name">rt.service.product.search.line</field>
+            <field name="model">rt.service.productos</field>
+            <field name="arch" type="xml">
+                <search string="Busqueda Prodcutos">
+                    <filter string="No Facturado" name="uninvoiced" domain="[('invoiced','=',False)]"/>
+                    <filter string="Facturado" name="invoiced" domain="[('invoiced','=',True)]"/>
+                    <filter string="Facturable" name="invoiceable" domain="[('is_invoiced','=',True)]"/>
+                    <filter string="Factura Rechazada" name="invoiced_rejected" domain="[('invoiced_rejected','=',True)]"/>
+                    <filter string="Comisiones Pagas" name="paid" domain="[('comision_paga','=','pago')]"/>
+                    <filter string="Comisiones No Pagas" name="unpaid" domain="[('comision_paga','=','no_pago')]"/>
+                    <field name="rt_carga_id"/>
+                    <field name="rt_service_id"/>
+                    <field name="product_id"/>
+                    <field name="remito"/>
+                    <field name="partner_id"/>
+                    <field name="name"/>
+                    <group expand="1" string="Group By">
+                        <filter name="filter_product" string="Product" icon="terp-accessories-archiver" domain="[]" context="{'group_by':'product_id'}"/>
+                        <filter name="filter_currency" string="Currency" icon="terp-dolar_ok!" domain="[]" context="{'group_by':'currency_id'}"/>
+                        <filter name="filter_partner_id" string="Cliente a Facturar" icon="terp-dolar_ok!" domain="[]" context="{'group_by':'partner_id'}"/>
+                        <filter name="filter_action_type_id" string="Tipo de Acción" icon="terp-dolar_ok!" domain="[]" context="{'group_by':'action_type_id'}"/>
+                        <filter string="Fecha" name="invoicedate" context="{'group_by':'start_datetime'}"/>
+                    </group>
+                </search>
+            </field>
+        </record>
+
+        <!--VISTA LISTA DE LA CARGA PARA LA BUSQUEDA Y PARA MOSTRAR EN EL MENU CARGAS-->
+        <record id="rt_service_carga_tree_view" model="ir.ui.view">
+            <field name="name">rt.service.cargas.tree</field>
+            <field name="model">rt.service.carga</field>
+            <field name="arch" type="xml">
+                <tree string="Cargas" create="false" delete="false" edit="false">
+                    <field name="rt_service_id" string="Carpeta Relacionada"/>
+                    <field name="name"/>
+                    <field name="state"/>
+                    <field name="regimen"/>
+                    <field name="purchase_order"/>
+                    <field name="dua_numero"/>
+                    <field name="seal_number"/>
+                    <field name="partner_id"/>
+                    <field name="origin_id"/>
+                    <field name="destiny_id"/>
+                </tree>
+            </field>
+        </record>
+
+        <record id="rt_service_carga_inter_tree_view" model="ir.ui.view">
+            <field name="name">rt.service.cargas.tree</field>
+            <field name="model">rt.service.carga</field>
+            <field name="arch" type="xml">
+                <tree string="Cargas" create="false" delete="false" edit="false">
+                    <field name="rt_service_id" string="Carpeta Relacionada"/>
+                    <field name="name"/>
+                    <field name="state"/>
+                    <field name="regimen"/>
+                    <field name="purchase_order"/>
+                    <field name="dua_numero"/>
+                    <field name="mic_aduana"/>
+                    <field name="crt_number"/>
+                    <field name="mic_number"/>
+                    <field name="seal_number"/>
+                    <field name="partner_id"/>
+                    <field name="origin_id"/>
+                    <field name="destiny_id"/>
+                </tree>
+            </field>
+        </record>
+
+        <!--VISTA LISTA DE LOS PRODUCTOS PARA LA BUSQUEDA Y PARA MOSTRAR EN EL MENU PRODUCTOS NACIONAL-->
+        <record id="view_productos_nacional_tree" model="ir.ui.view">
+            <field name="name">rt.productos.list.list</field>
+            <field name="model">rt.service.productos</field>
+            <field name="arch" type="xml">
+                <tree string="Productos" create="false" delete="false" edit="false">
+                    <field name="rt_service_id"/>
+                    <field name="rt_carga_id"/>
+                    <field name="name"/>
+                    <field name="start"/>
+                    <field name="partner_id"/>
+                    <field name="regimen"/>
+                    <field name="product_id"/>
+                    <field name="action_type_id"/>
+                    <field name="product_type"/>
+                    <field name="supplier_id" options="{'no_open': True,'no_create': True}"/>
+                </tree>
+            </field>
+        </record>
+
+        <!--ACCION DE LA CARPETA NACIONAL-->
+        <record id="action_rt_service_nacional" model="ir.actions.act_window">
+            <field name="name">Carpeta-Nacional</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">rt.service</field>
+            <field name="view_mode">tree,form,kanban</field>
+            <field name="domain">[('operation_type','=','national'), ('es_plantilla','=', False)]</field>
+            <field name="context">{'default_operation_type':'national'}</field>
+            <field name="view_id" ref="servicio_base.rt_service_base_tree_view"/>
+            <field name="filter" eval="True"/>
+            <field name="help" type="html">
+                <p class="o_view_nocontent_smiling_face">
+                    No se crearon Carpetas
+                </p><p>
+            </p>
+            </field>
+        </record>
+
+        <!--ACCION DE LA CARGA NACIONAL-->
+        <record id="action_rt_carga_naional" model="ir.actions.act_window">
+            <field name="name">Carga-Nacional</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">rt.service.carga</field>
+            <field name="view_mode">tree</field>
+            <field name="domain">[('operation_type','=','national')]</field>
+            <field name="view_id" ref="servicio_base.rt_service_carga_tree_view"/>
+            <field name="filter" eval="True"/>
+            <field name="help" type="html">
+                <p class="o_view_nocontent_smiling_face">
+                    No se crearon Carpetas
+                </p><p>
+            </p>
+            </field>
+        </record>
+
+        <!--ACCION DE LOS PRODUCTOS NACIONAL-->
+        <record id="action_rt_service_product_tree_normal" model="ir.actions.act_window">
+            <field name="name">Productos-Nacional</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">rt.service.productos</field>
+            <field name="domain">[('operation_type','=','national')]</field>
+            <field name="view_id" ref="servicio_base.view_productos_nacional_tree"/>
+            <field name="search_view_id" ref="view_rt_service_product_search_view"/>
+            <field name="view_mode">tree</field>
+            <field name="help" type="html">
+                <p>
+                    Here is a list of each service product to be invoiced. You can
+                    invoice service product partially, by lines of service.
+                </p>
+            </field>
+        </record>
+
+        <!--MENU RAIZ CON ICONO DE SERVICIO INTERNACIOANAL-->
+        <menuitem
+                id="menu_service_root_nacional"
+                name="Servicio Nacional"
+                web_icon="servicio_base,static/description/icon.png"
+                groups="base.group_user"
+                sequence="100"
+        />
+        <!--top menu de servicios nacional-->
+        <menuitem
+                id="menu_service_nacional_root"
+                name="Servicios Nacional"
+                parent="menu_service_root_nacional"
+                groups="base.group_user"
+                sequence="101"
+        />
+        <!--Menu de la Carpeta Nacional -->
+        <menuitem
+                action="action_rt_service_nacional"
+                parent="menu_service_nacional_root"
+                id="servcio_nacional_menu"
+                groups="base.group_user"
+                sequence="103"
+        />
+        <!--Menu de la Carga Nacional -->
+        <menuitem
+                action="action_rt_carga_naional"
+                parent="menu_service_nacional_root"
+                id="carga_nacional_menu"
+                groups="base.group_user"
+                sequence="104"
+        />
+        <!--Menu de los Productos Nacional-->
+        <menuitem
+                action="action_rt_service_product_tree_normal"
+                parent="menu_service_nacional_root"
+                id="producto_nacional_menu"
+                groups="base.group_user"
+                sequence="108"
+        />
+        <!--Menu de Configuracion INTERNACIONAL-->
+        <menuitem
+                id="menu_service_config_national"
+                name="Configuracion"
+                parent="menu_service_root_nacional"
+                groups="base.group_user"
+                sequence="201"
+        />
+
+        <!--#####################################ACA ARRANCAN LOS MENUS DE INTERNACIONAL##########################-->
+
+        <!--ACCION DE LA CARPETA INTERNACIONAL-->
+        <record id="action_rt_service_internacional" model="ir.actions.act_window"  >
+            <field name="name">Carpeta-Internacional</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">rt.service</field>
+            <field name="view_mode">tree,form,kanban</field>
+            <field name="domain">[('operation_type','=','international'), ('es_plantilla','=', False)]</field>
+            <field name="context">{'default_operation_type':'international'}</field>
+            <field name="view_id" ref="servicio_base.rt_service_base_tree_view"/>
+            <field name="filter" eval="True"/>
+            <field name="help" type="html">
+                <p class="o_view_nocontent_smiling_face">
+                    No se crearon Carpetas
+                </p>
+            </field>
+        </record>
+        <!--ACCION DE LA CARGA INTERNACIONAL-->
+        <record id="action_rt_carga_international" model="ir.actions.act_window">
+            <field name="name">Carga-Internacional</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">rt.service.carga</field>
+            <field name="view_mode">tree</field>
+            <field name="domain">[('operation_type','=','international')]</field>
+            <field name="view_id" ref="servicio_base.rt_service_carga_inter_tree_view"/>
+            <field name="filter" eval="True"/>
+            <field name="help" type="html">
+                <p class="o_view_nocontent_smiling_face">
+                    No se crearon Carpetas
+                </p><p>
+            </p>
+            </field>
+        </record>
+        <!--ACCION DE LOS PRODUCTOS INTERNACIONAL-->
+        <record id="action_rt_service_product_international_tree" model="ir.actions.act_window">
+            <field name="name">Productos-Internacional</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">rt.service.productos</field>
+            <field name="domain">[('operation_type','=','international')]</field>
+            <field name="view_id" ref="servicio_base.view_productos_nacional_tree"/>
+            <field name="search_view_id" ref="view_rt_service_product_search_view"/>
+            <field name="view_mode">tree</field>
+            <field name="help" type="html">
+                <p>
+                    Here is a list of each service product to be invoiced. You can
+                    invoice service product partially, by lines of service.
+                </p>
+            </field>
+        </record>
+
+
+        <!--MENU RAIZ CON ICONO DE SERVICIO INTERNACIOANAL-->
+        <menuitem
+                id="menu_service_root_inter"
+                name="Servicio Internacional"
+                web_icon="servicio_base,static/description/icon.png"
+                groups="base.group_user"
+                sequence="102"
+        />
+
+        <!--TOP MENU DENTRO DE LA APP-->
+        <menuitem
+                id="menu_service_inter_main"
+                parent="menu_service_root_inter"
+                name="Servicio Internacional"
+                sequence="5"
+        />
+
+        <!--Menu de la Carpeta Internacional -->
+        <menuitem action="action_rt_service_internacional"
+                  parent="menu_service_inter_main"
+                  id="servcio_intnacional_menu"
+                  groups="base.group_user"
+                  sequence="1"
+        />
+
+        <!--Menu de la Carga Internacional -->
+        <menuitem action="action_rt_carga_international"
+                  parent="menu_service_inter_main"
+                  id="carga_intnacional_menu"
+                  groups="base.group_user"
+                  sequence="2"
+        />
+
+        <!--Menu de los Productos Nacional-->
+        <menuitem
+                action="action_rt_service_product_international_tree"
+                parent="menu_service_inter_main"
+                id="producto_internacional_menu"
+                groups="base.group_user"
+                sequence="3"
+        />
+        <!--Menu de Configuracion INTERNACIONAL-->
+        <menuitem
+                id="menu_service_config_inter"
+                name="Configuracion"
+                parent="menu_service_root_inter"
+                groups="base.group_user"
+        />
+
+    </data>
+</odoo>

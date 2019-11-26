@@ -1,0 +1,32 @@
+<?xml version="1.0"?>
+<openerp>
+    <data>
+        <!-- Add MIC Report button to Service Carga -->
+            <record id="view_consolidado_camion_form" model="ir.ui.view">
+                <field name="name">consolidado.camion.form</field>
+                <field name="model">carpeta.camion</field>
+                <field name="inherit_id" ref="servicio_consolidado.camion_form_view"/>
+                <field name="arch" type="xml">
+                    <div name="buttons_mic" position="inside">
+                            <button class="oe_stat_button"
+                                    string="Reporte MIC"
+                                    name="create_mic_report"
+                                    type="object"
+                                    icon="fa-file-text-o"
+                                    style="border: 1px solid #7C7BAD; border-radius: 3px; white-space: normal"/>
+                    </div>
+                </field>
+            </record>
+
+        <!-- Menu Create MIC Report for Service ListView -->
+        <!--<record id="action_server_rt_service_MIC_report" model="ir.actions.server">-->
+            <!--<field name="name">Create MIC Report</field>-->
+            <!--<field name="condition">True</field>-->
+            <!--<field name="type">ir.actions.server</field>-->
+            <!--<field name="model_id" ref="servicio_base.model_rt_service"/>-->
+            <!--<field name="binding_model_id" ref="servicio_base.model_rt_service" />-->
+            <!--<field name="state">code</field>-->
+            <!--<field name="code">model.create_mic_report()</field>-->
+        <!--</record>-->
+    </data>
+</openerp>

@@ -1,0 +1,19 @@
+<?xml version="1.0" ?>
+<odoo>
+
+    <record id="module_consolidado" model="ir.module.category">
+        <field name="name">Consolidados</field>
+        <field name="sequence">20</field>
+    </record>
+    <record id="consolidado_group_user" model="res.groups">
+        <field name="name">Usuario</field>
+        <field name="category_id" ref="module_consolidado"/>
+    </record>
+
+    <record id="consolidado_manager" model="res.groups">
+        <field name="name">Responsable</field>
+        <field name="implied_ids" eval="[(4, ref('consolidado_group_user'))]"/>
+        <field name="category_id" ref="module_consolidado"/>
+    </record>
+
+</odoo>

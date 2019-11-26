@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+
+        <record id="generar_salida_renner_view" model="ir.ui.view">
+            <field name="name">Crear Salida</field>
+            <field name="model">renner.generar.salida</field>
+            <field name="arch" type="xml">
+                <form string="Create invoices">
+                    <p>
+                        <span class="fa fa-info-circle" style="font-size: 24px; margin-right: 10px; color: #DC5F59; float: left;"/>
+                        <span style="font-size: 16px;">Todos los registros selecionados seran Entregados</span>
+
+                    </p>
+                        <group>
+                            <field name="scheduled_date" style="width:50%%" required="1"/>
+                        </group>
+                    <footer>
+                        <button name="GenerarSalida"
+                                string="Generar Salida"
+                                type="object"
+				class="oe_highlight"
+				context="{'view_picking': False}"
+
+                        />
+                        <button name="GenerarSalida"
+                                string="Generar y Ver Salida"
+                                type="object"
+                                class="oe_highlight"
+                                context="{'view_picking': True}"
+                        />
+
+                        or
+                        <button string="Cancelar" class="oe_link" special="cancel" />
+                    </footer>
+                </form>
+            </field>
+        </record>
+
+
+        <act_window
+                id="action_renner_generar_salida"
+                multi="True"
+                key2="client_action_multi"
+                name="Crear Salida"
+                res_model="renner.generar.salida"
+                src_model="stock.move"
+                view_mode="form"
+                target="new"
+                view_type="form"
+                view_id="generar_salida_renner_view"
+        />
+
+
+    <record id="module_stock_actual" model="ir.module.category">
+        <field name="name">Stock de Clientes</field>
+        <field name="sequence">20</field>
+    </record>
+
+    <record id="ver_stock_actual" model="res.groups">
+        <field name="name">Ver Stock Actual</field>
+        <field name="category_id" ref="module_stock_actual"/>
+    </record>
+
+        
+        
+
+    <record model="ir.actions.act_window" id="location_open_quants_renner"> <!-- Used in location -->
+        <field name="context">{'search_default_po': 1,'search_default_embarque': 1}</field>
+        <field name="domain">[('location_id', 'child_of', 88)]</field>
+        <field name="name">Current Stock</field>
+        <field name="res_model">stock.quant</field>
+    </record>
+
+        <menuitem
+                id="menu_stock_renner_root"
+                name="Stock Actual"
+                web_icon="ras_trans_renner,static/description/icon-stock.png"
+                groups="ver_stock_actual"
+                sequence="75"
+                action="location_open_quants_renner"
+        />
+
+
+
+    </data>
+</odoo>

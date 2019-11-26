@@ -1,0 +1,231 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <!--MENU RAIZ DE CORRECIONES-->
+        <menuitem
+                id="menu_corrections_root"
+                name="Correciones"
+                web_icon="servicio_base,static/description/icon_correction.png"
+                groups="base.group_user"
+        />
+
+
+        <record id="action_correcion_costo_solicitada" model="ir.actions.act_window">
+            <field name="name">Correcciones Solicitadas</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">rt.service.productos</field>
+            <field name="domain">[('estado_costo','=','correcion_solicitada')]</field>
+            <field name="view_mode">tree,form</field>
+            <field name="view_ids" eval="[(5, 0, 0),
+                (0, 0, {'view_mode': 'tree', 'view_id': ref('servicio_base.product_cost_revision_tree_view')}),
+                (0, 0, {'view_mode': 'form', 'view_id': ref('servicio_base.vista_formulario_productos_para_correccion_de_costos')})]"/>
+            <field name="filter" eval="True"/>
+        </record>
+
+        <record id="action_correcion_costo_aprobada" model="ir.actions.act_window">
+            <field name="name">Correcciones Aprobadas</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">rt.service.productos</field>
+            <field name="domain">[('estado_costo','=','correcion_aprobada')]</field>
+            <field name="view_mode">tree</field>
+            <field name="view_ids" eval="[(5, 0, 0),
+                (0, 0, {'view_mode': 'tree', 'view_id': ref('servicio_base.product_cost_revision_tree_view')}),
+                (0, 0, {'view_mode': 'form', 'view_id': ref('servicio_base.vista_formulario_productos_para_correccion_de_costos')})]"/>
+            <field name="filter" eval="True"/>
+
+        </record>
+
+        <record id="action_correcion_costo_rechazada" model="ir.actions.act_window">
+            <field name="name">Correcciones Rechazadas</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">rt.service.productos</field>
+            <field name="domain">[('estado_costo','=','correcion_rechazada')]</field>
+            <field name="view_mode">tree</field>
+            <field name="view_ids" eval="[(5, 0, 0),
+                (0, 0, {'view_mode': 'tree', 'view_id': ref('servicio_base.product_cost_revision_tree_view')}),
+                (0, 0, {'view_mode': 'form', 'view_id': ref('servicio_base.vista_formulario_productos_para_correccion_de_costos')})]"/>
+            <field name="filter" eval="True"/>
+
+        </record>
+
+        <menuitem
+                id="menu_costo_revision"
+                parent="menu_corrections_root"
+                name="Revisión de Costos"
+                groups="servicio_base.encargado_comisiones,servicio_base.consulta_comisiones"
+                sequence="154"
+        />
+
+        <menuitem
+                id="menu_costo_correcion_solicitada"
+                parent="menu_costo_revision"
+                name="Correciones Solicitadas"
+                groups="servicio_base.encargado_comisiones"
+                action="action_correcion_costo_solicitada"
+        />
+
+        <menuitem
+                id="menu_costo_correcion_correcion_aprobada"
+                parent="menu_costo_revision"
+                name="Correciones Aprobadas"
+                groups="servicio_base.encargado_comisiones,servicio_base.consulta_comisiones"
+                action="action_correcion_costo_aprobada"
+        />
+
+        <menuitem
+                id="menu_costo_correcion_correcion_rechazada"
+                parent="menu_costo_revision"
+                name="Correciones Rechazadas"
+                groups="servicio_base.encargado_comisiones,servicio_base.consulta_comisiones"
+                action="action_correcion_costo_rechazada"
+        />
+
+
+
+        <!--     PARA COMISIONES   -->
+
+        <record id="action_correcion_solicitada" model="ir.actions.act_window">
+            <field name="name">Correcciones Solicitadas</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">rt.service.productos</field>
+            <field name="domain">[('estado_comision','=','correcion_solicitada')]</field>
+            <field name="view_mode">tree,form</field>
+            <field name="view_ids" eval="[(5, 0, 0),
+                (0, 0, {'view_mode': 'tree', 'view_id': ref('servicio_base.product_comision_revision_tree_view')}),
+                (0, 0, {'view_mode': 'form', 'view_id': ref('servicio_base.view_service_product_form_2')})]"/>
+            <field name="filter" eval="True"/>
+            <!--            <field name="search_view_id" ref="commission_filter"/>-->
+        </record>
+
+        <record id="action_correcion_aprobada" model="ir.actions.act_window">
+            <field name="name">Correcciones Aprobadas</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">rt.service.productos</field>
+            <field name="domain">[('estado_comision','=','correcion_aprobada')]</field>
+            <field name="view_mode">tree</field>
+            <field name="view_ids" eval="[(5, 0, 0),
+                (0, 0, {'view_mode': 'tree', 'view_id': ref('servicio_base.product_comision_revision_aprobada_tree_view')}),
+                (0, 0, {'view_mode': 'form', 'view_id': ref('servicio_base.view_service_product_form_2')})]"/>
+            <field name="filter" eval="True"/>
+
+        </record>
+
+        <record id="action_correcion_rechazada" model="ir.actions.act_window">
+            <field name="name">Correcciones Rechazadas</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">rt.service.productos</field>
+            <field name="domain">[('estado_comision','=','correcion_rechazada')]</field>
+            <field name="view_mode">tree</field>
+            <field name="view_ids" eval="[(5, 0, 0),
+                (0, 0, {'view_mode': 'tree', 'view_id': ref('servicio_base.product_comision_revision_aprobada_tree_view')}),
+                (0, 0, {'view_mode': 'form', 'view_id': ref('servicio_base.view_service_product_form_2')})]"/>
+            <field name="filter" eval="True"/>
+
+        </record>
+
+        <menuitem
+                id="menu_comision_revision"
+                parent="menu_corrections_root"
+                name="Revisión de Reporte de Viajes"
+                groups="servicio_base.encargado_comisiones,servicio_base.consulta_comisiones"
+                sequence="153"
+        />
+
+        <menuitem
+                id="menu_comision_correcion_solicitada"
+                parent="menu_comision_revision"
+                name="Correciones Solicitadas"
+                groups="servicio_base.encargado_comisiones"
+                action="action_correcion_solicitada"
+        />
+
+        <menuitem
+                id="menu_comision_correcion_correcion_aprobada"
+                parent="menu_comision_revision"
+                name="Correciones Aprobadas"
+                groups="servicio_base.encargado_comisiones,servicio_base.consulta_comisiones"
+                action="action_correcion_aprobada"
+        />
+
+        <menuitem
+                id="menu_comision_correcion_correcion_rechazada"
+                parent="menu_comision_revision"
+                name="Correciones Rechazadas"
+                groups="base.group_user"
+                action="action_correcion_rechazada"
+        />
+
+
+
+        <!--///////////////////////////////////////////ACA VA PARA LA CORRECION DE LA CARGA//////////////////        -->
+
+        <record id="action_correcion_carga_solicitada" model="ir.actions.act_window">
+            <field name="name">Correccion Carga Solicitadas</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">rt.service.carga</field>
+            <field name="domain">[('estado_correccion','=','correcion_solicitada')]</field>
+            <field name="view_mode">tree,form</field>
+            <field name="view_ids" eval="[(5, 0, 0),
+                (0, 0, {'view_mode': 'tree', 'view_id': ref('servicio_base.view_rt_cargas')}),
+                (0, 0, {'view_mode': 'form', 'view_id': ref('servicio_base.carga_form_view_correcion')})]"/>
+            <field name="filter" eval="True"/>
+        </record>
+
+        <record id="action_correcion_carga_aprobada" model="ir.actions.act_window">
+            <field name="name">Correccion Carga Aprobada</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">rt.service.carga</field>
+            <field name="domain">[('estado_correccion','=','correcion_aprobada')]</field>
+            <field name="view_mode">tree,form</field>
+            <field name="view_ids" eval="[(5, 0, 0),
+                (0, 0, {'view_mode': 'tree', 'view_id': ref('servicio_base.view_rt_cargas')}),
+                (0, 0, {'view_mode': 'form', 'view_id': ref('servicio_base.carga_form_view_correcion')})]"/>
+            <field name="filter" eval="True"/>
+        </record>
+
+        <record id="action_correcion_carga_rechazada" model="ir.actions.act_window">
+            <field name="name">Correccion Carga Rechazada</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">rt.service.carga</field>
+            <field name="domain">[('estado_correccion','=','correcion_rechazada')]</field>
+            <field name="view_mode">tree,form</field>
+            <field name="view_ids" eval="[(5, 0, 0),
+                (0, 0, {'view_mode': 'tree', 'view_id': ref('servicio_base.view_rt_cargas')}),
+                (0, 0, {'view_mode': 'form', 'view_id': ref('servicio_base.carga_form_view_correcion')})]"/>
+            <field name="filter" eval="True"/>
+        </record>
+
+        <menuitem
+                id="menu_costo_carga"
+                parent="menu_corrections_root"
+                name="Revisión de Carga"
+                groups="servicio_base.encargado_comisiones,servicio_base.consulta_comisiones"
+        />
+
+        <menuitem
+                id="menu_carga_correcion_solicitada"
+                parent="menu_costo_carga"
+                name="Correciones Solicitadas"
+                groups="servicio_base.encargado_comisiones"
+                action="action_correcion_carga_solicitada"
+        />
+
+        <menuitem
+                id="menu_carga_correcion_aprobada"
+                parent="menu_costo_carga"
+                name="Correciones Aprobadas"
+                groups="servicio_base.encargado_comisiones"
+                action="action_correcion_carga_aprobada"
+        />
+        
+        <menuitem
+                id="menu_carga_correcion_rechazada"
+                parent="menu_costo_carga"
+                name="Correciones Rechazadas"
+                groups="servicio_base.encargado_comisiones"
+                action="action_correcion_carga_rechazada"
+        />
+
+    </data>
+
+</odoo>

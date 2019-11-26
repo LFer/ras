@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+
+        <menuitem id="menu_asociados_a_carpeta_consolidado"
+                  name="Asociados a Carpeta"
+                  parent="menu_consolidado_root"
+                  groups="base.group_user"
+                  sequence="105"
+        />
+
+        <menuitem action="servicio_base.action_asociado_consignatario"
+                  parent="menu_asociados_a_carpeta_consolidado"
+                  id="menu_consignatario_consolidado"
+                  groups="base.group_user"
+                  sequence="20"
+        />
+
+        <menuitem action="servicio_base.action_asociado_remitente"
+                  parent="menu_asociados_a_carpeta_consolidado"
+                  id="menu_remitente_consolidado"
+                  groups="base.group_user"
+                  sequence="1"
+        />
+
+        <menuitem action="servicio_base.action_destinatario"
+                  parent="menu_asociados_a_carpeta_consolidado"
+                  id="menu_destinatario_consolidado"
+                  groups="base.group_user"
+                  sequence="10"
+        />
+
+        <menuitem action="servicio_base.action_notificar"
+                  parent="menu_asociados_a_carpeta_consolidado"
+                  id="menu_action_avisar_consolidado"
+                  groups="base.group_user"
+                  sequence="15"
+        />
+
+        <menuitem action="servicio_base.action_fronteras"
+                  parent="menu_asociados_a_carpeta_consolidado"
+                  id="menu_frontera_consolidado"
+                  groups="base.group_user"
+                  sequence="25"
+        />
+
+        <menuitem action="servicio_base.action_paises_inter"
+                  parent="menu_asociados_a_carpeta_consolidado"
+                  id="menu_paises_consolidado"
+                  groups="base.group_user"
+                  sequence="27"
+        />
+
+        <menuitem action="servicio_base.action_departamentos"
+                  parent="menu_asociados_a_carpeta_consolidado"
+                  id="menu_departamentos_consolidado"
+                  groups="base.group_user"
+                  sequence="30"
+        />
+
+        <menuitem action="servicio_base.action_localidades"
+                  parent="menu_asociados_a_carpeta_consolidado"
+                  id="menu_paises_consolidado"
+                  groups="base.group_user"
+                  sequence="31"
+        />
+
+        <menuitem action="servicio_base.action_depositos"
+                  parent="menu_asociados_a_carpeta_consolidado"
+                  id="menu_deposito_consolidado"
+                  groups="base.group_user"
+                  sequence="35"
+        />
+
+        <menuitem action="servicio_base.action_catalogo_tipo_bulto"
+                  parent="menu_asociados_a_carpeta_consolidado"
+                  id="menu_catalogo_consolidado"
+                  groups="base.group_user"
+                  sequence="40"
+        />
+
+        <menuitem action="servicio_base.action_codigos_contenedores"
+                  parent="menu_asociados_a_carpeta_consolidado"
+                  id="menu_codigo_contenedores_consolidado"
+                  groups="base.group_user"
+                  sequence="45"
+        />
+
+    </data>
+</odoo>

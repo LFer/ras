@@ -1,0 +1,177 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+
+
+
+        <record id="folder_calendar_form_view" model="ir.ui.view">
+            <field name="name">folder.calendar.form.view</field>
+            <field name="model">servicio.calendario</field>
+            <field name="arch" type="xml">
+                <form string="Productos">
+                    <sheet>
+                        <group>
+                            <group>
+                                <field name="start" invisible="1"/>
+                                <field name="stop" invisible="1"/>
+                                <field name="name"/>
+                                <field name="operation_type" groups="base.group_no_one"/>
+                                <field name="partner_id" widget="res_partner_many2one" domain="[('customer','=',True)]" context="{'search_default_customer':1, 'show_address': 1, 'show_vat': True}" options="{'no_open': True,'no_create': True,'always_reload': True}"/>
+                                <field name="rt_service_id"  domain="[('operation_type', '=', operation_type), ('partner_id', '=', partner_id)]" required="0" context = "{'default_operation_type': operation_type,
+                                                                                     'default_partner_invoice_id': partner_id,
+                                                                                     'default_start_datetime': start,
+                                                                                     'default_stop_datetime': stop,
+                                                                                     'default_load_type': 'bulk',
+                                                                                     }" />
+                                <field name="color_pickier_id"/>
+                            </group>
+                            <group string="Resumen Carpeta" colspan="2">
+                                <field name="notas"/>
+                                <field name="attach_notas" widget="many2many_binary" nolabel="1" style="width: 50%"/>
+                                <button class="oe_stat_button" type="object" icon="fa-search" name="get_info_from_nodes" string="Actualizar">
+                                </button>
+                                <field name="html_field" widget="html" nolabel="1" colspan="2"/>
+                            </group>
+                        </group>
+                    </sheet>
+                </form>
+
+            </field>
+        </record>
+
+        <record id="folder_calendarrio_contenedor" model="ir.ui.view">
+            <field name="name">folder.calendar.form.view</field>
+            <field name="model">servicio.calendario</field>
+            <field name="arch" type="xml">
+                <form string="Productos">
+                    <sheet>
+                        <group>
+                            <group>
+                                <field name="start" invisible="1"/>
+                                <field name="stop" invisible="1"/>
+                                <field name="name"/>
+                                <field name="operation_type" groups="base.group_no_one"/>
+                                <field name="partner_id" widget="res_partner_many2one" domain="[('customer','=',True)]" context="{'search_default_customer':1, 'show_address': 1, 'show_vat': True}" options="{'no_open': True,'no_create': True,'always_reload': True}"/>
+                                <field name="rt_service_id"  domain="[('operation_type', '=', operation_type), ('partner_id', '=', partner_id)]" required="0" context = "{'default_operation_type': operation_type,
+                                                                                     'default_partner_invoice_id': partner_id,
+                                                                                     'default_start_datetime': start,
+                                                                                     'default_stop_datetime': stop,
+                                                                                     'default_load_type': 'contenedor',
+                                                                                     }" />
+                                <field name="color_pickier_id"/>
+                            </group>
+                            <group string="Resumen Carpeta" colspan="2">
+                                <field name="notas"/>
+                                <field name="attach_notas" widget="many2many_binary" nolabel="1" style="width: 50%"/>
+                                <button class="oe_stat_button" type="object" icon="fa-search" name="get_info_from_nodes" string="Actualizar">
+                                </button>
+                                <field name="html_field" widget="html" nolabel="1" colspan="2"/>
+                            </group>
+                        </group>
+                    </sheet>
+                </form>
+
+            </field>
+        </record>
+
+
+        <record id="view_calendar_service_product" model="ir.ui.view">
+            <field name="name">service.product.calendar.event.calendar</field>
+            <field name="model">servicio.calendario</field>
+            <field name="priority" eval="2"/>
+            <field name="arch" type="xml">
+                <calendar string="Servicios" date_start="start" date_stop="stop" date_delay="duration" all_day="allday"
+                          readonly_form_view_id="%(servicio_base.folder_calendar_form_view)s"
+                          form_view_id="%(servicio_base.folder_calendar_form_view)s"
+                          event_open_popup="true"
+                          event_limit="30"
+                          color="color_pickier_id">
+                    <field name="name"/>
+                        <field name="partner_id"/>
+                </calendar>
+            </field>
+        </record>
+
+        <record id="view_calendar_contenedor" model="ir.ui.view">
+            <field name="name">service.product.calendar.event.calendar</field>
+            <field name="model">servicio.calendario</field>
+            <field name="priority" eval="2"/>
+            <field name="arch" type="xml">
+                <calendar string="Servicios" date_start="start" date_stop="stop" date_delay="duration" all_day="allday"
+                          readonly_form_view_id="%(servicio_base.folder_calendarrio_contenedor)s"
+                          form_view_id="%(servicio_base.folder_calendarrio_contenedor)s"
+                          event_open_popup="true"
+                          event_limit="30"
+                          color="color_pickier_id">
+                    <field name="name"/>
+                        <field name="partner_id"/>
+                </calendar>
+            </field>
+        </record>
+
+
+        <record id="action_calendar_contenedor" model="ir.actions.act_window">
+            <field name="name">Calendario Contenedor</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">servicio.calendario</field>
+            <field name="domain">[('operation_type','=','national'),('load_type','=','contenedor')]</field>
+            <field name="context">{"is_from_calendar_view":True ,"default_operation_type":"national" ,"default_load_type":"contenedor"}</field>
+            <field name="view_mode">calendar</field>
+            <field name="view_id" ref="view_calendar_contenedor"/>
+            <field name="help" type="html">
+                <p>
+                    Here is a list of each service product to be invoiced. You can
+                    invoice service product partially, by lines of service.
+                </p>
+            </field>
+        </record>
+
+
+        <menuitem
+                id="menu_calendario_servicio_root"
+                name="Calendario Contenedor"
+                web_icon="calendar,static/description/icon.png"
+                groups="base.group_user"
+                sequence="75"/>
+
+        <menuitem
+                id="menu_calendario_service_main"
+                name="Calendario Contenedor"
+                parent="menu_calendario_servicio_root"
+                groups="base.group_user"
+                action="action_calendar_contenedor"/>
+
+
+        <record id="action_calendar_bulk" model="ir.actions.act_window">
+            <field name="name">Calendario Bulk</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">servicio.calendario</field>
+            <field name="domain">[('operation_type','=','national'),('load_type','=','bulk')]</field>
+            <field name="context">{"is_from_calendar_view":True ,"default_operation_type":"national" ,"default_load_type":"bulk"}</field>
+            <field name="view_mode">calendar</field>
+            <field name="view_id" ref="view_calendar_service_product"/>
+            <field name="help" type="html">
+                <p>
+                    Here is a list of each service product to be invoiced. You can
+                    invoice service product partially, by lines of service.
+                </p>
+            </field>
+        </record>
+
+
+        <menuitem
+                id="menu_calendario_bulk_root"
+                name="Calendario Bulk"
+                web_icon="calendar,static/description/icon.png"
+                groups="base.group_user"
+                sequence="75"/>
+
+        <menuitem
+                id="menu_calendario_bulk"
+                name="Calendario Bulk"
+                parent="menu_calendario_bulk_root"
+                groups="base.group_user"
+                action="action_calendar_bulk"/>
+
+    </data>
+</odoo>

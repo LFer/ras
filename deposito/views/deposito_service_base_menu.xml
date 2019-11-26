@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <record model="ir.actions.act_window" id="view_deposito_action">
+            <field name="name">Deposito</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">deposito.service.base</field>
+            <field name="view_mode">tree,form,kanban</field>
+            <field name="filter" eval="True"/>
+            <field name="help" type="html">
+                <p class="o_view_nocontent_smiling_face">
+                    No se crearon Carpetas
+                </p><p>
+            </p>
+            </field>
+        </record>
+
+
+        <menuitem
+                id="menu_deposito_root"
+                name="Deposito"
+                web_icon=""
+                groups="base.group_user"
+                sequence="150"
+        />
+
+        <menuitem
+                id="menu_deposito_main"
+                name="Servicio Deposito"
+                web_icon=""
+                groups="base.group_user"
+                sequence="150"
+                parent="menu_deposito_root"
+                action="view_deposito_action"
+        />
+
+        <menuitem
+                id="menu_deposito_producto"
+                name="Producto Deposito"
+                web_icon=""
+                groups="base.group_user"
+                sequence="150"
+                parent="menu_deposito_main"
+                action="action_deposito_productos"
+        />
+
+    </data>
+</odoo>

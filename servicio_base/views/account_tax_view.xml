@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+
+
+
+
+
+        <record id="account_tax_form_impuesto" model="ir.ui.view">
+            <field name="name">Regimen-Impuesto</field>
+            <field name="model">account.tax</field>
+            <field name="inherit_id" ref="account.view_tax_form"/>
+            <field name="arch" type="xml">
+            <xpath expr="//field[@name='type_tax_use']" position="after">
+                <field name="regimen_ids" widget="many2many_checkboxes"/>
+            </xpath>
+            </field>
+        </record>
+
+
+        <record id="account_tax_tree_impuesto" model="ir.ui.view">
+            <field name="name">Regimen-Impuesto-Tree</field>
+            <field name="model">account.tax</field>
+            <field name="inherit_id" ref="account.view_tax_tree"/>
+            <field name="arch" type="xml">
+            <xpath expr="//field[@name='name']" position="after">
+                <field name="regimen_ids" widget="many2many_tags"/>
+            </xpath>
+            </field>
+        </record>
+
+    </data>
+</odoo>

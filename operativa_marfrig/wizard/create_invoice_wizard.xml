@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+
+
+        <record id="view_rt_service_product_make_invoice" model="ir.ui.view">
+            <field name="name">Service Product Make Invoice</field>
+            <field name="model">marfrig.service.product.make.invoice</field>
+            <field name="arch" type="xml">
+                <form string="Create invoices">
+                    <p>
+                        <span class="fa fa-info-circle" style="font-size: 24px; margin-right: 10px; color: #DC5F59; float: left;"/>
+                        <span style="font-size: 16px;">Todos los servicios selecionados seran facturados</span>
+                    </p>
+                    <footer>
+                        <button name="make_invoices" string="Crear &amp; Ver Factura" type="object"
+                                context="{'open_invoices': True}" class="oe_highlight"/>
+                        <button name="make_invoices" string="Crear Facturas" type="object" class="oe_highlight"/>
+                        or
+                        <button string="Cancelar" class="oe_link" special="cancel" />
+                    </footer>
+                </form>
+            </field>
+        </record>
+
+
+
+        <act_window
+                id="action_view_marfrig_product_make_invoice"
+                multi="True"
+                key2="client_action_multi"
+                name="Crear Factura"
+                res_model="marfrig.service.product.make.invoice"
+                src_model="marfrig.service.products"
+                view_mode="form"
+                target="new"
+                view_type="form"
+                view_id="view_rt_service_product_make_invoice"
+        />
+
+
+
+    </data>
+</odoo>
+
+
+
+

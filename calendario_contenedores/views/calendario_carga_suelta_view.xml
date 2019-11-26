@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+
+
+
+        <record id="calendario_carga_suelta_form_view" model="ir.ui.view">
+            <field name="name">formulario.calendario.carga.suelta</field>
+            <field name="model">servicio.calendario</field>
+            <field name="arch" type="xml">
+                <form string="Calendario Carga Suelta">
+                    <sheet>
+                        <group>
+                            <group>
+                                <field name="start" invisible="1"/>
+                                <field name="stop" invisible="1"/>
+                                <field name="name"/>
+                                <field name="operation_type"/>
+                                <field name="load_type"/>
+                                <field name="partner_id" widget="res_partner_many2one" domain="[('customer','=',True)]" context="{'search_default_customer':1, 'show_address': 1, 'show_vat': True}" options="{'no_open': True,'no_create': True,'always_reload': True}"/>
+                                <field name="rt_service_id"  domain="[('load_type','=', load_type),('operation_type', '=', operation_type), ('partner_id', '=', partner_id)]" required="0"
+                                       context = "{'form_view_ref':'calendario_contenedores.carpeta_to_contenedor_calendar_form_view',
+                                                   'default_operation_type': operation_type,
+                                                   'default_partner_invoice_id': partner_id,
+                                                   'default_load_type': load_type,
+                                                   'default_start_datetime': start,
+                                                   'default_stop_datetime': stop,
+                                                   }" />
+                                <field name="color_pickier_id"/>
+                            </group>
+                            <group string="Resumen Carpeta" colspan="2">
+                                <field name="notas"/>
+                                <field name="attach_notas" widget="many2many_binary" nolabel="1" style="width: 50%"/>
+                                <button class="oe_stat_button" type="object" icon="fa-search" name="get_info_from_nodes" string="Actualizar">
+                                </button>
+                                <field name="html_field" widget="html" nolabel="1" colspan="2"/>
+                            </group>
+                        </group>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+
+
+        <record id="action_calendario_carga_suelta" model="ir.actions.act_window">
+            <field name="name">Calendario Carga Suelta</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">servicio.calendario</field>
+            <field name="domain">[('operation_type','=','national'),('load_type','=','bulk')]</field>
+            <field name="context">{"is_from_calendar_view":True ,"default_operation_type":"national","default_load_type":"bulk"}</field>
+            <field name="view_mode">calendar</field>
+<!--            <field name="view_id" ref="calendario_contenedores.calendario_carga_suelta"/>-->
+            <field name="help" type="html">
+                <p>
+                    Here is a list of each service product to be invoiced. You can
+                    invoice service product partially, by lines of service.
+                </p>
+            </field>
+        </record>
+
+
+
+
+        <menuitem
+                id="menu_calendario_carga_suelta_root"
+                name="Calendario Carga Suelta"
+                groups="base.group_user"
+                web_icon="calendario_contenedores,static/description/icon2.png"
+        />
+
+        <menuitem
+                id="menu_calendario_carga_suelta_main"
+                parent="menu_calendario_carga_suelta_root"
+                name="Calendario Carga Suelta"
+                groups="base.group_user"
+                sequence="150"
+                action="action_calendario_carga_suelta"
+        />
+
+        <record id="calendario_carga_suelta" model="ir.ui.view">
+            <field name="name">service.product.calendar.event.calendar</field>
+            <field name="model">servicio.calendario</field>
+            <field name="priority" eval="2"/>
+            <field name="arch" type="xml">
+                <calendar string="Servicios" date_start="start" date_stop="stop" date_delay="duration" all_day="allday"
+                          readonly_form_view_id="%(calendario_contenedores.calendario_carga_suelta_form_view)s"
+                          form_view_id="%(calendario_contenedores.calendario_carga_suelta_form_view)s"
+                          event_open_popup="true"
+                          event_limit="30"
+                          color="color_pickier_id">
+                    <field name="name"/>
+                    <field name="partner_id"/>
+                </calendar>
+            </field>
+        </record>
+
+    </data>
+</odoo>

@@ -1,0 +1,355 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+
+        <!--VISTA DE LOS PRODUCTOS DEPOSITO-->
+        <record id="depo_productos_tree_view" model="ir.ui.view">
+            <field name="name">depo.productos.tree.view</field>
+            <field name="model">deposito.service.products</field>
+            <field name="arch" type="xml">
+                <tree string="Productos" create="false" delete="false" edit="false">
+                    <field name="name"/>
+                    <field name="deposito_srv_id"/>
+                    <field name="product_type"/>
+                    <field name="product_id"/>
+                    <field name="container_number"/>
+                    <field name="supplier_id"/>
+                    <field name="origin_id"/>
+                    <field name="destiny_id"/>
+                    <field name="importe"/>
+                </tree>
+            </field>
+        </record>
+
+        <record id="deposito_search" model="ir.ui.view">
+            <field name="name">deposito.search</field>
+            <field name="model">deposito.service.base</field>
+            <field name="arch" type="xml">
+                <search string="Busqueda">
+                    <!--Campos para buscar-->
+                    <field name="name" string="Carpeta"/>
+                    <field name="partner_invoice_id"/>
+                    <field name="origin_id"/>
+                    <field name="destiny_id"/>
+                    <filter name="late" string="Overdue" domain="['&amp;', ('start_datetime', '&lt;', time.strftime('%Y-%m-%d')), ('state', '=', 'progress')]" help="Overdue, maturity date passed"/>
+                    <group expand="1" string="Group By">
+                        <filter name="filter_partner_invoice_id" string="Cliente" context="{'group_by':'partner_invoice_id'}"/>
+                        <filter name="filter_origin" string="Origen" icon="terp-accessories-archiver" domain="[]" context="{'group_by':'origin_id'}"/>
+                        <filter name="filter_destiny" string="Destino" icon="terp-accessories-archiver" domain="[]" context="{'group_by':'destiny_id'}"/>
+                        <filter string="Fecha" name="invoicedate" context="{'group_by':'start_datetime'}"/>
+                    </group>
+                </search>
+            </field>
+        </record>
+
+        <record id="deposito_producto_search" model="ir.ui.view">
+            <field name="name">deposito.producto.search</field>
+            <field name="model">deposito.service.products</field>
+            <field name="arch" type="xml">
+                <search string="Busqueda">
+                    <!--Campos para buscar-->
+                    <field name="name" string="Carpeta"/>
+                    <field name="container_number"/>
+                    <field name="supplier_id"/>
+                    <field name="origin_id"/>
+                    <field name="destiny_id"/>
+                    <filter name="filter_supplier_id" string="Proveedor" context="{'group_by':'supplier_id'}"/>
+                    <filter name="filter_origin" string="Origen" icon="terp-accessories-archiver" context="{'group_by':'origin_id'}"/>
+                    <filter name="filter_destiny" string="Destino" icon="terp-accessories-archiver" domain="[]" context="{'group_by':'destiny_id'}"/>
+                </search>
+            </field>
+        </record>
+
+        <record id="action_deposito_productos" model="ir.actions.act_window">
+            <field name="name">Servicios</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">deposito.service.products</field>
+            <field name="view_mode">tree</field>
+            <field name="view_id" ref="deposito.depo_productos_tree_view"/>
+            <field name="target">current</field>
+            <field name="help" type="html">
+                <p>
+                    Here is a list of each service product to be invoiced. You can
+                    invoice service product partially, by lines of service.
+                </p>
+            </field>
+        </record>
+
+        <!--Accion de la Carga-->
+        <record id="action_deposito_products" model="ir.actions.act_window">
+            <field name="name">Servicios</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">deposito.service.products</field>
+            <field name="view_mode">form</field>
+            <field name="view_id" ref="operativa_marfrig.marfrig_service_form_view"/>
+            <field name="target">fullscreen</field>
+            <field name="help" type="html">
+                <p>
+                    Here is a list of each service product to be invoiced. You can
+                    invoice service product partially, by lines of service.
+                </p>
+            </field>
+        </record>
+
+
+        <record id="deposito_tree_view" model="ir.ui.view">
+            <field name="name">Deposito-Tree</field>
+            <field name="model">deposito.service.base</field>
+            <field name="arch" type="xml">
+                <tree string="Marfrig"
+                      decoration-primary="state=='draft'"
+                      decoration-bf="state in ('inprocess','confirm')"
+                      decoration-success="state=='totally_invoiced'"
+                      decoration-muted="state=='cancel'"
+                      decoration-info="state=='inprocess'"
+                >
+                    <field name="name"/>
+                    <field name="referencia"/>
+                    <field name="partner_invoice_id"/>
+                    <field name="pricelist_id"/>
+                    <field name="state"/>
+                </tree>
+            </field>
+        </record>
+
+        <!--VISTA LISTA DE LOS SERVICIOS DE MARFRIG-->
+        <record id="deposito_service_tree_view" model="ir.ui.view">
+            <field name="name">Deposito-service-Tree</field>
+            <field name="model">deposito.service.products</field>
+            <field name="arch" type="xml">
+                <tree string="Deposito">
+                    <field name="name"/>
+                    <field name="origin_id" invisible="1"/>
+                    <field name="product_type" invisible="1"/>
+                    <field name="destiny_id" invisible="1"/>
+                    <field name="driver_commission" invisible="1"/>
+                    <field name="vehicle_id" invisible="1"/>
+                    <field name="driver_id" invisible="1"/>
+                    <field name="matricula_fletero" invisible="1"/>
+                    <field name="matricula_dos_fletero" invisible="1"/>
+                    <field name="vehicle_type" invisible="1"/>
+                    <field name="matricula_dos_id" invisible="1"/>
+                    <field name="product_type"/>
+                    <field name="product_id"/>
+                    <field name="supplier_id"/>
+                    <field name="importe" sum="Total" options="{'currency_field': 'currency_id'}" />
+                    <field name="currency_id" string=" "/>
+                </tree>
+            </field>
+        </record>
+
+        <!--VISTA FORMULARIO DE LOS SERVICIOS DE MARFRIG-->
+        <record id="deposito_service_form_view" model="ir.ui.view">
+            <field name="name">Formulario Servicios Deposito</field>
+            <field name="model">deposito.service.products</field>
+            <field name="arch" type="xml">
+                <form string="Productos">
+                    <header>
+                        <field name="state" options="{'clickable': '1'}" widget="statusbar"/>
+                    </header>
+                    <sheet>
+                        <div style="border: 1px solid #7C7BAD; background-color: #EEEEEE; border-radius: 3px; padding-left: 380px; padding-right: 5px;">
+                            <group colspan="2" col="8">
+                                <field name="is_invoiced"/>
+                                <field name="is_outgoing"/>
+                            </group>
+                        </div>
+                        <group>
+                            <field name="product_type"/>
+                            <field name="pricelist_id" options="{'no_create': True, 'no_open': True}"/>
+                        </group>
+                        <div attrs="{'invisible': [('product_type','=', False)]}">
+                            <field name="deposito_srv_id" groups="base.group_no_one"/>
+                            <field name="invoiced" groups="base.group_no_one"/>
+                            <group>
+                                <group>
+                                    <field name="make_container_number_invisible" invisible="1"/>
+                                    <field name="valid_cointaner_number_text" invisible="1"/>
+                                    <field name="invalid_cointaner_number_text" invisible="1"/>
+                                    <field name="load_type"/>
+                                    <separator string="Datos de la Venta" attrs="{'invisible': [('product_type','=', False)]}"/>
+                                    <field name="start" options="{'datepicker': {'warn_future': true}}" required="True"/>
+                                    <field name="stop" options="{'datepicker': {'warn_future': true}}" required="True"/>
+                                    <field name="partner_invoice_id"  options="{'no_create': True, 'no_open': True}"/>
+                                    <field name="name" string="Referencia"/>
+                                    <field name="oc" invisible="0"/>
+                                    <field name="product_id"  options="{'no_open': True,'no_create': True}"/>
+                                    <field name="action_type_id"/>
+                                    <field name="currency_id" options="{'no_create': True, 'no_open': True}"/>
+                                    <field name="importe" widget="monetary" options="{'currency_field': 'currency_id'}" readonly="0"/>
+                                    <field name="origin_id" options="{'no_create': True, 'no_open': True}"/>
+                                    <field name="destiny_id" options="{'no_create': True, 'no_open': True}"/>
+                                    <field name="partner_seller_id"  options="{'no_create': True, 'no_open': True}"/>
+                                    <field name="currency_id_vendedor" options="{'no_create': True, 'no_open': True}"/>
+                                    <field name="seller_commission" widget='monetary' options="{'currency_field': 'currency_id_vendedor'}"/>
+                                </group>
+                                <group>
+                                    <field name="container_type" options="{'no_create': True, 'no_open': False}" attrs="{'invisible': [( 'load_type','!=', 'contenedor')], 'required': [('load_type','=','contenedor')]}"/>
+                                    <field name="container_number" placeholder="ej: HOYU-751013-6" attrs="{'invisible': ['|',('load_type','!=', 'contenedor'), ('make_container_number_invisible', '=', True)], 'required': [('load_type','=','contenedor ')]}"/>
+                                    <field name="container_number_exception" style="color:Green" attrs="{'invisible': ['|',('load_type','!=', 'contenedor'),('make_container_number_invisible', '=', False)]}"/>
+                                    <button class="oe_highlight" type="object" name="get_container_number" string="Generar Excepcion" confirm="¿Estas seguro?" attrs="{'invisible': ['|',('load_type','!=', 'contenedor'),('make_container_number_invisible', '=', True)]}"/>
+                                    <button class="oe_highlight" type="object" name="cancel_get_container_number" string="Cancelar" attrs="{'invisible': ['|',('load_type','!=', 'contenedor'),('make_container_number_invisible', '=', False)]}"/>
+                                    <span/>
+                                    <!--<div id="hideMe">-->
+                                    <span attrs="{'invisible': [('valid_cointaner_number_text','=',False)]}" style="color:Green;align:right">
+                                        <p>¡Número de contenedor válido!</p>
+                                    </span>
+                                    <span/>
+                                    <span  attrs="{'invisible': [('invalid_cointaner_number_text','!=',True)]}" style="color:Red;align:right">
+                                        <p>¡Número de contenedor inválido!</p>
+                                    </span>
+                                    <separator string="Datos de la Compra" attrs="{'invisible': [('product_type','=', 'propio')]}"/>
+                                    <field name="supplier_id" attrs="{'invisible': [('product_type','=', 'propio')]}" options="{'no_create': True, 'no_open': True}"/>
+                                    <field name="valor_compra_currency_id"  options="{'no_open': True,'no_create': True}" attrs="{'invisible': [('product_type','=', 'propio')]}"/>
+                                    <field name="valor_compra" widget="monetary" attrs="{'invisible': [('product_type','=', 'propio')]}"/>
+                                    <separator string="Datos de la Matrícula"/>
+                                        <field name="alquilado" attrs="{'invisible': [('product_type','=', 'propio')]}"/>
+                                        <field name="vehicle_id" options="{'no_create': True, 'no_open': True}" attrs="{'invisible': [('product_type','=', 'terceros'), ('alquilado','=', False)]}"/>
+                                        <field name="matricula_fletero" attrs="{'invisible': ['|', ('product_type','=', 'propio'), ('alquilado','=', True)]}"/>
+                                        <field name="driver_id" options="{'no_create': True, 'no_open': True}" attrs="{'invisible': [('product_type','=', 'terceros'), ('alquilado','=', False)]}"/>
+                                        <field name="chofer" attrs="{'invisible': ['|', ('product_type','=', 'propio'), ('alquilado','=', True)]}"/>
+                                        <field name="vehicle_type" attrs="{'invisible': [('product_type','=', 'terceros'), ('alquilado','=', False)]}"/>
+                                        <field name="matricula_dos_id" options='{"no_open": True, "no_create": True}' attrs="{'invisible': [('product_type','=', 'terceros'), ('alquilado','=', False)]}"/>
+                                        <field name="matricula_dos_fletero" attrs="{'invisible': ['|', ('product_type','=', 'propio'), ('alquilado','=', True)]}"/>
+                                        <field name="currency_id_chofer" options="{'no_create': True, 'no_open': True}"/>
+                                        <field name="driver_commission" widget="monetary" options="{'currency_field': 'currency_id_chofer'}"/>
+                                </group>
+                            </group>
+
+                            <notebook>
+                                <page string="Proveedores de producto"  attrs="{'invisible': [('product_type','=', 'propio')]}">
+                                    <button class="oe_stat_button"
+                                            string="Añadir Proveedor"
+                                            name="add_supplier_to_product_line"
+                                            type="object"
+                                            icon="fa-hand-o-down"
+                                            style="border: 1px solid #7C7BAD; border-radius: 3px; white-space: normal"
+                                    />
+                                    <field name="supplier_ids"  mode="tree" nolabel="1" readonly="0" colspan="4" context="{'default_currency_id':currency_id}">
+                                        <tree string="profit" editable="false">
+                                            <field name="rt_deposito_product_id" invisible="0"/>
+                                            <field name="ref"/>
+                                            <field name="service_state" invisible="1"/>
+                                            <field name="partner_invoice_id" options="{'no_open': True,'no_create': True}"/>
+                                            <field name="supplier_id" options="{'no_open': True,'no_create': True}"/>
+                                            <field name="product_id" options="{'no_open': True,'no_create': True}"/>
+                                            <field name="output_reference" options="{'no_open': True,'no_create': True}"/>
+                                            <field name="origin_id" options="{'no_create': True, 'no_open': True}"/>
+                                            <field name="destiny_id" options="{'no_create': True, 'no_open': True}"/>
+                                            <field name="invoice_id" options="{'no_open': True,'no_create': True}"/>
+                                            <field name="currency_id" options="{'no_open': True,'no_create': True}"/>
+                                            <field name="tax_ids" options="{'no_open': True,'no_create': True}" widget="many2many_tags"/>
+                                            <field name="amount" options="{'currency_field': 'currency_id'}"/>
+                                            <field name="price_subtotal" options="{'currency_field': 'currency_id'}"/>
+                                            <field name="service_state" readonly="1"/>
+                                            <field name="service_date"/>
+                                        </tree>
+                                    </field>
+                                </page>
+                            </notebook>
+                        </div>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+
+        <!--VISTA FORMULARIO DE LA CARPETA DE MARFIG-->
+        <record id="deposito_form_view" model="ir.ui.view">
+            <field name="name">Deposito Form</field>
+            <field name="model">deposito.service.base</field>
+            <field name="arch" type="xml">
+                <form string="Deposito" class="o_invoice_form">
+                    <header>
+                        <button class="oe_highlight"
+                                type="object"
+                                name="draft_confirm"
+                                string="Validar"
+                                states="draft"
+                        />
+                        <button class="oe_highlight"
+                                type="object"
+                                name="confirm_inprocess"
+                                string="Confirmar"
+                                states="confirm"
+                        />
+                        <button class="oe_highlight"
+                                type="object"
+                                name="confirm_cancel"
+                                string="Cancelar"
+                                states="confirm"
+                        />
+                        <button class="oe_highlight"
+                                type="object"
+                                name="cancel_draft"
+                                string="Borrador"
+                                states="cancel"
+                        />
+                        <button class="oe_highlight"
+                                type="action"
+                                name="%(action_deposito_servicio_tree)d"
+                                string="Mostrar Servicios a Facturar"
+                                context="{'default_rt_service_id': id}"
+                                states="inprocess,invoiced,invoice_rejected"
+                        >
+                        </button>
+                        <button type="object"
+                                name="action_view_invoice"
+                                class="oe_highlight"
+                                string="Ver Factura"
+                                states="inprocess,invoiced"
+                        >
+                        </button>
+                        <field name="state" widget="statusbar"/>
+                    </header>
+                    <sheet string="Deposito">
+                        <h1 class="mt0">
+                            <div>
+                                <field name="name" readonly="1" class="oe_inline"/>
+                            </div>
+                        </h1>
+                        <group>
+                            <group>
+                                <field name="referencia"/>
+                                <field name="stock_operation" options="{'no_create': True, 'no_open': True}"/>
+                                <field name="partner_invoice_id" options="{'no_create': True, 'no_open': True}"/>
+                                <field name="company_id" invisible="1"/>
+                                <field name="origin_id" options="{'no_create': True, 'no_open': True}"/>
+                                <field name="destiny_id" options="{'no_create': True, 'no_open': True}"/>
+                            </group>
+                            <group>
+                                <field name="start_datetime" options="{'datepicker': {'warn_future': true}}"/>
+                                <field name="stop_datetime" options="{'datepicker': {'warn_future': true}}"/>
+                                <field name="pricelist_id" options="{'no_create': True, 'no_open': False}"/>
+                                <field name="currency_id" options="{'no_create': True, 'no_open': True}" class="oe_inline"/>
+                            </group>
+                        </group>
+                        <notebook colspan="3">
+                            <page string="Servicios">
+                                <field name="deposito_srv_ids" context="{'deposito_srv_id': active_id,
+                                                                    'form_view_ref':'deposito.deposito_service_form_view',
+                                                                    'tree_view_ref':'deposito.deposito_service_tree_view',
+                                                                    }">
+
+                                </field>
+                            </page>
+                            <page string="Facturas de Cliente">
+                                <field name="invoices_ids"  readonly="0" context="{'form_view_ref':'account.invoice_form',
+                                                                     'tree_view_ref':'account.invoice_tree',}"/>
+                            </page>
+                            <page string="Facturas de Proveedor">
+                                <field name="suppliers_invoices_ids" readonly="0" context="{'form_view_ref':'account.invoice_supplier_form',
+                                                                                 'tree_view_ref':'account.invoice_supplier_tree',}"/>
+                            </page>
+                        </notebook>
+                    </sheet>
+                    <div class="oe_chatter">
+                        <field name="message_follower_ids" widget="mail_followers" groups="base.group_user"/>
+                        <field name="activity_ids" widget="mail_activity"/>
+                        <field name="message_ids" widget="mail_thread"/>
+                    </div>
+                </form>
+            </field>
+        </record>
+
+    </data>
+</odoo>

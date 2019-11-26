@@ -1,0 +1,225 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+
+        <record id="view_load_filter" model="ir.ui.view">
+            <field name="name">rt.service.product.uninvoiced.line</field>
+            <field name="model">rt.service.productos</field>
+            <field name="arch" type="xml">
+                <search string="Busqueda">
+                    <field name="name" string="Numero"/>
+                    <field name="partner_invoice_id" string="Cliente"/>
+                    <filter name="nacional" domain="[('operation_type','=','national')]" string="Operativa Nacional"/>
+                    <filter name="internacional" domain="[('operation_type','=','international')]" string="Operativa Internacional"/>
+                    <group expand="1" string="Group By">
+                        <filter name="filter_load_state" string="Estado" icon="terp-gtk-jump-to-rtl" domain="[]" context="{'group_by':'state'}"/>
+                        <filter name="filter_load_type" string="Tipo de Carga" icon="terp-gtk-jump-to-rtl" domain="[]" context="{'group_by':'load_type'}"/>
+                        <filter name="filter_load_partner_id" string="Cliente" icon="terp-gtk-jump-to-rtl" domain="[]" context="{'group_by':'partner_invoice_id'}"/>
+                        <filter name="filter_load_operation_type" string="Tipo de Operativa" icon="terp-gtk-jump-to-rtl" domain="[]" context="{'group_by':'operation_type'}"/>
+                    </group>
+                </search>
+            </field>
+        </record>
+
+        <record id="rt_service" model="ir.ui.view">
+            <field name="name">rt.service.base.tree.view</field>
+            <field name="model">rt.service</field>
+            <field name="arch" type="xml">
+                <tree string="Carpeta">
+                    <field name="name"/>
+                    <field name="reference"/>
+                    <field name="partner_invoice_id"/>
+                    <field name="partner_id"/>
+                    <field name="regimen"/>
+                    <field name="start_datetime"/>
+                    <field name="state"/>
+                    <field name="currency_id" invisible="0"/>
+                </tree>
+            </field>
+        </record>
+
+
+        <!--Vista lista de las cargas-->
+        <record id="view_rt_cargas_income" model="ir.ui.view">
+            <field name="name">rt.cargas.income.list</field>
+            <field name="model">rt.service.carga</field>
+            <field name="arch" type="xml">
+                <tree string="Cargas" create="false">
+                    <field name="id" widget="handle"/>
+                    <field name="name"/>
+                    <field name="load_type"/>
+                    <field name="name"/>
+                    <field name="container_number"/>
+                    <field name="xls_name" invisible="1"/>
+                </tree>
+            </field>
+        </record>
+
+
+        <record id="action_ver_cargas_in" model="ir.actions.act_window">
+            <field name="name">Cargas a Ingresar</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">rt.service.carga</field>
+            <field name="domain">[('state','=','ready_to_ingress'),('operation_type','=','national')]</field>
+            <field name="search_view_id" ref="view_load_filter"/>
+            <field name="view_mode">tree,form</field>
+            <field name="view_ids" eval="[(5, 0, 0),
+            (0, 0, {'view_mode': 'tree', 'view_id': ref('servicio_base.view_rt_cargas_income')}),
+            (0, 0, {'view_mode': 'form', 'view_id': ref('servicio_base.view_service_carga_form')})]"/>
+            <field name="help" type="html">
+                <p class="fa fa-smile-o">
+                    No tiene cargas a ingresar
+                </p>
+            </field>
+        </record>
+
+        <record id="action_ver_cargas_all" model="ir.actions.act_window">
+            <field name="name">Ver Todas las Cargas</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">rt.service.carga</field>
+            <field name="domain">[('operation_type','=','national')]</field>
+            <field name="view_mode">tree,form</field>
+            <field name="search_view_id" ref="view_load_filter"/>
+            <field name="view_ids" eval="[(5, 0, 0),
+            (0, 0, {'view_mode': 'tree', 'view_id': ref('servicio_base.view_rt_cargas_income')}),
+            (0, 0, {'view_mode': 'form', 'view_id': ref('servicio_base.view_service_carga_form')})]"/>
+            <field name="help" type="html">
+                <p class="fa fa-smile-o">
+                    No tiene cargas a ingresar
+                </p>
+            </field>
+        </record>
+
+        <record id="action_ver_cargas_ingresada" model="ir.actions.act_window">
+            <field name="name">Cargas Ingresadas</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">rt.service.carga</field>
+            <field name="domain">[('state','=','ingress'),('operation_type','=','national')]</field>
+            <field name="search_view_id" ref="view_load_filter"/>
+            <field name="view_mode">tree,form</field>
+            <field name="view_ids" eval="[(5, 0, 0),
+            (0, 0, {'view_mode': 'tree', 'view_id': ref('servicio_base.view_rt_cargas_income')}),
+            (0, 0, {'view_mode': 'form', 'view_id': ref('servicio_base.view_service_carga_form')})]"/>
+            <field name="help" type="html">
+                <p class="fa fa-smile-o">
+                    No tiene cargas ingresadas
+                </p>
+            </field>
+        </record>
+
+        <record id="action_ver_cargas_in_inter" model="ir.actions.act_window">
+            <field name="name">Cargas a Ingresar</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">rt.service.carga</field>
+            <field name="domain">[('state','=','ready_to_ingress'),('operation_type','=','international')]</field>
+            <field name="search_view_id" ref="view_load_filter"/>
+            <field name="view_mode">tree,form</field>
+            <field name="view_ids" eval="[(5, 0, 0),
+            (0, 0, {'view_mode': 'tree', 'view_id': ref('servicio_base.view_rt_cargas_income')}),
+            (0, 0, {'view_mode': 'form', 'view_id': ref('servicio_base.view_service_carga_form')})]"/>
+            <field name="help" type="html">
+                <p class="fa fa-smile-o">
+                    No tiene cargas a ingresar
+                </p>
+            </field>
+        </record>
+
+        <record id="action_ver_cargas_all_inter" model="ir.actions.act_window">
+            <field name="name">Ver Todas las Cargas</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">rt.service.carga</field>
+            <field name="domain">[('operation_type','=','international')]</field>
+            <field name="view_mode">tree,form</field>
+            <field name="search_view_id" ref="view_load_filter"/>
+            <field name="view_ids" eval="[(5, 0, 0),
+            (0, 0, {'view_mode': 'tree', 'view_id': ref('servicio_base.view_rt_cargas_income')}),
+            (0, 0, {'view_mode': 'form', 'view_id': ref('servicio_base.view_service_carga_form')})]"/>
+            <field name="help" type="html">
+                <p class="fa fa-smile-o">
+                    No tiene cargas a ingresar
+                </p>
+            </field>
+        </record>
+
+        <record id="action_ver_cargas_ingresada_inter" model="ir.actions.act_window">
+            <field name="name">Cargas Ingresadas</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">rt.service.carga</field>
+            <field name="domain">[('state','=','ingress'),('operation_type','=','international')]</field>
+            <field name="search_view_id" ref="view_load_filter"/>
+            <field name="view_mode">tree,form</field>
+            <field name="view_ids" eval="[(5, 0, 0),
+            (0, 0, {'view_mode': 'tree', 'view_id': ref('servicio_base.view_rt_cargas_income')}),
+            (0, 0, {'view_mode': 'form', 'view_id': ref('servicio_base.view_service_carga_form')})]"/>
+            <field name="help" type="html">
+                <p class="fa fa-smile-o">
+                    No tiene cargas ingresadas
+                </p>
+            </field>
+        </record>
+
+        <menuitem
+                id="menu_load_control"
+                name="Control"
+                parent="menu_service_root_nacional"
+                groups="base.group_user"
+                sequence="105"
+        />
+
+        <menuitem action="action_ver_cargas_in"
+                  parent="menu_load_control"
+                  id="menu_cargas_a_depo"
+                  groups="base.group_user"
+                  sequence="104"
+        />
+
+        <menuitem action="action_ver_cargas_all"
+                  parent="menu_load_control"
+                  id="menu_all_cargas"
+                  groups="base.group_user"
+                  sequence="109"
+        />
+
+        <menuitem action="action_ver_cargas_ingresada"
+                  parent="menu_load_control"
+                  id="menu_cargas_ingresadas"
+                  groups="base.group_user"
+                  sequence="105"
+        />
+
+
+        <!--Para la parte internacional-->
+
+        <menuitem
+                id="menu_load_control_inter"
+                name="Control"
+                parent="menu_service_root_inter"
+                groups="base.group_user"
+                sequence="103"
+        />
+
+        <menuitem action="action_ver_cargas_in_inter"
+                  parent="menu_load_control_inter"
+                  id="menu_cargas_a_depo_inter"
+                  groups="base.group_user"
+                  sequence="104"
+        />
+
+        <menuitem action="action_ver_cargas_all_inter"
+                  parent="menu_load_control_inter"
+                  id="menu_all_cargas_inter"
+                  groups="base.group_user"
+                  sequence="109"
+        />
+
+        <menuitem action="action_ver_cargas_ingresada_inter"
+                  parent="menu_load_control_inter"
+                  id="menu_cargas_ingresadas_inter"
+                  groups="base.group_user"
+                  sequence="105"
+        />
+
+
+
+    </data>
+</odoo>

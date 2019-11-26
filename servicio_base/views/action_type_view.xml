@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+
+
+        <record id="action_type_tree_view" model="ir.ui.view">
+            <field name="name">Tipo de Accion-Tree</field>
+            <field name="model">tipo.accion</field>
+            <field name="arch" type="xml">
+                <tree string="Tipo de Accion" editable="bottom">
+                    <field name="name"/>
+                    <field name="internacional" string="Internacional" widget="boolean_toggle"/>
+                    <field name="nacional" string="Nacional" widget="boolean_toggle"/>
+                    <field name="contenedores" string="Contenedores" widget="boolean_toggle"/>
+                    <field name="carga_suelta" string="Carga Suelta" widget="boolean_toggle"/>
+                    <field name="corresponde_comision" widget="boolean_toggle"/>
+                </tree>
+            </field>
+        </record>
+
+        <record id="action_type_form_view" model="ir.ui.view">
+            <field name="name">Tipo de Accion-Form</field>
+            <field name="model">tipo.accion</field>
+            <field name="arch" type="xml">
+                <form string="Tipo de Accion">
+                    <sheet>
+                        <group>
+                            <field name="name"/>
+                            <field name="codigo"/>
+                            <field name="internacional" string="Internacional" widget="boolean_toggle"/>
+                            <field name="contenedores" string="Contenedores" widget="boolean_toggle"/>
+                            <field name="nacional" string="Nacional" widget="boolean_toggle"/>
+                            <field name="carga_suelta" string="Carga Suelta" widget="boolean_toggle"/>
+                            <field name="corresponde_comision" widget="boolean_toggle"/>
+                        </group>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+
+
+
+        <record id="action_tipo_accion" model="ir.actions.act_window">
+            <field name="name">Tipo de Accion</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">tipo.accion</field>
+            <field name="view_mode">kanban,tree</field>
+            <field name="filter" eval="True"/>
+            <field name="help" type="html">
+                <p class="o_view_nocontent_smiling_face">
+                    No se crearon Tipo de Acciones
+                </p>
+            </field>
+        </record>
+
+        <menuitem action="action_tipo_accion"
+                  parent="servicio_base.menu_service_config_national"
+                  id="menu_service_config_action_type"
+                  groups="servicio_base.fleet_group_manager"
+                  sequence="5"
+        />
+
+        <menuitem action="action_tipo_accion"
+                  parent="servicio_base.menu_service_config_inter"
+                  id="menu_service_config_action_type_inter"
+                  groups="servicio_base.fleet_group_manager"
+                  sequence="5"
+        />
+
+    </data>
+</odoo>

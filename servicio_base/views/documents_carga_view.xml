@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+
+        <!--VIEW DE LA FACTURA-->
+        <record id="view_factura_carga_tree" model="ir.ui.view">
+            <field name="name">rt.service.factura.carga.tree</field>
+            <field name="model">rt.service.factura.carga</field>
+            <field name="arch" type="xml">
+                <tree string="Factura" editable="bottom">
+                    <field name="rt_carga_id"/>
+                    <field name="remitente_id"/>
+                    <field name="consigantario_id"/>
+                    <field name="destinatario_id"/>
+                    <field name="notificar_id"/>
+                    <field name="invoice_description"/>
+                    <field name="invoice_list"/>
+                    <field name="market_value"/>
+                    <field name="market_value_currency_id"/>
+                    <field name="ncm"/>
+                    <field name="market_origin"/>
+                    <field name="attachment" widget="many2many_binary"/>
+                </tree>
+            </field>
+        </record>
+
+        <record id="action_factura_carga" model="ir.actions.act_window">
+            <field name="name">Factura</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">rt.service.factura.carga</field>
+            <field name="view_mode">tree</field>
+            <field name="view_id" ref="view_factura_carga_tree"/>
+            <field name="target">fullscreen</field>
+            <field name="help" type="html">
+                <p>
+                    Here is a list of each service product to be invoiced. You can
+                    invoice service product partially, by lines of service.
+                </p>
+            </field>
+        </record>
+
+        <!--VIEW DE EL PACKING LIST-->
+        <record id="view_packing_list_carga_tree" model="ir.ui.view">
+            <field name="name">rt.service.packing.list.carga.tree</field>
+            <field name="model">rt.service.packing.list.carga</field>
+            <field name="arch" type="xml">
+                <tree string="Packing List" editable="bottom">
+                    <field name="rt_carga_id"/>
+                    <field name="package"/>
+                    <field name="load_presentation"/>
+                    <field name="net_kg"/>
+                    <field name="raw_kg"/>
+                    <field name="attachment" widget="many2many_binary"/>
+                </tree>
+            </field>
+        </record>
+
+        <record id="action_packing_list_carga" model="ir.actions.act_window">
+            <field name="name">Packing List</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">rt.service.packing.list.carga</field>
+            <field name="view_mode">tree</field>
+            <field name="view_id" ref="view_packing_list_carga_tree"/>
+            <field name="target">fullscreen</field>
+            <field name="help" type="html">
+                <p>
+                    Here is a list of each service product to be invoiced. You can
+                    invoice service product partially, by lines of service.
+                </p>
+            </field>
+        </record>
+    </data>
+</odoo>

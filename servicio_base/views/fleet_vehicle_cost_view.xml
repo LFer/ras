@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+
+        <record id="res_cost_fleet" model="ir.ui.view">
+            <field name="name">fleet.inherit.pad</field>
+            <field name="model">fleet.vehicle.log.fuel</field>
+            <field name="inherit_id" ref="fleet.fleet_vehicle_log_fuel_view_tree"/>
+            <field name="arch" type="xml">
+                <xpath expr="//tree[1]" position="replace">
+                    <tree decoration-success="invoice_id != False" decoration-danger="invoice_id == False" string="Fuel Logs">
+                        <field name="date"/>
+                        <field name="vehicle_id"/>
+                        <field name="purchaser_id"/>
+                        <field name="inv_ref" invisible="1"/>
+                        <field name="vendor_id" invisible="1"/>
+                        <field name="odometer"/>
+                        <field name="odometer_unit"/>
+                        <field name="liter"/>
+                        <field name="price_per_liter" invisible="1"/>
+                        <field name="amount" sum="Price"/>
+                        <field name="invoice_id" invisible="1"/>
+                    </tree>
+                </xpath>
+            </field>
+        </record>
+
+
+
+        <record id="view_fleet_cost_inh" model="ir.ui.view">
+            <field name="name">fleet.vehicle.cost.inh</field>
+            <field name="model">fleet.vehicle.cost</field>
+            <field name="inherit_id" ref="fleet.fleet_vehicle_costs_view_form"/>
+            <field name="arch" type="xml">
+                <data>
+                    <xpath expr="//form[1]/sheet[1]/group[1]" position="after">
+                        <group name="studio_group_sVtqd">
+                            <group name="studio_group_sVtqd_left" string="Detalles de Factura">
+                                <field name="product_to_invoice"/>
+                                <field name="vendor_id"/>
+                                <field name="inv_ref"/>
+                                <field name="invoice_id"/>
+                            </group>
+                        </group>
+                    </xpath>
+                </data>
+            </field>
+        </record>
+
+
+        <record id="view_fleet_cost_create_invoice" model="ir.ui.view">
+            <field name="name">Crear Facturas</field>
+            <field name="model">fleet.vehicle.cost.make.invoice</field>
+            <field name="arch" type="xml">
+                <form string="Create invoices">
+                    <group>
+                        <field name="group"/>
+                    </group>
+                    <p>
+                        <span class="fa fa-info-circle" style="font-size: 24px; margin-right: 10px; color: #DC5F59; float: left;"/>
+                        <span style="font-size: 16px;">Todos los servicios selecionados seran facturados</span>
+                    </p>
+                    <footer>
+                        <button name="make_invoices" string="Crear &amp; Ver Factura" type="object"
+                                context="{'open_invoices': True}" class="oe_highlight"/>
+                        <button name="make_invoices" string="Crear Facturas" type="object" class="oe_highlight"/>
+                        or
+                        <button string="Cancelar" class="oe_link" special="cancel" />
+                    </footer>
+                </form>
+            </field>
+        </record>
+
+
+
+        <act_window
+                id="action_view_fleet_cost_make_invoice"
+                multi="True"
+                key2="client_action_multi"
+                name="Crear Facturas"
+                res_model="fleet.vehicle.cost.make.invoice"
+                src_model="fleet.vehicle.cost"
+                view_mode="form"
+                target="new"
+                view_type="form"
+                view_id="view_fleet_cost_create_invoice"
+        />
+
+    </data>
+</odoo>

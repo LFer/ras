@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+
+        <record id="action_rt_service_template_nat" model="ir.actions.act_window">
+            <field name="name">Plantillas</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">rt.service</field>
+            <field name="view_mode">tree,form</field>
+            <field name="domain">[('es_plantilla','=', True),('operation_type', '=', 'national')]</field>
+            <field name="context">{'default_es_plantilla': True, 'default_operation_type': 'national'}</field>
+            <field name="view_id" ref="servicio_base.rt_service_base_tree_view"/>
+            <field name="filter" eval="True"/>
+            <field name="help" type="html">
+                <p class="o_view_nocontent_smiling_face">
+                    No se crearon Plantillas
+                </p><p>
+            </p>
+            </field>
+        </record>
+
+        <record id="action_rt_service_template_inter" model="ir.actions.act_window">
+            <field name="name">Plantillas</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">rt.service</field>
+            <field name="view_mode">tree,form</field>
+            <field name="domain">[('es_plantilla','=', True),('operation_type', '=', 'international')]</field>
+            <field name="context">{'default_es_plantilla': True, 'default_operation_type': 'international'}</field>
+            <field name="view_id" ref="servicio_base.rt_service_base_tree_view"/>
+            <field name="filter" eval="True"/>
+            <field name="help" type="html">
+                <p class="o_view_nocontent_smiling_face">
+                    No se crearon Plantillas
+                </p><p>
+            </p>
+            </field>
+        </record>
+
+        <!--Menu de Plantillas INTERNACIONAL-->
+        <menuitem
+                action="action_rt_service_template_inter"
+                parent="servicio_base.menu_service_config_inter"
+                id="rt_service_base_template_inter"
+                groups="base.group_user"
+        />
+
+        <!--Menu de Plantillas NACIONAL-->
+        <menuitem
+                action="action_rt_service_template_nat"
+                parent="servicio_base.menu_service_config_national"
+                id="rt_service_base_template_nat"
+                groups="base.group_user"
+        />
+    </data>
+</odoo>

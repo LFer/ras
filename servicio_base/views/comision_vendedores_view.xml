@@ -1,0 +1,136 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+
+        <record id="comision_vendedor_tree" model="ir.ui.view">
+            <field name="name">Comision Vendedor-Tree</field>
+            <field name="model">rt.service.productos</field>
+            <field name="arch" type="xml">
+                <tree string="Comision de Vendedores" edit="false" create="false" delete="false" decoration-success="comision_paga=='pago'" decoration-it="comision_paga=='pago'" decoration-danger="comision_paga=='no_pago'">
+                    <field name="partner_seller_id"/>
+                    <field name="comision_paga"/>
+                    <field name="name" string="Referencia"/>
+                    <field name="mic_number"/>
+                    <field name="crt_number"/>
+                    <field name="currency_id_vendedor"/>
+                    <field name="seller_commission" widget="monetary" options="{'currency_field': 'currency_id_vendedor'}" sum="Total"/>
+                </tree>
+            </field>
+        </record>
+
+        <record id="comision_vendedores_filter" model="ir.ui.view">
+            <field name="name">Comision Vendedores</field>
+            <field name="model">rt.service.productos</field>
+            <field name="arch" type="xml">
+                <search string="Buscar Comisiones">
+                    <filter string="Pagas" name="paid" domain="[('comision_paga','=','pago')]"/>
+                    <filter string="No Pagas" name="unpaid" domain="[('comision_paga','=','no_pago')]"/>
+                    <field name="partner_seller_id"/>
+                    <group expand="1" string="Group By">
+                        <filter name="filter_seller" string="Vendedor" icon="terp-gtk-jump-to-rtl" domain="[]" context="{'group_by':'partner_seller_id'}"/>
+                        <filter name="filter_state" string="Estado" icon="terp-accessories-archiver" domain="[]" context="{'group_by':'comision_paga'}"/>
+                        <filter name="filter_service" string="Servicio" icon="terp-accessories-archiver" domain="[]" context="{'group_by':'name'}"/>
+                        <filter name="filter_service_type" string="Tipo de Servicio" icon="terp-accessories-archiver" domain="[]" context="{'group_by':'product_id' }"/>
+                        <!--<filter name="filter_deadline" string="Fecha de Pago" icon="terp-accessories-archiver" domain="[]" context="{'group_by':''}"/>-->
+                        <filter name="filter_date" string="Fecha" icon="terp-accessories-archiver" domain="[]" context="{'group_by':'start' }"/>
+                    </group>
+                </search>
+            </field>
+        </record>
+
+        <record id="action_comisiones_vendedores" model="ir.actions.act_window">
+            <field name="name">Comisiones Vendedores</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">rt.service.productos</field>
+            <field name="view_mode">tree</field>
+            <field name="domain">[('operation_type','=','national')]</field>
+            <field name="filter" eval="True"/>
+            <field name="search_view_id" ref="comision_vendedores_filter"/>
+            <field name="view_id" ref="comision_vendedor_tree"/>
+            <field name="help" type="html">
+                <p class="o_view_nocontent_smiling_face">
+                    Nada que mostrar
+                </p>
+            </field>
+        </record>
+
+        <record id="action_comisiones_vendedores_inter" model="ir.actions.act_window">
+            <field name="name">Comisiones Vendedores</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">rt.service.productos</field>
+            <field name="view_mode">tree</field>
+            <field name="domain">[('operation_type','=','international')]</field>
+            <field name="filter" eval="True"/>
+            <field name="search_view_id" ref="comision_vendedores_filter"/>
+            <field name="view_id" ref="comision_vendedor_tree"/>
+            <field name="help" type="html">
+                <p class="o_view_nocontent_smiling_face">
+                    Nada que mostrar
+                </p>
+            </field>
+        </record>
+
+        <record id="view_comision_vendedor_graph" model="ir.ui.view">
+            <field name="name">comision.vendedor.graph</field>
+            <field name="model">rt.service.productos</field>
+            <field name="arch" type="xml">
+                <graph string="Sales Analysis" type="bar" stacked="True">
+                    <!--AGRUPADORES-->
+                    <field name="operation_type"/>
+                    <field name="comision_paga"/>
+                    <field name="partner_seller_id"/>
+                    <!--CAMPO DE COLUMNA-->
+                    <field name="seller_commission" type="measure"/>
+                    </graph>
+            </field>
+        </record>
+
+        <record id="comision_vendedor_view_pivot" model="ir.ui.view">
+            <field name="name">comision.vendedor.pivot</field>
+            <field name="model">rt.service.productos</field>
+            <field name="arch" type="xml">
+                <pivot string="Sales Analysis" disable_linking="True">
+                    <field name="operation_type" type="row"/>
+                    <field name="comision_paga" type="row"/>
+                    <field name="partner_seller_id" type="row"/>
+                    <field name="seller_commission" type="measure" widget="monetary" options="{'currency_field': 'currency_id_vendedor'}"/>
+                    <field name="currency_id_vendedor" type="col"/>
+                </pivot>
+            </field>
+        </record>
+
+        <record id="comision_vendednores_report_view_dashboard" model="ir.ui.view">
+            <field name="name">comision.vendedor.view.dashboard</field>
+            <field name="model">rt.service.productos</field>
+            <field name="mode">primary</field>
+            <field name="arch" type="xml">
+                <dashboard>
+                    <view type="graph" ref="servicio_base.view_comision_vendedor_graph"/>
+                    <view type="pivot" ref="servicio_base.comision_vendedor_view_pivot"/>
+                </dashboard>
+            </field>
+        </record>
+
+        <record id="filter_comisions_vendedor_two" model="ir.filters">
+            <field name="name">Vendedor->Mes-Estado</field>
+            <field name="model_id">rt.service.productos</field>
+            <field name="user_id" eval="False"/>
+            <field name="context">{'group_by': ['partner_seller_id', 'comision_paga', 'start:month']}</field>
+            <field name="action_id" ref="action_comisiones_vendedores"/>
+            <field name="is_default" eval="True"/>
+        </record>
+
+        <record id="filter_comisions_vendedor_two_inter" model="ir.filters">
+            <field name="name">Vendedor->Mes-Estado</field>
+            <field name="model_id">rt.service.productos</field>
+            <field name="user_id" eval="False"/>
+            <field name="context">{'group_by': ['partner_seller_id', 'comision_paga', 'start:month']}</field>
+            <field name="action_id" ref="action_comisiones_vendedores_inter"/>
+            <field name="is_default" eval="True"/>
+        </record>
+
+
+
+
+    </data>
+</odoo>

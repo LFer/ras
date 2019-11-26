@@ -1,0 +1,78 @@
+<?xml version="1.0"?>
+<odoo>
+    <data>
+
+        <record id="invoice_supplier_form" model="ir.ui.view">
+            <field name="name">account.invoice.supplier.form</field>
+            <field name="model">account.invoice</field>
+            <field name="inherit_id" ref="account.invoice_supplier_form"/>
+            <field name="arch" type="xml">
+                <data>
+                    <notebook position="inside">
+                        <page string="Informacion de Servicios">
+                            <button class="oe_stat_button"
+                                    string="Añadir Proveedor"
+                                    name="bind_service_product_supplier"
+                                    type="object"
+                                    icon="fa-user-plus"
+                                    style="border: 1px solid #7C7BAD; border-radius: 3px; white-space: normal"
+                            />
+                            <group>
+                                <field name="freighter_id" domain="[('supplier','=',True)]" style="width: 25%" options="{'no_open': True,'no_create': True}"/>
+                            </group>
+                            <notebook>
+                                <page string="Product Suppliers" invisible="1">
+                                    <field name="product_supplier_ids" nolabel="1" widget="one2many_list">
+                                        <!--                                        <tree string="Suppliers" create="false" edit="false" delete="false">-->
+                                        <tree string="Suppliers">
+                                            <field name="rt_service_id" attrs="{'invisible': [('rt_service_id','=',False)]}" options="{&quot;no_create&quot;: True}"/>
+                                            <field name="rt_service_product_id" options="{&quot;no_create&quot;: True}"/>
+                                            <field name="currency_id" options="{&quot;no_create&quot;: True}"/>
+                                            <field name="tax_ids" widget="many2many_tags" options="{&quot;no_create&quot;: True}"/>
+                                            <field name="amount"/>
+                                        </tree>
+                                    </field>
+                                </page>
+                                <page string="Proveedores de producto">
+                                    <field name="producto_ids" nolabel="1" widget="one2many_list">
+                                        <tree string="Suppliers" create="false" edit="true" delete="false">
+                                            <button name="button_delete_invoice_id" string="Borrar Factura Proveedor" type="object" icon="fa-trash-alt"  attrs="{'readonly':[('invoice_id','=',False)], 'invisible':[('invoice_id','=',False)]}"/>
+                                            <field name="invoice_id"/>
+                                            <field name="partner_invoice_id"/>
+                                            <field name="supplier_id"/>
+                                            <field name="product_id"/>
+                                            <field name="output_reference"/>
+                                            <field name="origin_id" options="{'no_create': True, 'no_open': True}"/>
+                                            <field name="destiny_id" options="{'no_create': True, 'no_open': True}"/>
+                                            <field name="tack_id"/>
+                                            <field name="dua"/>
+                                            <field name="mic"/>
+                                            <field name="crt"/>
+                                            <field name="service_date"/>
+                                            <field name="currency_id"/>
+                                            <field name="amount"/>
+                                            <field name="tax_ids" widget="many2many_tags"/>
+                                            <field name="price_subtotal"/>
+                                            <field name="service_state"/>
+                                            <field name="rt_service_product_id" string="Servicio"/>
+                                        </tree>
+                                    </field>
+                                </page>
+                                <page string="Carpetas">
+                                    <field name="service_ids" nolabel="1" widget="one2many_list">
+                                        <tree string="Services" create="false" edit="false" delete="false">
+                                            <field name="name" string="Service Number"/>
+                                            <field name="partner_id"/>
+                                            <field name="state"/>
+                                        </tree>
+                                    </field>
+                                </page>
+                            </notebook>
+                        </page>
+                    </notebook>
+                </data>
+            </field>
+        </record>
+
+    </data>
+</odoo>

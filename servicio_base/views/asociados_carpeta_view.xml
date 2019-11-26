@@ -1,0 +1,307 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+
+        <record id="consignatario_view_tree" model="ir.ui.view">
+            <field name="name">consigntario - tree</field>
+            <field name="model">asociados.carpeta</field>
+            <field eval="8" name="priority"/>
+            <field name="arch" type="xml">
+                <tree string="Contacts">
+                    <field name="name"/>
+                    <field name="phone"/>
+                    <field name="email"/>
+                </tree>
+            </field>
+        </record>
+
+        <record id="asociados_a_carpeta_form_view_consignatario" model="ir.ui.view">
+            <field name="name">Consigantario - Form</field>
+            <field name="model">asociados.carpeta</field>
+            <field name="priority" eval="1"/>
+            <field name="arch" type="xml">
+                <form string="Asociados">
+                    <sheet>
+                        <div class="oe_button_box" name="button_box">
+                            <button name="toggle_active" type="object" class="oe_stat_button" icon="fa-archive">
+                                <field name="active" widget="boolean_button" options="{&quot;terminology&quot;: &quot;archive&quot;}"/>
+                            </button>
+                        </div>
+                        <field name="image" widget="image" class="oe_avatar" options="{&quot;preview_image&quot;: &quot;image&quot;, &quot;size&quot;: [90, 90]}"/>
+                        <div class="oe_title">
+                            <h1>
+                                <field name="name" default_focus="1" placeholder="Name" attrs="{'required' : [('type', '=', 'contact')]}"/>
+                                <group>
+                                    <field name="category_id" widget="many2many_tags" options="{'color_field': 'color', 'no_create_edit': False}" placeholder="Etiquetas..."/>
+                                </group>
+                            </h1>
+                        </div>
+
+                        <group>
+                            <group>
+                                <field name="type" groups="base.group_no_one"/>
+                                <field name="document_nro" string="Número de Documento"/>
+                                <label for="street" string="Dirección"/>
+                                <div class="o_address_format">
+                                    <field name="country_id" placeholder="País" class="o_address_country" string="País"/>
+                                    <field name="state_id" class="o_address_state" placeholder="Artigas..." options="{&quot;no_open&quot;: True}" string="Departamento"/>
+                                    <field name="city" placeholder="Ciudad" class="o_address_city" string="Ciudad"/>
+                                    <field name="street" placeholder="Calle..." class="o_address_street" string="Calle"/>
+                                </div>
+
+                            </group>
+                            <group>
+                                <field name="phone" widget="phone" string="Telefono"/>
+                                <field name="mobile" widget="phone" string="Celular"/>
+                                <field name="email" widget="email" context="{'gravatar_image': True}" string="E-mail"/>
+                                <field name="vat"/>
+                            </group>
+                        </group>
+
+                    </sheet>
+                </form>
+            </field>
+        </record>
+
+        <record id="asociados_a_carpeta_kanban_view_consignatario" model="ir.ui.view" >
+            <field name="name">Consignatario - Kanban</field>
+            <field name="model">asociados.carpeta</field>
+            <field name="arch" type="xml">
+                <kanban class="o_res_partner_kanban">
+                    <field name="id"/>
+                    <field name="color"/>
+                    <field name="email"/>
+                    <field name="phone"/>
+                    <field name="street"/>
+                    <field name="city"/>
+                    <field name="country_id"/>
+                    <field name="mobile"/>
+                    <field name="state_id"/>
+                    <field name="category_id"/>
+                    <field name="image_small"/>
+                    <field name="image"/>
+                    <field name="type"/>
+                            <templates>
+                                <t t-name="kanban-box">
+                                    <div class="oe_kanban_global_click o_kanban_record_has_image_fill o_res_partner_kanban">
+                                        <div class="oe_kanban_details">
+                                            <div>
+                                                <img class="o_kanban_image" t-att-src="kanban_image('asociados.carpeta', 'image', record.id.raw_value)" t-att-alt="record.name"/>
+                                            </div>
+                                            <h4><a type="open">
+                                                <field name="name" />
+                                            </a></h4>
+                                            <ul>
+                                                <field name="category_id" widget="many2many_tags" options="{'color_field': 'color'}"/>
+                                                <li><field name="country_id" />, <field name="state_id" />, <field name="city"/></li>
+                                                <li><field name="email" /></li>
+                                            </ul>
+                                        </div>
+                                    </div>
+                                </t>
+                            </templates>
+                </kanban>
+            </field>
+        </record>
+
+
+
+        <record id="asociados_a_carpeta_kanban_view_remitente" model="ir.ui.view">
+            <field name="name">Consignatario - Remitente</field>
+            <field name="model">asociados.carpeta</field>
+            <field name="arch" type="xml">
+                <kanban class="o_res_partner_kanban">
+                    <field name="id"/>
+                    <field name="color"/>
+                    <field name="email"/>
+                    <field name="phone"/>
+                    <field name="street"/>
+                    <field name="city"/>
+                    <field name="country_id"/>
+                    <field name="mobile"/>
+                    <field name="state_id"/>
+                    <field name="category_id"/>
+                    <field name="image_small"/>
+                    <field name="image"/>
+                    <field name="type"/>
+                            <templates>
+                                <t t-name="kanban-box">
+                                    <div class="oe_kanban_global_click o_kanban_record_has_image_fill o_res_partner_kanban">
+                                        <div class="oe_kanban_details">
+                                            <div>
+                                                <img class="o_kanban_image" t-att-src="kanban_image('asociados.carpeta', 'image', record.id.raw_value)" t-att-alt="record.name"/>
+                                            </div>
+                                            <h4><a type="open">
+                                                <field name="name" />
+                                            </a></h4>
+                                            <ul>
+                                                <field name="category_id" widget="many2many_tags" options="{'color_field': 'color'}"/>
+                                                <li><field name="country_id" />, <field name="state_id" />, <field name="city"/></li>
+                                                <li><field name="email" /></li>
+                                            </ul>
+                                        </div>
+                                    </div>
+                                </t>
+                            </templates>
+                </kanban>
+            </field>
+        </record>
+
+        <record id="remitente_view_tree" model="ir.ui.view">
+            <field name="name">consigntario - tree</field>
+            <field name="model">asociados.carpeta</field>
+            <field eval="8" name="priority"/>
+            <field name="arch" type="xml">
+                <tree string="Contacts">
+                    <field name="name"/>
+                    <field name="phone"/>
+                    <field name="email"/>
+                </tree>
+            </field>
+        </record>
+
+
+        <menuitem id="menu_asociados_a_carpeta"
+                  name="Asociados a Carpeta"
+                  parent="menu_service_root_nacional"
+                  groups="base.group_user"
+                  sequence="115"
+        />
+
+        <menuitem id="menu_asociados_a_carpeta_inter"
+                  name="Asociados a Carpeta"
+                  parent="menu_service_root_inter"
+                  groups="base.group_user"
+                  sequence="105"
+        />
+
+        <record id="action_asociado_consignatario" model="ir.actions.act_window">
+            <field name="name">Consignatario</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">asociados.carpeta</field>
+            <field name="view_mode">kanban,tree,form</field>
+            <field name="domain">[('type','=','consignatario')]</field>
+            <field name="context">{'default_type':'consignatario'}</field>
+            <!--<field name="view_id" ref="asociados_a_carpeta_form_view_consignatario"/>-->
+            <field name="filter" eval="True"/>
+            <field name="help" type="html">
+                <p class="o_view_nocontent_smiling_face">
+                    No existe ningun Consignatario Creado
+                </p><p>
+
+            </p>
+            </field>
+        </record>
+
+        <menuitem action="action_asociado_consignatario"
+                  parent="menu_asociados_a_carpeta"
+                  id="menu_consignatario"
+                  groups="base.group_user"
+                  sequence="20"
+        />
+
+        <menuitem action="action_asociado_consignatario"
+                  parent="menu_asociados_a_carpeta_inter"
+                  id="menu_consignatario_inter"
+                  groups="base.group_user"
+                  sequence="20"
+        />
+
+
+        <record id="action_asociado_remitente" model="ir.actions.act_window">
+            <field name="name">Remitente</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">asociados.carpeta</field>
+            <field name="view_mode">kanban,tree,form</field>
+            <field name="domain">[('type','=','remitente')]</field>
+            <field name="context">{'default_type':'remitente'}</field>
+            <field name="filter" eval="True"/>
+            <field name="help" type="html">
+                <p class="o_view_nocontent_smiling_face">
+                    No existe ningun Remitente Creado
+                </p><p>
+
+            </p>
+            </field>
+        </record>
+
+        <menuitem action="action_asociado_remitente"
+                  parent="menu_asociados_a_carpeta"
+                  id="menu_remitente"
+                  groups="base.group_user"
+                  sequence="1"
+        />
+
+        <menuitem action="action_asociado_remitente"
+                  parent="menu_asociados_a_carpeta_inter"
+                  id="menu_remitente_inter"
+                  groups="base.group_user"
+                  sequence="1"
+        />
+
+
+
+
+        <record id="action_destinatario" model="ir.actions.act_window">
+            <field name="name">Destinatario</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">asociados.carpeta</field>
+            <field name="view_mode">kanban,tree,form</field>
+            <field name="domain">[('type','=','destinatario')]</field>
+            <field name="context">{'default_type':'destinatario'}</field>
+            <field name="filter" eval="True"/>
+            <field name="help" type="html">
+                <p class="o_view_nocontent_smiling_face">
+                    No existe ningun Destinatario Creado
+                </p><p>
+
+            </p>
+            </field>
+        </record>
+
+        <menuitem action="action_destinatario"
+                  parent="menu_asociados_a_carpeta"
+                  id="menu_destinatario"
+                  groups="base.group_user"
+                  sequence="10"
+        />
+        <menuitem action="action_destinatario"
+                  parent="menu_asociados_a_carpeta_inter"
+                  id="menu_destinatario_inter"
+                  groups="base.group_user"
+                  sequence="10"
+        />
+
+        <record id="action_notificar" model="ir.actions.act_window">
+            <field name="name">Notificar a </field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">asociados.carpeta</field>
+            <field name="view_mode">kanban,tree,form</field>
+            <field name="domain">[('type','=','notificar')]</field>
+            <field name="context">{'default_type':'notificar'}</field>
+            <field name="filter" eval="True"/>
+            <field name="help" type="html">
+                <p class="o_view_nocontent_smiling_face">
+                    Cree un registro
+                </p><p>
+
+            </p>
+            </field>
+        </record>
+
+        <menuitem action="action_notificar"
+                  parent="menu_asociados_a_carpeta"
+                  id="menu_action_avisar"
+                  groups="base.group_user"
+                  sequence="15"
+        />
+
+        <menuitem action="action_notificar"
+                  parent="menu_asociados_a_carpeta_inter"
+                  id="menu_action_avisar_inter"
+                  groups="base.group_user"
+                  sequence="15"
+        />
+
+    </data>
+</odoo>

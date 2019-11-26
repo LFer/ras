@@ -1,0 +1,139 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+
+        <record id="container_form_view" model="ir.ui.view">
+            <field name="name">product.template.common.form</field>
+            <field name="model">product.template</field>
+            <field name="mode">primary</field>
+            <field name="arch" type="xml">
+                <form string="Product">
+                    <field name="valid_cointaner_number_text" invisible="1"/>
+                    <field name="invalid_cointaner_number_text" invisible="1"/>
+                    <header>
+                    </header>
+                    <sheet>
+                        <div class="oe_button_box" name="button_box">
+                            <button string="Product Moves"
+                                    type="object"
+                                    name= "action_view_stock_move_lines"
+                                    attrs="{'invisible':[('type', 'not in', ['product', 'consu'])]}"
+                                    class="oe_stat_button" icon="fa-arrows-v"
+                                    groups="stock.group_stock_user">
+
+                            </button>
+
+                            <button class="oe_stat_button"
+                                    name="%(stock.product_open_quants)d"
+                                    icon="fa-building-o"
+                                    type="action" attrs="{'invisible':[('type', '!=', 'product')]}">
+                                <div class="o_field_widget o_stat_info">
+                                    <span class="o_stat_value">
+                                        <field name="qty_available" widget="statinfo" nolabel="1" class="mr4"/>
+                                        <field name="uom_name"/>
+                                    </span>
+                                    <span class="o_stat_text">En Mano</span>
+                                </div>
+                            </button>
+
+                            <button name="toggle_active" type="object"
+                                    class="oe_stat_button" icon="fa-archive">
+                                <field name="active" widget="boolean_button"
+                                       options='{"terminology": "archive"}'/>
+                            </button>
+                        </div>
+                        <field name="image_medium" widget="image" class="oe_avatar"/>
+                        <div class="oe_title">
+                            <label class="oe_edit_only" for="name" string="Número de Contenedor"/>
+                            <h1>
+                                <field name="name" placeholder="ej: HOYU-751013-6"/>
+                            </h1>
+
+                            <div name="options" groups="base.group_user">
+                                <span attrs="{'invisible': [('valid_cointaner_number_text','=',False)]}" style="color:Green;align:right">
+                                    <p>¡Número de contenedor válido!</p>
+                                </span>
+                                <span/>
+                                <span  attrs="{'invisible': [('invalid_cointaner_number_text','!=',True)]}" style="color:Red;align:right">
+                                    <p>¡Número de contenedor no válido!</p>
+                                </span>
+                                <div>
+                                    <field name="is_container"/>
+                                    <label for="is_container"/>
+                                </div>
+                            </div>
+                        </div>
+                        <notebook>
+                            <page string="Informacion General" name="general_information">
+                                <group>
+                                    <group name="group_general">
+                                        <field name="type" invisible="0"/>
+                                        <field name="container_type"  options="{'no_create': True, 'no_open': True}"/>
+                                        <label for="weight"/>
+                                        <div class="o_row" name="weight">
+                                            <field name="weight"/>
+                                            <span><field name="weight_uom_name"/></span>
+                                        </div>
+                                        <label for="volume"/>
+                                        <div class="o_row" name="volume">
+                                            <field name="volume" string="Volume"/>
+                                            <span>m³</span>
+                                        </div>
+                                    </group>
+                                </group>
+                                <group string="Internal Notes">
+                                    <field name="description" nolabel="1" placeholder="This note is only for internal purposes."/>
+                                </group>
+                            </page>
+                            <page string="Fotos" name="images">
+                                <group name="extra_images" string="Fotos">
+                                    <field name="product_image_ids" class="o_website_sale_image_list" context="{'default_name': name, 'default_product_tmpl_id': active_id}" nolabel="1">
+                                        <kanban string="Container Images" class="o_attachments_previews">
+                                            <field name="id"/>
+                                            <field name="name"/>
+                                            <field name="image"/>
+                                            <templates>
+                                                <t t-name="kanban-box">
+                                                    <div class="o_attachment oe_kanban_global_click o_website_sale_image_card">
+                                                        <div class="o_attachment_wrap">
+                                                            <div class="o_image_box">
+                                                                <div class="o_attachment_image" t-attf-style="background-image:url({{kanban_image('product.image', 'image', record.id.raw_value)}});"/>
+                                                                <div t-attf-class="o_image_overlay" t-att-title="record.name.value"/>
+                                                                <div class="o_website_sale_image_card_title" t-att-title="record.name.value">
+                                                                    <field name="name"/>
+                                                                </div>
+                                                            </div>
+
+                                                            <t t-set="size" t-value="[record.image.value][0]"/>
+                                                            <t t-set="size_status" t-value="'normal'" t-if="size.indexOf('Bytes') !== -1 or ( size.indexOf('Kb') !== -1 and size[2]=='.')"/>
+                                                            <t t-set="size_status" t-value="'warning'" t-elif="( size.indexOf('Kb') !== -1 and size[3]=='.')"/>
+                                                            <t t-set="size_status" t-value="'danger'"  t-else=""/>
+                                                            <t t-set="message" t-value="'Acceptable file size'" t-if="size_status == 'normal'"></t>
+                                                            <t t-set="message" t-value="'Huge file size. The image should be optimized/reduced.'" t-elif="size_status == 'warning'"></t>
+                                                            <t t-set="message" t-value="'Optimization required! Reduce the image size or increase your compression settings.'" t-else=""></t>
+
+                                                            <span t-attf-class="o_website_sale_image_card_size badge badge-#{size_status}" t-att-title="message">
+                                                                <t t-esc="record.image.value"/>
+                                                            </span>
+                                                        </div>
+                                                    </div>
+                                                </t>
+                                            </templates>
+                                        </kanban>
+                                    </field>
+                                </group>
+                            </page>
+                        </notebook>
+                    </sheet>
+                    <div class="oe_chatter">
+                        <field name="message_follower_ids" widget="mail_followers"/>
+                        <field name="activity_ids" widget="mail_activity"/>
+                        <field name="message_ids" widget="mail_thread"/>
+                    </div>
+                </form>
+            </field>
+        </record>
+
+
+    </data>
+</odoo>

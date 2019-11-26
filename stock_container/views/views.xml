@@ -1,0 +1,38 @@
+<odoo>
+  <data>
+
+        <record id="distribuir_paquetes_wizard" model="ir.ui.view">
+            <field name="name">Distribuir Paquetes</field>
+            <field name="model">distribuye.paquetes.wizard</field>
+            <field name="arch" type="xml">
+                <form string="Create invoices">
+                    <p>
+                        <span class="fa fa-info-circle" style="font-size: 24px; margin-right: 10px; color: #DC5F59; float: left;"/>
+                        <span style="font-size: 16px;">Todos los paquetes selecionados seran marcados distribuidos en batch de 18</span>
+                    </p>
+                    <footer>
+                        <button name="distribuir_paquetes" string="Distribuir Paquetes" type="object" class="oe_highlight"/>
+
+                        or
+                        <button string="Cancelar" class="oe_link" special="cancel" />
+                    </footer>
+                </form>
+            </field>
+        </record>
+
+        <act_window
+                id="action_distruir_paquetes"
+                multi="True"
+                key2="client_action_multi"
+                name="Distribuir Paquetes"
+                res_model="distribuye.paquetes.wizard"
+                src_model="product.template"
+                view_mode="form"
+                target="new"
+                view_type="form"
+                view_id="distribuir_paquetes_wizard"
+        />    
+    
+    
+  </data>
+</odoo>

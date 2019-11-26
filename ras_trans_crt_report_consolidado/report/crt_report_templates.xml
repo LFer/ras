@@ -1,0 +1,950 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <template id="report_crt_report">
+        <t t-call="web.html_container">
+            <!--<t t-debug="ipdb"/>-->
+            <div class="page">
+                <style>
+                    table {
+                    border: none !important;
+                    border-collapse: collapse;
+                    border-spacing: 0px;
+                    height: 100%;
+                    width:100%;
+                    }
+                    .texto_titulito {
+                    font-size: x-small;
+                    font-weight: bold;
+                    padding-left: 5px;
+                    }
+                    .texto_titulito_soft {
+                    font-size: x-small;
+                    }
+                    .texto_contenido {
+                    font-size: small;
+                    padding: 5px;
+                    }
+                    .celda_contenido {
+                    vertical-align: top;
+                    border: solid 1px black;
+                    height: 100%;
+                    }
+                </style>
+                <div style="width: 100%; height: 280mm" name="borde_externo">
+                    <div style="width: 100%;"
+                         name="cabezal">
+                        <table style="height: 25mm">
+                            <tbody>
+                                <tr>
+                                    <td style="width: 10%; vertical-align: middle;border-radius: 50%; align: center; border: solid 1px black;">
+                                        <!--<span style="font-size: 30px">&#160;<b>CRT</b></span>-->
+                                        <t t-set="company" t-value="docs.company_id"/>
+                                        <img t-if="company.logo_crt" t-att-src="image_data_uri(company.logo_crt)" alt="Logo"/>
+                                    </td>
+                                    <td style="width: 25%; vertical-align: top; align: left; border: solid 1px black">
+                                        <span style="font-size: x-small;">
+                                            <b>Carta de Porte Internacional por Carretera.
+                                                <br></br>
+                                                <br></br>
+                                                Conhecimiento de Transporte Internacional por Rodovia.</b>
+                                        </span>
+                                    </td>
+                                    <td style="width: 65%; vertical-align: top; align: left; border: solid 1px black">
+                                        <p style="font-size: 10px;">
+                                            El transporte realizado bajo esta Carta de Porte Internacional está sujeto a las disposiciones del Convenio
+                                            sobre el Contrato de transporte y la Responsabilidad Civil del Portador en el Transporte Terrestre Internacional
+                                            de Mercancías, las cuales anulan toda estipulación que se aparte de ellas en perjuicio del remitente o del consignatario.<br></br>
+                                            O transporte realizado ao amparo desde Conhecimento de transporte Internacional está sujeto as disposições do convenio
+                                            sobre o Contrato de Transporte e a Responsabilidade Civil do Transportador no Transporte Terrestre Internacional
+                                            de Mercaderías, as quais anulam todo estipulação contraria as mesmas em prejuizo do remitente ou do consignatário.
+                                        </p>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div style="width: 100%;" name="zona1">
+                        <table style="width: 100%; height: 100%; height: 60.5mm" cellspacing="0">
+                            <tbody>
+                                <tr>
+                                    <td style="width: 50%;">
+                                        <table style="width: 100%; height: 100%;" cellspacing="0">
+                                            <tbody>
+                                                <tr>
+                                                    <t t-if="docs.factura_carga_ids">
+                                                        <t t-set ="factura_carga" t-value="recorre_tipo_de_lineas(docs.factura_carga_ids)"/>
+                                                        <t t-if="factura_carga.remitente_id">
+                                                            <td class="celda_contenido">
+                                                                <span class="texto_titulito">1 Nombre y domicilio del remitente / Nome e endereço do remetente </span>
+                                                                <br/>
+                                                                <span t-field="factura_carga.remitente_id.social_reason" class="texto_contenido"/>
+                                                                <br></br>
+                                                                <span t-field="factura_carga.remitente_id.street" class="texto_contenido"/>
+                                                                <br></br>
+                                                                <span t-field="factura_carga.remitente_id.city" class="texto_contenido"/>
+                                                                ,
+                                                                <span t-field="factura_carga.remitente_id.country_id.name" class="texto_contenido"/>
+                                                            </td>
+                                                        </t>
+                                                        <t t-if="not factura_carga.remitente_id">
+                                                            <td class="celda_contenido">
+                                                                <span class="texto_titulito">1 Nombre y domicilio del remitente / Nome e endereço do remetente </span>
+                                                                <br/>
+                                                                <span t-field="factura_carga.partner_remitente_id.social_reason" class="texto_contenido"/>
+                                                                <br></br>
+                                                                <span t-field="factura_carga.partner_remitente_id.street" class="texto_contenido"/>
+                                                                <br></br>
+                                                                <span t-field="factura_carga.partner_remitente_id.city" class="texto_contenido"/>
+                                                                ,
+                                                                <span t-field="factura_carga.partner_remitente_id.country_id.name" class="texto_contenido"/>
+                                                            </td>
+                                                        </t>
+                                                    </t>
+                                                    <t t-if="not docs.factura_carga_ids">
+                                                        <td class="celda_contenido">
+                                                            <span class="texto_titulito">1 Nombre y domicilio del remitente / Nome e endereço do remetente </span>
+                                                            <br/>
+                                                            <br></br>
+                                                            <br></br>
+                                                        </td>
+                                                    </t>
+                                                </tr>
+                                                <tr>
+                                                    <t t-if="docs.factura_carga_ids">
+                                                        <t t-set ="factura_carga" t-value="recorre_tipo_de_lineas(docs.factura_carga_ids)"/>
+                                                        <t t-if="factura_carga.destinatario_id">
+                                                            <td class="celda_contenido">
+                                                                <span class="texto_titulito">4 Nombre y domicilio del destinatario / Nome e endereço do destinatario </span>
+                                                                <br></br>
+                                                                <span t-field="factura_carga.destinatario_id.social_reason" class="texto_contenido"/>
+                                                                <span class="texto_contenido" style="float: right; margin-right: 10px, font-size:20px;">
+                                                                    CUIT:<t t-esc="factura_carga.destinatario_id.vat"/>
+                                                                </span>
+                                                                <br></br>
+                                                                <span t-field="factura_carga.destinatario_id.street" class="texto_contenido"/>
+                                                                <br></br>
+                                                                <span t-field="factura_carga.destinatario_id.city" class="texto_contenido"/>
+                                                                <span t-field="factura_carga.destinatario_id.country_id.name" class="texto_contenido"/>
+                                                            </td>
+                                                        </t>
+                                                        <t t-if="not factura_carga.destinatario_id">
+                                                            <td class="celda_contenido">
+                                                                <span class="texto_titulito">4 Nombre y domicilio del destinatario / Nome e endereço do destinatario </span>
+                                                                <br></br>
+                                                                <span t-field="factura_carga.partner_destinatario_id.social_reason" class="texto_contenido"/>
+                                                                <span class="texto_contenido" style="float: right; margin-right: 10px, font-size:20px;">
+                                                                    CUIT:<t t-esc="factura_carga.partner_destinatario_id.vat"/>
+                                                                </span>
+                                                                <br></br>
+                                                                <span t-field="factura_carga.partner_destinatario_id.street" class="texto_contenido"/>
+                                                                <br></br>
+                                                                <span t-field="factura_carga.partner_destinatario_id.city" class="texto_contenido"/>
+                                                                <span t-field="factura_carga.partner_destinatario_id.country_id.name" class="texto_contenido"/>
+                                                            </td>
+                                                        </t>
+                                                    </t>
+                                                    <t t-if="not docs.factura_carga_ids">
+                                                        <td class="celda_contenido">
+                                                            <span class="texto_titulito">4 Nombre y domicilio del destinatario / Nome e endereço do destinatario </span>
+                                                            <br></br>
+                                                            <br></br>
+                                                            <br></br>
+                                                        </td>
+                                                    </t>
+                                                </tr>
+                                                <tr>
+                                                    <t t-if="docs.factura_carga_ids">
+                                                        <t t-set ="factura_carga" t-value="recorre_tipo_de_lineas(docs.factura_carga_ids)"/>
+                                                        <t t-if="factura_carga.consigantario_id">
+                                                            <td class="celda_contenido">
+                                                                <span class="texto_titulito">6 Nombre y domicilio del consignatario / Nome e endereço do consignatario </span>
+                                                                <br></br>
+                                                                <span t-field="factura_carga.consigantario_id.social_reason" class="texto_contenido"/>
+                                                                <span class="texto_contenido" style="float: right; margin-right: 10px, font-size:20px;">
+                                                                    CUIT:<t t-esc="factura_carga.consigantario_id.vat"/>
+                                                                </span>
+                                                                <br></br>
+                                                                <span t-field="factura_carga.consigantario_id.street" class="texto_contenido"/>
+                                                                <br></br>
+                                                                <span t-field="factura_carga.consigantario_id.city" class="texto_contenido"/>
+                                                                <span t-field="factura_carga.consigantario_id.country_id.name" class="texto_contenido"/>
+                                                            </td>
+                                                        </t>
+                                                        <t t-if="not factura_carga.consigantario_id">
+                                                            <td class="celda_contenido">
+                                                                <span class="texto_titulito">6 Nombre y domicilio del consignatario / Nome e endereço do consignatario </span>
+                                                                <br></br>
+                                                                <span t-field="factura_carga.partner_consigantario_id.social_reason" class="texto_contenido"/>
+                                                                <span class="texto_contenido" style="float: right; margin-right: 10px, font-size:20px;">
+                                                                    CUIT:<t t-esc="factura_carga.partner_consigantario_id.vat"/>
+                                                                </span>
+                                                                <br></br>
+                                                                <span t-field="factura_carga.partner_consigantario_id.street" class="texto_contenido"/>
+                                                                <br></br>
+                                                                <span t-field="factura_carga.partner_consigantario_id.city" class="texto_contenido"/>
+                                                                <span t-field="factura_carga.partner_consigantario_id.country_id.name" class="texto_contenido"/>
+                                                            </td>
+                                                        </t>
+                                                    </t>
+                                                    <t t-if="not docs.factura_carga_ids">
+                                                        <td class="celda_contenido">
+                                                            <span class="texto_titulito">6 Nombre y domicilio del consignatario / Nome e endereço do consignatario </span>
+                                                            <br></br>
+                                                            <br></br>
+                                                            <br></br>
+                                                        </td>
+                                                    </t>
+                                                </tr>
+                                                <tr>
+                                                    <t t-if="docs.factura_carga_ids">
+                                                        <t t-set ="factura_carga" t-value="recorre_tipo_de_lineas(docs.factura_carga_ids)"/>
+                                                        <t t-if="factura_carga.notificar_id">
+                                                            <td class="celda_contenido">
+                                                                <span class="texto_titulito">9 Notificar a: / Notificar a: </span>
+                                                                <br></br>
+                                                                <span t-field="factura_carga.notificar_id.social_reason" class="texto_contenido"/>
+                                                                <br></br>
+                                                                <span t-field="factura_carga.notificar_id.street" class="texto_contenido"/>
+                                                                <span class="texto_contenido">Tel:<t t-esc="factura_carga.notificar_id.phone"/></span>
+                                                                <br></br>
+                                                                <span t-field="factura_carga.notificar_id.city" class="texto_contenido"/>
+                                                                <span t-field="factura_carga.notificar_id.country_id.name" class="texto_contenido"/>
+                                                            </td>
+                                                        </t>
+                                                        <t t-if="not factura_carga.notificar_id">
+                                                            <td class="celda_contenido">
+                                                                <span class="texto_titulito">9 Notificar a: / Notificar a: </span>
+                                                                <br></br>
+                                                                <span t-field="factura_carga.partner_notificar_id.social_reason" class="texto_contenido"/>
+                                                                <br></br>
+                                                                <span t-field="factura_carga.partner_notificar_id.street" class="texto_contenido"/>
+                                                                <span class="texto_contenido">Tel:<t t-esc="factura_carga.partner_notificar_id.phone"/></span>
+                                                                <br></br>
+                                                                <span t-field="factura_carga.partner_notificar_id.city" class="texto_contenido"/>
+                                                                <span t-field="factura_carga.partner_notificar_id.country_id.name" class="texto_contenido"/>
+                                                            </td>
+                                                        </t>
+                                                    </t>
+                                                    <t t-if="not docs.factura_carga_ids">
+                                                        <td class="celda_contenido">
+                                                            <span class="texto_titulito">9 Notificar a: / Notificar a: </span>
+                                                            <br></br>
+                                                            <br></br>
+                                                            <br></br>
+                                                        </td>
+                                                    </t>
+                                                </tr>
+                                            </tbody>
+                                        </table>
+                                    </td>
+                                    <td style="width: 50%;">
+                                        <table style="width: 100%; height: 100%;" cellspacing="0">
+                                            <tbody>
+                                                <tr>
+                                                    <td class="celda_contenido">
+                                                        <span class="texto_titulito">2 Número / Número </span>
+                                                        <br></br>
+                                                        <br></br>
+                                                        <span class="texto_contenido" t-esc="docs.crt_number" style="font-weight:bold"/>
+                                                    </td>
+                                                </tr>
+                                                <tr>
+                                                    <td class="celda_contenido">
+                                                        <span class="texto_titulito">3 Nombre y domicilio del portador / Nome e endereço do transportador </span>
+                                                        <img t-if="company.logo" t-att-src="image_data_uri(company.logo)" style="max-height: 45px; width:250px;" alt="Logo"/>
+                                                        <br/>
+
+                                                        <span t-field="company.partner_id.social_reason" style="margin-left:120px" class="h5 texto_contenido"/>
+                                                        <br></br>
+                                                        <span t-field="company.partner_id.street" style="margin-left:80" class="texto_contenido"/>
+                                                        <br></br>
+                                                        <span t-field="company.partner_id.city" style="margin-left:80" class="texto_contenido"/>
+                                                        ,
+                                                        <span t-field="company.partner_id.country_id.name" class="texto_contenido"/>
+                                                    </td>
+                                                </tr>
+                                                <tr>
+                                                    <td class="celda_contenido">
+                                                        <span class="texto_titulito">5 Lugar y país de emisión / Localidade e país de emissão </span>
+                                                        <br></br>
+                                                        <span class="texto_contenido" t-esc="company.partner_id.city" style="text-transform: uppercase"/>
+                                                        <b> - </b>
+                                                        <span class="texto_contenido" t-esc="company.partner_id.country_id.name" style="text-transform: uppercase"/>
+                                                    </td>
+                                                </tr>
+                                                <tr>
+                                                    <td class="celda_contenido">
+                                                        <span class="texto_titulito">7 Lugar, país y fecha en que el portador se hace cargo de las mercancías /<br></br>
+                                                            Localidade, país e data em que o transportado se responsabiliza per mercadoria </span>
+                                                        <br></br>
+                                                        <br></br>
+                                                        <t t-if="docs.origin_id">
+                                                            <span class="texto_prueba" t-esc="docs.origin_id.city_id.name"/>
+                                                            -
+                                                            <span class="texto_prueba" t-esc="docs.origin_id.country_id.name"/>
+                                                        </t>
+                                                        <t t-if="not docs.origin_id">
+                                                            <br></br>
+                                                        </t>
+                                                        <b class="texto_contenido" style="float: right; margin-right: 10px" t-esc="date()" />
+                                                    </td>
+                                                </tr>
+                                                <tr>
+                                                    <t t-if="docs.producto_servicio_carga_ids and recorre_tipo_de_accion_descarga(docs.producto_servicio_carga_ids)">
+                                                        <td class="celda_contenido">
+                                                            <span class="texto_titulito">8 Lugar, país y plazo de entrega / Localidade, país e prazo de entrega</span>
+                                                            <br></br>
+                                                            <br></br>
+                                                            <t t-if="recorre_tipo_de_accion_descarga(docs.producto_servicio_carga_ids).destiny_id">
+                                                                <!--<span class="texto_contenido" t-esc="recorre_tipo_de_accion_descarga(docs.producto_servicio_carga_ids).name"/>-->
+                                                                <span class="texto_contenido" t-esc="recorre_tipo_de_accion_descarga(docs.producto_servicio_carga_ids).destiny_id.city_id.name"/>
+                                                                -
+                                                                <span class="texto_contenido" t-esc="recorre_tipo_de_accion_descarga(docs.producto_servicio_carga_ids).destiny_id.country_id.name"/>
+                                                            </t>
+                                                            <br></br>
+                                                        </td>
+                                                    </t>
+                                                    <t t-if="not (docs.producto_servicio_carga_ids and recorre_tipo_de_accion_descarga(docs.producto_servicio_carga_ids))">
+                                                        <td class="celda_contenido">
+                                                            <span class="texto_titulito">8 Lugar, país y plazo de entrega / Localidade, país e prazo de entrega</span>
+                                                            <br></br>
+                                                            <br></br>
+                                                            <br></br>
+                                                        </td>
+                                                    </t>
+                                                </tr>
+                                                <tr>
+                                                    <td class="celda_contenido">
+                                                        <span class="texto_titulito">10 Portadores sucesivos / Transportadores sucesivos</span>
+                                                        <br></br>
+                                                        <br></br>
+                                                    </td>
+                                                </tr>
+                                            </tbody>
+                                        </table>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div style="width: 100%;" name="zona2">
+                        <table style="width: 100%; height: 35mm;" cellspacing="0">
+                            <tbody>
+                                <tr style="height: 25%">
+                                    <t t-if="docs.factura_carga_ids and docs.packing_list_carga_ids">
+                                        <td class="celda_contenido" style="width: 70%;" rowspan="3">
+                                            <span class="texto_titulito">11 Cantidad y clase de bultos, marcas y numeros, tipos de mercancías, contenedores y accesorios / </span>
+                                            <br></br>
+                                            <span class="texto_titulito_soft">Quantidade e tipo de pacotes, marcas e números, tipos de mercadorias, contenhedores e peças </span>
+                                            <br></br>
+                                            <span class="texto_contenido" t-esc="recorre_lineas_factura_package(docs.packing_list_carga_ids)"/>
+                                            <span style="font-size : 10px">PALLETS</span>
+                                            <span style="font-size : 10px">QUE DICE CONTENER:</span>
+                                            <span class="texto_contenido" t-esc="recorre_lineas_factura_invoice_description(docs.factura_carga_ids)"/>
+                                            <br></br>
+                                            <br></br>
+                                            <br></br>
+                                            <span class="texto_contenido">Segun facturas:</span>
+                                            <span class="texto_contenido" t-esc="recorre_lineas_factura_invoice_list(docs.factura_carga_ids)"/>
+                                            <br></br>
+                                            <span class="texto_contenido">Origen:</span>
+                                            <span class="texto_contenido" t-esc="recorre_tipo_de_lineas(docs.factura_carga_ids).market_origin"/>
+                                            <br></br>
+                                            <span class="texto_contenido">NCM:</span>
+                                            <span class="texto_contenido" t-esc="recorre_lineas_factura_ncm(docs.factura_carga_ids)"/>
+                                        </td>
+                                    </t>
+                                    <t t-if="not (docs.factura_carga_ids and docs.packing_list_carga_ids)">
+                                        <td class="celda_contenido" style="width: 70%;" rowspan="3">
+                                            <span class="texto_titulito">11 Cantidad y clase de bultos, marcas y numeros, tipos de mercancías, contenedores y accesorios / </span>
+                                            <br></br>
+                                            <span class="texto_titulito_soft">Quantidade e tipo de pacotes, marcas e números, tipos de mercadorias, contenhedores e peças </span>
+                                            <br></br>
+                                            <br></br>
+                                            <br></br>
+                                            <br></br>
+                                            <br></br>
+                                            <br></br>
+                                        </td>
+                                    </t>
+                                    <t t-if="docs.packing_list_carga_ids">
+                                        <td class="celda_contenido">
+                                            <span class="texto_titulito">12 Peso bruto en kg / Peso bruto em kg</span>
+                                            <br></br>
+                                            <b>
+                                                <span class="texto_contenido">P.B:</span>
+                                                <span class="texto_contenido" t-esc="recorre_lineas_factura_raw_kg(docs.packing_list_carga_ids)"/>
+                                            </b>
+                                        </td>
+                                    </t>
+                                    <t t-if="not docs.packing_list_carga_ids">
+                                        <td class="celda_contenido">
+                                            <span class="texto_titulito">12 Peso bruto en kg / Peso bruto em kg</span>
+                                            <br></br>
+                                        </td>
+                                    </t>
+                                </tr>
+                                <tr style="height: 25%">
+                                    <t t-if="docs.packing_list_carga_ids">
+                                        <t t-if="not recorre_lineas_factura_volume(docs.packing_list_carga_ids) == 0">
+                                            <td class="celda_contenido">
+                                                <span class="texto_titulito">13 Volumen en m3 / Volume em m3</span>
+                                                <br></br>
+                                                <span class="texto_contenido" t-esc="recorre_lineas_factura_volume(docs.packing_list_carga_ids)"/>
+                                            </td>
+                                        </t>
+                                        <t t-if="recorre_lineas_factura_volume(docs.packing_list_carga_ids) == 0">
+                                            <td class="celda_contenido">
+                                                <span class="texto_titulito">13 Volumen en m3 / Volume em m3</span>
+                                                <br></br>
+                                                <br></br>
+                                            </td>
+                                        </t>
+                                    </t>
+                                    <t t-if="not docs.packing_list_carga_ids">
+                                        <td class="celda_contenido">
+                                            <span class="texto_titulito">13 Volumen en m3 / Volume em m3</span>
+                                            <br></br>
+                                            <br></br>
+                                        </td>
+                                    </t>
+                                </tr>
+                                <tr style="height: 50%">
+                                    <t t-if="docs.factura_carga_ids">
+                                        <td class="celda_contenido">
+                                            <span class="texto_titulito">14 Valor / Valor</span>
+                                            <br></br>
+                                            <span class="texto_contenido" t-esc="recorre_lineas_factura_market_value(docs.factura_carga_ids)"/>
+                                            <br></br>
+                                            <span class="texto_titulito">14 Moneda / Moeda</span>
+                                            <br></br>
+                                            <span class="texto_contenido" t-esc="recorre_tipo_de_lineas(docs.factura_carga_ids).market_value_currency_id.name"/>
+                                        </td>
+                                    </t>
+                                    <t t-if="not docs.factura_carga_ids">
+                                        <td class="celda_contenido">
+                                            <span class="texto_titulito">14 Valor / Valor</span>
+                                            <br></br>
+                                            <br></br>
+                                            <span class="texto_titulito">14 Moneda / Moeda</span>
+                                            <br></br>
+                                        </td>
+                                    </t>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div style="width: 100%; height: 120mm" name="zona3">
+                        <table style="width: 100%; height: 100%;">
+                            <tbody>
+                                <tr>
+                                    <td style="width: 50%;">
+                                        <table cellspacing="0">
+                                            <tbody>
+                                                <tr>
+                                                    <t t-if="docs.producto_servicio_carga_ids">
+                                                        <td>
+                                                            <table cellspacing="0">
+                                                                <tbody>
+                                                                    <tr>
+                                                                        <th class="celda_contenido" rowspan="4">
+                                                                            <span class="texto_titulito">15 Gastos a Pagar / Gastos a Pagar</span>
+                                                                            <br></br>
+                                                                            <span class="texto_contenido"></span>
+                                                                            <br></br>
+                                                                            <span class="texto_titulito">Flete / Frete</span>
+                                                                            <br></br>
+                                                                            <br></br>
+                                                                            <span class="texto_titulito">Otros / Outros</span>
+                                                                            <br></br>
+                                                                        </th>
+                                                                        <th class="celda_contenido">
+                                                                            <span class="texto_titulito">Monto remitente / Valor remitente</span>
+                                                                            <br></br>
+                                                                            <span class="texto_contenido"></span>
+                                                                        </th>
+                                                                        <th class="celda_contenido">
+                                                                            <span class="texto_titulito">Moneda / Moeda</span>
+                                                                            <br></br>
+                                                                        </th>
+                                                                        <th class="celda_contenido">
+                                                                            <span class="texto_titulito">Monto destinatario / Valor destinatario</span>
+                                                                            <br></br>
+                                                                            <span class="texto_contenido"></span>
+                                                                        </th>
+                                                                        <th class="celda_contenido">
+                                                                            <span class="texto_titulito">Moneda / Moeda</span>
+                                                                        </th>
+                                                                    </tr>
+                                                                    <tr>
+                                                                        <t t-if="recorre_tipo_de_accion_salida(docs.producto_servicio_carga_ids)">
+                                                                            <td class="celda_contenido">
+                                                                                <t t-if="recorre_tipo_de_accion_salida(docs.producto_servicio_carga_ids).origin_id">
+                                                                                    <span class="texto_titulito_soft" t-esc="recorre_tipo_de_accion_salida(docs.producto_servicio_carga_ids).origin_id.city_id.name"/>
+                                                                                </t>
+                                                                                <t t-if="not recorre_tipo_de_accion_salida(docs.producto_servicio_carga_ids).origin_id">
+                                                                                    <br></br>
+                                                                                </t>
+                                                                                /
+                                                                                <t t-if="recorre_tipo_de_accion_salida(docs.producto_servicio_carga_ids).frontera_nacional">
+                                                                                    <span class="texto_titulito_soft" t-esc="recorre_tipo_de_accion_salida(docs.producto_servicio_carga_ids).frontera_nacional.name"/>
+                                                                                </t>
+                                                                                <t t-if="not recorre_tipo_de_accion_salida(docs.producto_servicio_carga_ids).frontera_nacional">
+                                                                                    <br></br>
+                                                                                </t>
+                                                                            </td>
+                                                                            <td class="celda_contenido">
+                                                                                <t t-if="recorre_tipo_de_accion_salida(docs.producto_servicio_carga_ids).currency_id">
+                                                                                    <span class="texto_titulito_soft" t-esc="recorre_tipo_de_accion_salida(docs.producto_servicio_carga_ids).currency_id.name"/>
+                                                                                </t>
+                                                                                <t t-if="not recorre_tipo_de_accion_salida(docs.producto_servicio_carga_ids).currency_id">
+                                                                                    <br></br>
+                                                                                </t>
+                                                                            </td>
+                                                                            <td class="celda_contenido">
+                                                                                <t t-if="recorre_tipo_de_accion_salida(docs.producto_servicio_carga_ids).importe">
+                                                                                    <span class="texto_titulito_soft" t-esc="recorre_tipo_de_accion_salida(docs.producto_servicio_carga_ids).importe"/>
+                                                                                </t>
+                                                                                <t t-if="not recorre_tipo_de_accion_salida(docs.producto_servicio_carga_ids).importe">
+                                                                                    <br></br>
+                                                                                </t>
+                                                                            </td>
+                                                                            <td class="celda_contenido">
+                                                                                <t t-if="recorre_tipo_de_accion_salida(docs.producto_servicio_carga_ids).name">
+                                                                                    <span class="texto_titulito_soft" t-esc="recorre_tipo_de_accion_salida(docs.producto_servicio_carga_ids).currency_id.name"/>
+                                                                                </t>
+                                                                                <t t-if="not recorre_tipo_de_accion_salida(docs.producto_servicio_carga_ids).name">
+                                                                                    <br></br>
+                                                                                </t>
+                                                                            </td>
+                                                                        </t>
+                                                                        <t t-if="not recorre_tipo_de_accion_salida(docs.producto_servicio_carga_ids)">
+                                                                            <td class="celda_contenido">
+                                                                                <br></br>
+                                                                            </td>
+                                                                            <td class="celda_contenido">
+                                                                                <br></br>
+                                                                            </td>
+                                                                            <td class="celda_contenido">
+                                                                                <br></br>
+                                                                            </td>
+                                                                            <td class="celda_contenido">
+                                                                                <br></br>
+                                                                            </td>
+                                                                        </t>
+                                                                    </tr>
+                                                                    <tr>
+                                                                        <t t-if="recorre_tipo_de_accion_frontera(docs.producto_servicio_carga_ids)">
+                                                                            <td class="celda_contenido">
+                                                                                <t t-if="recorre_tipo_de_accion_frontera(docs.producto_servicio_carga_ids).frontera_nacional">
+                                                                                    <span class="texto_titulito_soft" t-esc="recorre_tipo_de_accion_frontera(docs.producto_servicio_carga_ids).frontera_nacional.name"/>
+                                                                                </t>
+                                                                                <t t-if="not recorre_tipo_de_accion_frontera(docs.producto_servicio_carga_ids).frontera_nacional">
+                                                                                    <br></br>
+                                                                                </t>
+                                                                                /
+                                                                                <t t-if="recorre_tipo_de_accion_frontera(docs.producto_servicio_carga_ids).frontera_internacional">
+                                                                                    <span class="texto_titulito_soft" t-esc="recorre_tipo_de_accion_frontera(docs.producto_servicio_carga_ids).frontera_internacional.name"/>
+                                                                                </t>
+                                                                                <t t-if="not recorre_tipo_de_accion_frontera(docs.producto_servicio_carga_ids).frontera_internacional">
+                                                                                    <br></br>
+                                                                                </t>
+                                                                            </td>
+                                                                            <td class="celda_contenido">
+                                                                                <t t-if="recorre_tipo_de_accion_frontera(docs.producto_servicio_carga_ids).currency_id">
+                                                                                    <span class="texto_titulito_soft" t-esc="recorre_tipo_de_accion_frontera(docs.producto_servicio_carga_ids).currency_id.name"/>
+                                                                                </t>
+                                                                                <t t-if="not recorre_tipo_de_accion_frontera(docs.producto_servicio_carga_ids).currency_id">
+                                                                                    <br></br>
+                                                                                </t>
+                                                                            </td>
+                                                                            <td class="celda_contenido">
+                                                                                <t t-if="recorre_tipo_de_accion_frontera(docs.producto_servicio_carga_ids).importe">
+                                                                                    <span class="texto_titulito_soft" t-esc="recorre_tipo_de_accion_frontera(docs.producto_servicio_carga_ids).importe"/>
+                                                                                </t>
+                                                                                <t t-if="not recorre_tipo_de_accion_frontera(docs.producto_servicio_carga_ids).importe">
+                                                                                    <br></br>
+                                                                                </t>
+                                                                            </td>
+                                                                            <td class="celda_contenido">
+                                                                                <br></br>
+                                                                            </td>
+                                                                        </t>
+                                                                        <t t-if="not recorre_tipo_de_accion_frontera(docs.producto_servicio_carga_ids)">
+                                                                            <td class="celda_contenido">
+                                                                                <br></br>
+                                                                            </td>
+                                                                            <td class="celda_contenido">
+                                                                                <br></br>
+                                                                            </td>
+                                                                            <td class="celda_contenido">
+                                                                                <br></br>
+                                                                            </td>
+                                                                            <td class="celda_contenido">
+                                                                                <br></br>
+                                                                            </td>
+                                                                        </t>
+                                                                    </tr>
+                                                                    <tr>
+                                                                        <t t-if="recorre_tipo_de_accion_descarga(docs.producto_servicio_carga_ids)">
+                                                                            <td class="celda_contenido">
+                                                                                <t t-if="recorre_tipo_de_accion_descarga(docs.producto_servicio_carga_ids).frontera_internacional">
+                                                                                    <span class="texto_titulito_soft" t-esc="recorre_tipo_de_accion_descarga(docs.producto_servicio_carga_ids).frontera_internacional.name"/>
+                                                                                </t>
+                                                                                <t t-if="not recorre_tipo_de_accion_descarga(docs.producto_servicio_carga_ids).frontera_internacional">
+                                                                                    <br></br>
+                                                                                </t>
+                                                                                /
+                                                                                <t t-if="recorre_tipo_de_accion_descarga(docs.producto_servicio_carga_ids).destiny_id">
+                                                                                    <span class="texto_titulito_soft" t-esc="recorre_tipo_de_accion_descarga(docs.producto_servicio_carga_ids).destiny_id.city_id.name"/>
+                                                                                </t>
+                                                                                <t t-if="not recorre_tipo_de_accion_descarga(docs.producto_servicio_carga_ids).destiny_id">
+                                                                                    <br></br>
+                                                                                </t>
+                                                                            </td>
+                                                                            <td class="celda_contenido">
+                                                                                <t t-if="recorre_tipo_de_accion_descarga(docs.producto_servicio_carga_ids).currency_id">
+                                                                                    <span class="texto_titulito_soft" t-esc="recorre_tipo_de_accion_descarga(docs.producto_servicio_carga_ids).currency_id.name"/>
+                                                                                </t>
+                                                                                <t t-if="not recorre_tipo_de_accion_descarga(docs.producto_servicio_carga_ids).currency_id">
+                                                                                    <br></br>
+                                                                                </t>
+                                                                            </td>
+                                                                            <td class="celda_contenido">
+                                                                                <t t-if="recorre_tipo_de_accion_descarga(docs.producto_servicio_carga_ids).importe">
+                                                                                    <span class="texto_titulito_soft" t-esc="recorre_tipo_de_accion_descarga(docs.producto_servicio_carga_ids).importe"/>
+                                                                                </t>
+                                                                                <t t-if="not recorre_tipo_de_accion_descarga(docs.producto_servicio_carga_ids).importe">
+                                                                                    <br></br>
+                                                                                </t>
+                                                                            </td>
+                                                                            <td class="celda_contenido">
+                                                                                <t t-if="recorre_tipo_de_accion_descarga(docs.producto_servicio_carga_ids).name">
+                                                                                    <span class="texto_titulito_soft" t-esc="recorre_tipo_de_accion_descarga(docs.producto_servicio_carga_ids).currency_id.name"/>
+                                                                                </t>
+                                                                                <t t-if="not recorre_tipo_de_accion_descarga(docs.producto_servicio_carga_ids).name">
+                                                                                    <br></br>
+                                                                                </t>
+                                                                            </td>
+                                                                        </t>
+                                                                        <t t-if="not recorre_tipo_de_accion_descarga(docs.producto_servicio_carga_ids)">
+                                                                            <td class="celda_contenido">
+                                                                                <br></br>
+                                                                            </td>
+                                                                            <td class="celda_contenido">
+                                                                                <br></br>
+                                                                            </td>
+                                                                            <td class="celda_contenido">
+                                                                                <br></br>
+                                                                            </td>
+                                                                            <td class="celda_contenido">
+                                                                                <br></br>
+                                                                            </td>
+                                                                        </t>
+                                                                    </tr>
+                                                                    <tr>
+                                                                        <t t-if="recorre_tipo_de_accion_salida(docs.producto_servicio_carga_ids)">
+                                                                            <td class="celda_contenido" style="height: 15px">
+                                                                                <span class="texto_titulito_soft">TOTAL / Total</span>
+                                                                            </td>
+                                                                            <td class="celda_contenido" style="height: 15px">
+                                                                                <span class="texto_titulito_soft"></span>
+                                                                            </td>
+                                                                            <td class="celda_contenido" style="height: 15px">
+                                                                                <t t-if="recorre_tipo_de_accion_salida(docs.producto_servicio_carga_ids).currency_id">
+                                                                                    <span class="texto_titulito_soft" t-esc="recorre_tipo_de_accion_salida(docs.producto_servicio_carga_ids).currency_id.name"/>
+                                                                                </t>
+                                                                            </td>
+                                                                            <td class="celda_contenido" style="height: 15px">
+                                                                                <t t-if="not suma_tipo_de_accion_importe(docs.producto_servicio_carga_ids) == 0">
+                                                                                    <span class="texto_titulito_soft" t-esc="suma_tipo_de_accion_importe(docs.producto_servicio_carga_ids)"/>
+                                                                                </t>
+                                                                                <t t-if="suma_tipo_de_accion_importe(docs.producto_servicio_carga_ids) == 0">
+                                                                                    <span class="texto_titulito_soft"></span>
+                                                                                </t>
+                                                                            </td>
+                                                                            <td class="celda_contenido" style="height: 15px">
+                                                                                <span class="texto_titulito_soft"></span>
+                                                                            </td>
+                                                                        </t>
+                                                                        <t t-if="not recorre_tipo_de_accion_salida(docs.producto_servicio_carga_ids)">
+                                                                            <td class="celda_contenido" style="height: 15px">
+                                                                                <span class="texto_titulito_soft">TOTAL / Total</span>
+                                                                            </td>
+                                                                            <td class="celda_contenido" style="height: 15px">
+                                                                                <span class="texto_titulito_soft"></span>
+                                                                            </td>
+                                                                            <td class="celda_contenido" style="height: 15px">
+                                                                                <span class="texto_titulito_soft"></span>
+                                                                            </td>
+                                                                            <td class="celda_contenido" style="height: 15px">
+                                                                                <span class="texto_titulito_soft"></span>
+                                                                            </td>
+                                                                            <td class="celda_contenido" style="height: 15px">
+                                                                                <span class="texto_titulito_soft"></span>
+                                                                            </td>
+                                                                        </t>
+                                                                    </tr>
+                                                                </tbody>
+                                                            </table>
+                                                        </td>
+                                                    </t>
+                                                    <t t-if="not docs.producto_servicio_carga_ids">
+                                                        <td>
+                                                            <table cellspacing="0">
+                                                                <tbody>
+                                                                    <tr>
+                                                                        <th class="celda_contenido" rowspan="4">
+                                                                            <span class="texto_titulito">15 Gastos a Pagar / Gastos a Pagar</span>
+                                                                            <br></br>
+                                                                            <span class="texto_contenido"></span>
+                                                                            <br></br>
+                                                                            <span class="texto_titulito">Flete / Frete</span>
+                                                                            <br></br>
+                                                                            <br></br>
+                                                                            <span class="texto_titulito">Otros / Outros</span>
+                                                                            <br></br>
+                                                                        </th>
+                                                                        <th class="celda_contenido">
+                                                                            <span class="texto_titulito">Monto remitente / Valor remitente</span>
+                                                                            <br></br>
+                                                                            <span class="texto_contenido"></span>
+                                                                        </th>
+                                                                        <th class="celda_contenido">
+                                                                            <span class="texto_titulito">Moneda / Moeda</span>
+                                                                            <br></br>
+                                                                        </th>
+                                                                        <th class="celda_contenido">
+                                                                            <span class="texto_titulito">Monto destinatario / Valor destinatario</span>
+                                                                            <br></br>
+                                                                            <span class="texto_contenido"></span>
+                                                                        </th>
+                                                                        <th class="celda_contenido">
+                                                                            <span class="texto_titulito">Moneda / Moeda</span>
+                                                                        </th>
+                                                                    </tr>
+                                                                    <tr>
+                                                                        <td class="celda_contenido">
+                                                                            <br></br>
+                                                                        </td>
+                                                                        <td class="celda_contenido">
+                                                                            <br></br>
+                                                                        </td>
+                                                                        <td class="celda_contenido">
+                                                                            <br></br>
+                                                                        </td>
+                                                                        <td class="celda_contenido">
+                                                                            <br></br>
+                                                                        </td>
+                                                                    </tr>
+                                                                    <tr>
+                                                                        <td class="celda_contenido">
+                                                                            <br></br>
+                                                                        </td>
+                                                                        <td class="celda_contenido">
+                                                                            <br></br>
+                                                                        </td>
+                                                                        <td class="celda_contenido">
+                                                                            <br></br>
+                                                                        </td>
+                                                                        <td class="celda_contenido">
+                                                                            <br></br>
+                                                                        </td>
+                                                                    </tr>
+                                                                    <tr>
+                                                                        <td class="celda_contenido">
+                                                                            <br></br>
+                                                                        </td>
+                                                                        <td class="celda_contenido">
+                                                                            <br></br>
+                                                                        </td>
+                                                                        <td class="celda_contenido">
+                                                                            <br></br>
+                                                                        </td>
+                                                                        <td class="celda_contenido">
+                                                                            <br></br>
+                                                                        </td>
+                                                                    </tr>
+                                                                    <tr>
+                                                                        <td class="celda_contenido" style="height: 15px">
+                                                                            <span class="texto_titulito_soft">TOTAL / Total</span>
+                                                                        </td>
+                                                                        <td class="celda_contenido" style="height: 15px">
+                                                                            <span class="texto_titulito_soft"></span>
+                                                                        </td>
+                                                                        <td class="celda_contenido" style="height: 15px">
+                                                                            <span class="texto_titulito_soft"></span>
+                                                                        </td>
+                                                                        <td class="celda_contenido" style="height: 15px">
+                                                                            <span class="texto_titulito_soft"></span>
+                                                                        </td>
+                                                                        <td class="celda_contenido" style="height: 15px">
+                                                                            <span class="texto_titulito_soft"></span>
+                                                                        </td>
+                                                                    </tr>
+                                                                </tbody>
+                                                            </table>
+                                                        </td>
+                                                    </t>
+                                                </tr>
+                                                <tr>
+                                                    <td class="celda_contenido">
+                                                        <span class="texto_titulito">19 Monto de flete extero / Valor do flete externo</span>
+                                                        <br></br>
+                                                    </td>
+                                                </tr>
+                                                <tr>
+                                                    <td class="celda_contenido">
+                                                        <span class="texto_titulito">20 Monto de reembolso contra entrega / Valor de reembolso contra entrega</span>
+                                                        <br></br>
+                                                    </td>
+                                                </tr>
+                                                <tr>
+                                                    <t t-if="docs.factura_carga_ids">
+                                                        <t t-set ="factura_carga" t-value="recorre_tipo_de_lineas(docs.factura_carga_ids)"/>
+                                                        <t t-if="factura_carga.remitente_id">
+                                                            <td class="celda_contenido">
+                                                                <span class="texto_titulito">21 Nombre, firma del remitente o su representante / Nome e assinatura do remitente ou seu representante</span>
+                                                                <br></br>
+                                                                <span t-field="factura_carga.remitente_id.social_reason" class="texto_contenido"/>
+                                                                <br></br>
+                                                                <span class="texto_titulito">Fecha / Data</span> <b class="texto_contenido" t-esc="date()"/>
+                                                                <br></br>
+                                                            </td>
+                                                        </t>
+                                                        <t t-if="not factura_carga.remitente_id">
+                                                            <td class="celda_contenido">
+                                                                <span class="texto_titulito">21 Nombre, firma del remitente o su representante / Nome e assinatura do remitente ou seu representante</span>
+                                                                <br></br>
+                                                                <span t-field="factura_carga.partner_remitente_id.social_reason" class="texto_contenido"/>
+                                                                <br></br>
+                                                                <span class="texto_titulito">Fecha / Data</span> <b class="texto_contenido" t-esc="date()"/>
+                                                                <br></br>
+                                                            </td>
+                                                        </t>
+                                                    </t>
+                                                    <t t-if="not docs.factura_carga_ids">
+                                                        <td class="celda_contenido">
+                                                            <span class="texto_titulito">21 Nombre, firma del remitente o su representante / Nome e assinatura do remitente ou seu representante</span>
+                                                            <br></br>
+                                                            <br></br>
+                                                            <br></br>
+                                                        </td>
+                                                    </t>
+                                                </tr>
+                                                <tr>
+                                                    <td class="celda_contenido">
+                                                        <span class="texto_titulito">
+                                                            Las mercancías consignadas en esta Carta de Porte fueron recibidas por el porteador
+                                                            aparentemente en buen estado, bajo las condiciones generales que figuran al dorso.
+                                                        </span>
+                                                        <br></br>
+                                                        <span class="texto_titulito_soft">
+                                                            As mercadorias consignadas néste Conhecimento do Transporte foram recibidas pelo transportador
+                                                            aparentemente em bom estado, sob as condições gerais que figuram no verso.
+                                                        </span>
+                                                        <br></br>
+                                                        <br></br>
+                                                        <span class="texto_titulito">23 Nombre y firma del Portador o su representante / Nome e assinatura do transportador ou seu representante</span>
+                                                        <br></br>
+                                                        <img t-if="company.sello_empresa"
+                                                             t-att-src="image_data_uri(company.sello_empresa)"
+                                                             alt="Logo"
+                                                             style="height: 30mm"/>
+                                                        <br></br>
+                                                        <span class="texto_titulito">Fecha / Data</span> <span class="texto_contenido" t-esc="date()"/>
+                                                    </td>
+                                                </tr>
+                                            </tbody>
+                                        </table>
+                                    </td>
+                                    <td style="width: 50%;">
+                                        <table>
+                                            <tbody>
+                                                <tr>
+                                                    <t t-if="docs.factura_carga_ids">
+                                                        <td class="celda_contenido" colspan="5" style="height: 10%">
+                                                            <span class="texto_titulito">16 Declaración del valor de las mercancías / Declaração do valor das mercadorias</span>
+                                                            <br></br>
+                                                            <span class="texto_contenido" t-esc="recorre_lineas_factura_market_value_desc(docs.factura_carga_ids)"/>
+                                                        </td>
+                                                    </t>
+                                                    <t t-if="not docs.factura_carga_ids">
+                                                        <td class="celda_contenido" colspan="5" style="height: 10%">
+                                                            <span class="texto_titulito">16 Declaración del valor de las mercancías / Declaração do valor das mercadorias</span>
+                                                        </td>
+                                                    </t>
+                                                </tr>
+                                                <tr>
+                                                    <t t-if="docs.factura_carga_ids">
+                                                        <td class="celda_contenido" colspan="5" style="height: 20%">
+                                                            <span class="texto_titulito">17 Documentos anexos / Documentos anexos</span>
+                                                            <br></br>
+                                                            <span class="texto_titulito">Según Facturas</span>
+                                                            <br></br>
+                                                            <br></br>
+                                                            <br></br>
+                                                            <span class="texto_contenido" t-esc="recorre_lineas_factura_invoice_list(docs.factura_carga_ids)"/>
+                                                        </td>
+                                                    </t>
+                                                    <t t-if="not docs.factura_carga_ids">
+                                                        <td class="celda_contenido" colspan="5" style="height: 20%">
+                                                            <span class="texto_titulito">17 Documentos anexos / Documentos anexos</span>
+                                                            <br></br>
+                                                            <br></br>
+                                                            <span class="texto_titulito">Según Facturas</span>
+                                                            <br></br>
+                                                        </td>
+                                                    </t>
+                                                </tr>
+                                                <tr>
+                                                    <t t-if="docs.producto_servicio_carga_ids and (recorre_tipo_de_accion_descarga(docs.producto_servicio_carga_ids) and recorre_tipo_de_accion_descarga(docs.producto_servicio_carga_ids))">
+                                                        <td class="celda_contenido" colspan="5" style="height: 20%">
+                                                            <span class="texto_titulito">18 Instrucciones sobre formalidades de aduana / Instruções sobre formalidades de alfandega</span>
+                                                            <br></br>
+                                                            <span class="texto_titulito_soft" t-esc="generar_ruta(docs.producto_servicio_carga_ids)"/>
+                                                        </td>
+                                                    </t>
+                                                    <t t-if="not (docs.producto_servicio_carga_ids and (recorre_tipo_de_accion_descarga(docs.producto_servicio_carga_ids) and recorre_tipo_de_accion_descarga(docs.producto_servicio_carga_ids)))">
+                                                        <td class="celda_contenido" colspan="5" style="height: 20%">
+                                                            <span class="texto_titulito">18 Instrucciones sobre formalidades de aduana / Instruções sobre formalidades de alfandega</span>
+                                                            <br></br>
+                                                            <br></br>
+                                                        </td>
+                                                    </t>
+                                                </tr>
+                                                <tr>
+                                                    <td class="celda_contenido" colspan="5" style="height: 20%">
+                                                        <span class="texto_titulito">22 Declaraciones y observaciones / Declarações e observações</span>
+                                                        <br></br>
+                                                        <span class="texto_titulito_soft">
+                                                            PESO, CALIDAD Y CONTENIDO DECLARADOS POR EL EMBARCADOR SIN CONTROL DEL TRANSPORTE.
+                                                            SEGURO POR CUENTA Y RIESGO DEL REMITENTE/CONSIGNATARIO. LIBERADA DE TODA
+                                                            RESPONSABILIDAD INCLUSIVE POR REPETICIÓN, A LA EMPRESA DE TRANSPORTE
+                                                        </span>
+                                                    </td>
+                                                </tr>
+                                                <tr>
+                                                    <td class="celda_contenido" colspan="5" style="height: 30%">
+                                                        <span class="texto_titulito">24 Nombre y firma del destinatario o su representante / Nome e assinatura do destinatário ou do seu representante</span>
+                                                        <br></br>
+                                                        <br></br>
+                                                        <br></br>
+                                                        <br></br>
+                                                        <br></br>
+                                                        <br></br>
+                                                        <span class="texto_titulito">Fecha / Data</span> <span class="texto_contenido" t-esc="date()"/>
+                                                    </td>
+                                                </tr>
+                                            </tbody>
+                                        </table>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </t>
+    </template>
+</odoo>

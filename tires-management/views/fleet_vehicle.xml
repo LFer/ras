@@ -1,0 +1,44 @@
+<odoo>
+  <data>
+
+      <record id="fleet_vehicle_tire_int" model="ir.ui.view">
+            <field name="name">fleet.vehicle.tire.inh</field>
+            <field name="model">fleet.vehicle</field>
+            <field eval="30" name="priority"/>
+            <field name="inherit_id" ref="servicio_base.fleet_vehicle_form"/>
+            <field name="arch" type="xml">
+                <xpath expr="//page[last()]" position="after">
+                    <page string="Gestión de las Cubiertas">
+						<group col="8"  string="Información de la Cubierta">
+							<field name="tires"  />
+							<field name="axles_id" />
+						</group>
+						<group col="6" string="Eje Frontal" >
+							<field name="f_l_tire" />
+							<field name="f_r_tire" />
+						</group>
+						<newline></newline>
+						<group col="10" string="Eje Medio">
+							<field name="m_l_tire1" />
+							<field name="m_r_tire1" />
+							<field name="m_l_tire2" />
+							<field name="m_r_tire2" />
+						</group>
+						<newline></newline>
+						<group col="6" string="Eje Traserp">
+							<field name="r_l_tire1" />
+							<field name="r_r_tire1" />
+							<group>
+								<group  attrs="{'invisible':[('tires','=',4)]}">
+									<field name="r_l_tire2" />
+									<field name="r_r_tire2" />
+								</group>
+							</group>
+						</group>
+                    </page>
+                </xpath>
+
+            </field>
+        </record>
+  </data>
+</odoo>

@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+
+
+
+        <record id="product_cost_revision_tree_view" model="ir.ui.view">
+            <field name="name">Reporte de Viajes-Tree</field>
+            <field name="model">rt.service.productos</field>
+            <field name="arch" type="xml">
+                <tree string="Comisiones" create="false" delete="false">
+                    <field name="estado_comision"/>
+                    <field name="name"/>
+                    <field name="rt_service_id"/>
+                    <field name="motivo_solicitud" string="Motivo"/>
+                    <field name="comision_excepcion"/>
+                    <field name="vehicle_id"/>
+                    <field name="matricula_dos_id" />
+                    <field name="driver_id" />
+                    <field name="chofer" />
+                    <field name="currency_id_chofer" />
+                    <field name="driver_commission" widget="monetary" options="{'currency_field': 'currency_id_chofer'}" />
+                </tree>
+            </field>
+        </record>
+
+
+    </data>
+</odoo>

@@ -1,0 +1,39 @@
+<odoo>
+    <data>
+        <t t-name="reconciliation.line">
+            <t t-set="state" t-value="widget._initialState"/>
+            <div class="o_reconciliation_line" t-att-data-mode="state.mode">
+                <table class="accounting_view">
+                    <caption style="caption-side: top;">
+                        <div class="float-right o_buttons">
+                            <button t-attf-class="o_validate btn btn-secondary #{!state.balance.type ? '' : 'd-none'}">Validate</button>
+                            <button t-attf-class="o_reconcile btn btn-primary #{state.balance.type &gt; 0 ? '' : 'd-none'}">Reconcile</button>
+                            <span t-attf-class="o_no_valid text-danger #{state.balance.type &lt; 0 ? '' : 'd-none'}">Select a partner or choose a counterpart</span>
+                        </div>
+                    </caption>
+                    <thead>
+                        <tr>
+                            <td class="cell_action"><span class="toggle_match fa fa-cog" aria-label="Settings" role="img" title="Settings"></span></td>
+                            <td class="cell_account_code"><t t-esc="state.st_line.account_code"/></td>
+                            <td class="cell_due_date"><t t-esc="state.st_line.date"/></td>
+                            <td class="cell_label"><t t-if="state.st_line.id" t-esc="state.st_line.name"/> <t t-if="state.st_line.amount_currency_str"> (<t t-esc="state.st_line.amount_currency_str"/>)</t></td>
+                            <td class="cell_left"><t t-if="state.st_line.amount &gt; 0"><t t-raw="state.st_line.amount_str"/></t></td>
+                            <td class="cell_right"><t t-if="state.st_line.amount &lt; 0"><t t-raw="state.st_line.amount_str"/></t></td>
+                            <td class="cell_info_popover"></td>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <t t-foreach="state.reconciliation_proposition" t-as="line"><t t-call="reconciliation.line.mv_line"/></t>
+                    </tbody>
+                    <tfoot>
+                        <t t-call="reconciliation.line.balance"/>
+                    </tfoot>
+                </table>
+                <div class="match">
+                    <t t-call="reconciliation.line.match"/>
+                </div>
+                <div class="create"></div>
+            </div>
+        </t>
+    </data>
+</odoo>

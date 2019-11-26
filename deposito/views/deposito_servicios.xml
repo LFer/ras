@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+
+        <record id="view_rt_service_product_depo_uninvoiced_filter" model="ir.ui.view">
+            <field name="name">rt.service.product.depo.uninvoiced.line</field>
+            <field name="model">deposito.service.products</field>
+            <field name="arch" type="xml">
+                <search string="Search Uninvoiced Service Product">
+                    <filter string="No Facturado" name="uninvoiced" domain="[('invoiced','=',False),('is_invoiced','=',True)]"/>
+                    <filter name="group_carpeta_id" string="Carpeta Asociada" icon="terp-partner" context="{'group_by':'deposito_srv_id'}"/>
+                    <filter name="group_product_id" string="Productos" icon="terp-partner" context="{'group_by':'product_id'}"/>
+                </search>
+            </field>
+        </record>
+
+        <record id="deposito_servicios_tree_view" model="ir.ui.view">
+            <field name="name">Servicios Deposito</field>
+            <field name="model">deposito.service.products</field>
+            <field name="arch" type="xml">
+                <tree string="Servicios" create="false" >
+                    <field name="deposito_srv_id"/>
+                    <field name="product_id"/>
+                    <field name="partner_invoice_id"/>
+                    <field name="name"/>
+                    <field name="is_invoiced" invisible="1"/>
+                    <field name="supplier_id"/>
+                    <field name="state"/>
+                </tree>
+            </field>
+        </record>
+
+
+        <record id="action_deposito_servicio_tree" model="ir.actions.act_window">
+            <field name="name">Servicios Deposito</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">deposito.service.products</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">tree</field>
+            <field name="domain">[('deposito_srv_id','=', active_id)]</field>
+            <field name="view_id" ref="deposito_servicios_tree_view"/>
+            <field name="context">{"search_default_uninvoiced":1, "search_default_group_carpeta_id": 1, "search_default_group_product_id": 1}</field>
+            <field name="filter" eval="True"/>
+            <field name="help" type="html">
+              <p>
+                Here is a list of each service product to be invoiced. You can
+                invoice service product partially, by lines of service.
+              </p>
+            </field>
+        </record>
+
+        <record id="deposito_invoice_create" model="ir.ui.view">
+            <field name="name">Crea Factura</field>
+            <field name="model">deposito.make.invoice</field>
+            <field name="arch" type="xml">
+                <form string="Create invoices">
+                    <p>
+                        <span class="fa fa-info-circle" style="font-size: 24px; margin-right: 10px; color: #DC5F59; float: left;"/>
+                        <span style="font-size: 16px;">Todos los registros selecionados seran marcados como Pago</span>
+                    </p>
+                    <footer>
+                        <button name="make_invoices" string="Crear y Ver Factura" type="object" context="{'open_invoices': True}" class="oe_highlight"/>
+                        <button name="make_invoices" string="Crear Factura" type="object" class="oe_highlight"/>
+                    </footer>
+                </form>
+            </field>
+        </record>
+
+        <act_window
+                id="action_deposito_invoice_create"
+                multi="True"
+                key2="client_action_multi"
+                name="Crear Factura"
+                res_model="deposito.make.invoice"
+                src_model="deposito.service.products"
+                view_mode="form"
+                target="new"
+                view_type="form"
+                view_id="deposito_invoice_create"
+        />
+
+    </data>
+</odoo>
