@@ -19,7 +19,6 @@ class FleetVehicle(models.Model):
         """ This opens log view to view and add new log for this vehicle, groupby default to only show effective costs
             @return: the costs log view
         """
-        ipdb.set_trace()
         self.ensure_one()
         copy_context = dict(self.env.context)
         copy_context.pop('group_by', None)
