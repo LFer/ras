@@ -1,0 +1,38 @@
+<odoo>
+    <data>
+
+        <record id='fleet_vehicle_fixed_action' model='ir.actions.act_window'>
+            <field name="name">Vehicles Fixed Costs</field>
+            <field name="res_model">fleet.vehicle.cost</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">tree,kanban,form,graph</field>
+            <field name="domain">[('is_toll','=',True)]</field>
+            <field name="context">{"search_default_parent_false" : True, "search_default_groupby_vehicle_id" : True, "default_is_toll" : True}</field>
+            <field name="help" type="html">
+                <p class="o_view_nocontent_smiling_face">
+                    Create a new cost
+                </p><p>
+                Manage the costs for your different vehicles.
+                Costs are created automatically from services, contracts and fuel logs.
+            </p>
+            </field>
+        </record>
+
+        <record model='ir.ui.view' id='fleet_fixed_cost_vehicle_form'>
+            <field name="name">fleet.vehicle.form.inh</field>
+            <field name="model">fleet.vehicle</field>
+            <field name="inherit_id" ref="fleet.fleet_vehicle_view_form"/>
+            <field name="arch" type="xml">
+                <xpath expr="//form[1]/sheet[1]/div[@name='button_box']" position="inside">
+                    <button class="oe_stat_button"
+                            icon="fa-store-alt"
+                            type="object"
+                            name="act_show_toll_cost">
+                        <field name="toll_count" string="Peajes" widget="statinfo"/>
+                    </button>
+                </xpath>
+            </field>
+        </record>
+
+    </data>
+</odoo>
