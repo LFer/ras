@@ -16,6 +16,8 @@ class FleetVehicleCost(models.Model):
         fleet = super(FleetVehicleCost, self).create(values)
         return fleet
 
+    cost_type = fields.Selection(selection_add=[('toll', 'Peaje')])
+
 class FleetVehicle(models.Model):
     _inherit = 'fleet.vehicle'
 
